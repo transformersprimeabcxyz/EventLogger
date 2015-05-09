@@ -43,6 +43,14 @@
     <Compile Include="RestErrorLog.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HashTag.Core.Project\HashTag.Core.Project.csproj">
+      <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
+      <Name>HashTag.Core.Project</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HashTag.Core.RestClient\HashTag.Core.RestClient.csproj">
+      <Project>{49139c04-dc1a-420c-83ae-072bd986e2ef}</Project>
+      <Name>HashTag.Core.RestClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HashTag.Elmah\HashTag.Elmah.csproj">
       <Project>{c92dc151-a0ba-4a5e-a20e-620ec9c06aff}</Project>
       <Name>HashTag.Elmah</Name>

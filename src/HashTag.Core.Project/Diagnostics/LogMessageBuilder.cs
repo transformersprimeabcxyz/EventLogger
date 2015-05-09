@@ -32,20 +32,21 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="message">Message text of log message.  May include any standard string.format paramters</param>
         /// <param name="args">Any argument to supply to <paramref name="message"/></param>
-        public void Write(string message, params object[] args)
+        public LogMessage Write(string message, params object[] args)
         {
             _message.MessageText = TextUtils.StringFormat(message, args);
             if (_writeAction != null)
             {
                 _writeAction(_message);
             }
+            return _message;
         }
 
         /// <summary>
         /// Persist an object to log.  Uses <paramref name="messageData"/>.ToString() to serialize the message
         /// </summary>
         /// <param name="messageData">Data to be persisted to log.</param>
-        public void Write(object messageData = null)
+        public LogMessage Write(object messageData = null)
         {
             if (messageData != null)
             {
@@ -58,9 +59,34 @@ namespace HashTag.Diagnostics
                     _writeAction(_message);
                 }
             }
+            return _message;
         }
 
+        
+        /// <summary>
+        /// Persist all built up properties to persistent store
+        /// </summary>
+        /// <param name="message">Message text of log message.  May include any standard string.format paramters</param>
+        /// <param name="args">Any argument to supply to <paramref name="message"/></param>
+        public LogMessage  Message(string message, params object[] args)
+        {
+            _message.MessageText = TextUtils.StringFormat(message, args);
+            
+            return _message;
+        }
 
+        /// <summary>
+        /// Persist an object to log.  Uses <paramref name="messageData"/>.ToString() to serialize the message
+        /// </summary>
+        /// <param name="messageData">Data to be persisted to log.</param>
+        public LogMessage Message(object messageData = null)
+        {
+            if (messageData != null)
+            {
+                _message.MessageText = messageData.ToString();
+            }
+            return _message;
+        }
 
         /// <summary>
         /// Identifier of this message (e.g. '101', '34334').  Used in IT departments where there is a preference to log by number instead of by category and/or name.

@@ -29,7 +29,7 @@ namespace HashTag.Diagnostics
     [DataContract(Namespace = CoreConfig.WcfNamespace)]
     public partial class LogMessage
     {
-        private AssemblyVersion.CallerInfo _callerInfo;
+        
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -38,7 +38,7 @@ namespace HashTag.Diagnostics
         {
             TimeStamp = DateTime.Now;
             MessageId = Guid.NewGuid();
-            Categories = new List<string>();            
+            Categories = new List<string>();
         }
         public LogMessage(string message = null, params object[] args)
             : this()
@@ -104,7 +104,14 @@ namespace HashTag.Diagnostics
         [System.Xml.Serialization.XmlElement]
         public List<LogException> Exceptions
         {
-            get { return _exceptions; }
+            get
+            {
+                if (_exceptions == null)
+                {
+                    _exceptions = new List<LogException>();
+                }
+                return _exceptions;
+            }
             set
             {
                 if (_exceptions == null)
@@ -337,7 +344,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public PropertyBag Properties { get; set; }
-        public void AddProperty(string key,string value)
+        public void AddProperty(string key, string value)
         {
             if (Properties == null) Properties = new PropertyBag();
             Properties.Add(key, value);
@@ -384,18 +391,18 @@ namespace HashTag.Diagnostics
             try
             {
                 sb.AppendLine("{0:yyyy-MM-dd HH:mm:ss.fff} {1}({2}) {3}", this.TimeStamp, this.Severity, this.Priority, _messageText.Left(60, "..."));
-                sb.AppendLine("{1,16} {0}", indentRow(this._messageText, 17),CoreResources.MSG_Diagnostics_MessageBuilder_FullMessage);
-                sb.AppendLine("{2,16} {0}({1})", this.Severity, (int)this.Severity,CoreResources.MSG_Diagnostics_MessageBuilder_Severity);
-                sb.AppendLine("{2,16} {0}({1})", this.Priority, (int)this.Priority,CoreResources.MSG_Diagnostics_MessageBuilder_Priority);
-                sb.AppendLine("{1,16} {0}", this.ApplicationKey,CoreResources.MSG_Diagnostics_MessageBuilder_Application);
-                sb.AppendLine("{1,16} {0}", this.ActivityId,CoreResources.MSG_Diagnostics_MessageBuilder_ActivityId);
-                sb.AppendLine("{1,16} {0}", this.ActiveEnvironment,CoreResources.MSG_Diagnostics_MessageBuilder_Environment);
+                sb.AppendLine("{1,16} {0}", indentRow(this._messageText, 17), CoreResources.MSG_Diagnostics_MessageBuilder_FullMessage);
+                sb.AppendLine("{2,16} {0}({1})", this.Severity, (int)this.Severity, CoreResources.MSG_Diagnostics_MessageBuilder_Severity);
+                sb.AppendLine("{2,16} {0}({1})", this.Priority, (int)this.Priority, CoreResources.MSG_Diagnostics_MessageBuilder_Priority);
+                sb.AppendLine("{1,16} {0}", this.ApplicationKey, CoreResources.MSG_Diagnostics_MessageBuilder_Application);
+                sb.AppendLine("{1,16} {0}", this.ActivityId, CoreResources.MSG_Diagnostics_MessageBuilder_ActivityId);
+                sb.AppendLine("{1,16} {0}", this.ActiveEnvironment, CoreResources.MSG_Diagnostics_MessageBuilder_Environment);
                 sb.AppendLine("{1,16} {0}", this.MachineName, CoreResources.MSG_Diagnostics_MessageBuilder_Host);
                 sb.AppendLine("{1,16} {0}", this.LoggerName, CoreResources.MSG_Diagnostics_MessageBuilder_LoggerName);
                 sb.AppendLine("{1,16} {0}", (Categories == null) ? "" : string.Join("|", this.Categories.ToArray()), CoreResources.MSG_Diagnostics_MessageBuilder_Categories);
                 sb.AppendLine("{1,16} {0}", Reference == null ? CoreResources.MSG_Diagnostics_NullText : Reference.ToString(), CoreResources.MSG_Diagnostics_MessageBuilder_Reference);
                 sb.AppendLine("{1,16} {0}", EventId, CoreResources.MSG_Diagnostics_MessageBuilder_EventId);
-                sb.AppendLine("{1,16} {0}", MessageCode,CoreResources.MSG_Diagnostics_MessageBuilder_MessageCode);
+                sb.AppendLine("{1,16} {0}", MessageCode, CoreResources.MSG_Diagnostics_MessageBuilder_MessageCode);
 
                 if (Properties != null)
                 {

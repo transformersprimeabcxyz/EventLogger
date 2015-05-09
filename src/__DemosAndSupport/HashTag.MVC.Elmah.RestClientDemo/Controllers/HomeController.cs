@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using HashTag.Diagnostics;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -10,16 +12,27 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 {
     public class HomeController : Controller
     {
+        ILog _log = Log.NewLog(typeof(HomeController));
         public ActionResult Index()
         {
+            try
+            {
+                using(var cn = new SqlConnection("Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=dbLog;Data Source=powell-pc\\sqlexpressS"))
+                {
+                    cn.Open();
+                }
 
-            var dic = new Dictionary<string, string>();
-            dic.Add("key", "value");
-            dic.Add("key2", "value");
+            }
+            catch(Exception ex)
+            {
+                ex.Data["test data"] = "test message";
+
+                var msg = _log.Error.Catch(ex).Message("something really, really bad happened at {0}", DateTime.Now);
+                msg.Properties.Add("form fields","other stuff");
+                var js = JsonConvert.SerializeObject(msg,Formatting.Indented);
+                throw;
+            }
             
-            var js = JsonConvert.SerializeObject(dic,Formatting.Indented);
-            throw new NotImplementedException("something really went bad!");
-
             return View();
         }
 

@@ -14,15 +14,15 @@ namespace HashTag.Diagnostics
             switch (eventType)
             {
 
-                case TraceEventType.Critical: return MessagePriority.Highest; break;
-                case TraceEventType.Error: return MessagePriority.VeryHigh; break;
-                case TraceEventType.Warning: return MessagePriority.High; break;
-                case TraceEventType.Information: return MessagePriority.Normal; break;
-                case TraceEventType.Verbose: return MessagePriority.Low; break;
-                case TraceEventType.Start: return MessagePriority.VeryLow; break;
-                case TraceEventType.Stop: return MessagePriority.VeryLow; break;
+                case TraceEventType.Critical: return MessagePriority.Highest;
+                case TraceEventType.Error: return MessagePriority.VeryHigh;
+                case TraceEventType.Warning: return MessagePriority.High; 
+                case TraceEventType.Information: return MessagePriority.Normal;
+                case TraceEventType.Verbose: return MessagePriority.Low; 
+                case TraceEventType.Start: return MessagePriority.VeryLow; 
+                case TraceEventType.Stop: return MessagePriority.VeryLow;
                 default:
-                    return MessagePriority.Normal; break;
+                    return MessagePriority.Normal;
             }
         }
         public static bool IsEnabled(this SourceLevels sourceLevel, TraceEventType eventType)
