@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,11 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
         public ActionResult Index()
         {
 
-            var asm = Assembly.Load("HashTag.Elmah.RestProxy");
+            var dic = new Dictionary<string, string>();
+            dic.Add("key", "value");
+            dic.Add("key2", "value");
+            
+            var js = JsonConvert.SerializeObject(dic,Formatting.Indented);
             throw new NotImplementedException("something really went bad!");
 
             return View();

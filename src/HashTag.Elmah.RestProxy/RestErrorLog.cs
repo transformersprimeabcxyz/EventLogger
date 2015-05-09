@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HashTag.Elmah.RestProxy
 {
-    public class RestProxyErrorLog : ErrorLog
+    public class RestErrorLog : ErrorLog
     {
 
         private readonly string _connectionString;
@@ -21,7 +21,7 @@ namespace HashTag.Elmah.RestProxy
         /// using a dictionary of configured settings.
         /// </summary>
 
-        public RestProxyErrorLog(IDictionary config)
+        public RestErrorLog(IDictionary config)
         {
             if (config == null)
                 throw new ArgumentNullException("config");
@@ -60,7 +60,7 @@ namespace HashTag.Elmah.RestProxy
         /// to use a specific connection string for connecting to the database.
         /// </summary>
 
-        public RestProxyErrorLog(string connectionString)
+        public RestErrorLog(string connectionString)
         {
             if (connectionString == null)
                 throw new ArgumentNullException("connectionString");
