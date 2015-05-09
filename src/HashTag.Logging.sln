@@ -5,6 +5,16 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Web.Service", "HashTag.Logging.Web.Service\HashTag.Logging.Web.Service.csproj", "{51C1F103-D28A-4DF0-948F-5F028B02F8D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Web.Library", "HashTag.Logging.Web.Library\HashTag.Logging.Web.Library.csproj", "{6881591D-3A09-4A80-85BE-564222CD9595}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Elmah", "HashTag.Elmah\HashTag.Elmah.csproj", "{C92DC151-A0BA-4A5E-A20E-620EC9C06AFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__DemosAndSupport", "__DemosAndSupport", "{E3CF7125-5D53-4D44-B808-021488E0FAF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.MVC.Elmah.RestClientDemo", "__DemosAndSupport\HashTag.MVC.Elmah.RestClientDemo\HashTag.MVC.Elmah.RestClientDemo.csproj", "{55B5D26B-95EC-436A-BCCC-684DCF88F9CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Elmah.RestProxy", "HashTag.Elmah.RestProxy\HashTag.Elmah.RestProxy.csproj", "{B191913A-1C54-4356-B436-F8CFA2F269F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +25,27 @@ Global
 		{51C1F103-D28A-4DF0-948F-5F028B02F8D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51C1F103-D28A-4DF0-948F-5F028B02F8D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51C1F103-D28A-4DF0-948F-5F028B02F8D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6881591D-3A09-4A80-85BE-564222CD9595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6881591D-3A09-4A80-85BE-564222CD9595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6881591D-3A09-4A80-85BE-564222CD9595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6881591D-3A09-4A80-85BE-564222CD9595}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C92DC151-A0BA-4A5E-A20E-620EC9C06AFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C92DC151-A0BA-4A5E-A20E-620EC9C06AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C92DC151-A0BA-4A5E-A20E-620EC9C06AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C92DC151-A0BA-4A5E-A20E-620EC9C06AFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55B5D26B-95EC-436A-BCCC-684DCF88F9CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55B5D26B-95EC-436A-BCCC-684DCF88F9CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55B5D26B-95EC-436A-BCCC-684DCF88F9CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55B5D26B-95EC-436A-BCCC-684DCF88F9CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B191913A-1C54-4356-B436-F8CFA2F269F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B191913A-1C54-4356-B436-F8CFA2F269F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B191913A-1C54-4356-B436-F8CFA2F269F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B191913A-1C54-4356-B436-F8CFA2F269F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55B5D26B-95EC-436A-BCCC-684DCF88F9CB} = {E3CF7125-5D53-4D44-B808-021488E0FAF3}
 	EndGlobalSection
 EndGlobal

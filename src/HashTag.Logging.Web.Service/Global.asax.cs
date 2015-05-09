@@ -14,10 +14,10 @@ namespace HashTag.Logging.Web.Service
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            GlobalConfiguration.Configure(Startup.Register);
+            Startup.RegisterGlobalFilters(GlobalFilters.Filters);
+            Startup.RegisterRoutes(RouteTable.Routes);
+            Startup.RegisterBundles(BundleTable.Bundles);
         }
     }
 }
