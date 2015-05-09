@@ -27,9 +27,9 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             {
                 ex.Data["test data"] = "test message";
 
-                var msg = _log.Error.Catch(ex).Message("something really, really bad happened at {0}", DateTime.Now);
-                msg.Properties.Add("form fields","other stuff");
-                var js = JsonConvert.SerializeObject(msg,Formatting.Indented);
+                //var msg = _log.Error.Catch(ex).Message("something really, really bad happened at {0}", DateTime.Now);
+                //msg.Properties.Add("form fields","other stuff");
+                //var js = JsonConvert.SerializeObject(msg,Formatting.Indented);
                 throw;
             }
             
