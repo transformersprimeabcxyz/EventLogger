@@ -43,9 +43,29 @@ namespace HashTag.Diagnostics
         Items = 16,
 
         /// <summary>
+        /// HttpContext.Request.Cookies
+        /// </summary>
+        Cookies = 32,
+
+        /// <summary>
+        /// HttpContext.Request.QueryString
+        /// </summary>
+        QueryString = 64,
+
+        /// <summary>
+        /// HttpContext.Request.ServerVariables
+        /// </summary>
+        ServerVariables=128,
+
+        /// <summary>
+        /// HttpContext.Request.Header
+        /// </summary>
+        Headers=256,
+
+        /// <summary>
         /// Return all HttpContext values
         /// </summary>
-        All = Url | Form | Session | AppCache | Items
+        All = Url | Form | Session | AppCache | Items | Cookies | QueryString | ServerVariables | Headers
 
     }
 }

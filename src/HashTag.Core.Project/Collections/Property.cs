@@ -26,6 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace HashTag.Collections
 {
@@ -58,10 +59,15 @@ namespace HashTag.Collections
 		}
 
 		[DataMember]
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
 		public string ValueType { get; set; }
+
+        [XmlAttribute]
 		[DataMember]
 		public string Key { get; set; }
-		[DataMember]
+
+
+		[DataMember,XmlText]
 		public string Value { get; set; }
 
 		public Property SetValue(object value)

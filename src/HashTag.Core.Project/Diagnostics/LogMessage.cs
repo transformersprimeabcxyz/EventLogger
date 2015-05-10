@@ -377,7 +377,7 @@ namespace HashTag.Diagnostics
         /// Textual (N09099, AP3933) or numeric (9932, 5321) that identifies this message.  These codes, if used, should be unique within a Source but might be unique across several sources.  Message Codes uniquely identify a particular event. Each event source can define its own numbered events 
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string MessageCode { get; set; }
+        public string EventCode { get; set; }
 
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace HashTag.Diagnostics
                 sb.AppendLine("{1,16} {0}", (Categories == null) ? "" : string.Join("|", this.Categories.ToArray()), CoreResources.MSG_Diagnostics_MessageBuilder_Categories);
                 sb.AppendLine("{1,16} {0}", Reference == null ? CoreResources.MSG_Diagnostics_NullText : Reference.ToString(), CoreResources.MSG_Diagnostics_MessageBuilder_Reference);
                 sb.AppendLine("{1,16} {0}", EventId, CoreResources.MSG_Diagnostics_MessageBuilder_EventId);
-                sb.AppendLine("{1,16} {0}", MessageCode, CoreResources.MSG_Diagnostics_MessageBuilder_MessageCode);
+                sb.AppendLine("{1,16} {0}", EventCode, CoreResources.MSG_Diagnostics_MessageBuilder_MessageCode);
 
                 if (Properties != null)
                 {

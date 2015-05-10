@@ -54,6 +54,7 @@ namespace HashTag.Logging.Web.Service
             var jsonResolver = new DefaultContractResolver(); //allow [Serializable] attribute on classes (for ELMAH compatiability)
             jsonResolver.IgnoreSerializableAttribute = true;           
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = jsonResolver;
+            config.Formatters.XmlFormatter.UseXmlSerializer = true;
         }
     }
 }

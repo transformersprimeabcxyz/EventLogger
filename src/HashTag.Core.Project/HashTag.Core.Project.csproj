@@ -178,6 +178,7 @@
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
     <Compile Include="Diagnostics\ILog.cs" />
     <Compile Include="Diagnostics\InternalLogger.cs" />
+    <Compile Include="Diagnostics\LogHttpContext.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\LocalFileTraceListener.cs" />
