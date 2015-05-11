@@ -46,33 +46,48 @@ namespace HashTag.Diagnostics
 
             if ((flags & HttpCaptureFlags.QueryString) == HttpCaptureFlags.QueryString)
             {
-                foreach (string key in request.QueryString.Keys)
+                for (int x = 0; x < request.QueryString.Count; x++)
                 {
-                    QueryString.Add(key, request.QueryString[key]);
+
+                    var k = request.QueryString.AllKeys[x];
+                    var v = request.QueryString[k];
+                   
+                    this.QueryString.Add(k, v);
                 }
             }
 
             if ((flags & HttpCaptureFlags.Cookies) == HttpCaptureFlags.Cookies)
             {
-                for(int x = 0;x<request.Cookies.Count;x++)
+                for (int x = 0; x < request.Cookies.Count; x++)
                 {
-                    var cookie = request.Cookies[0];
-                    Cookies.Add(cookie.Name, cookie.Value);
+
+                    var k = request.Cookies.AllKeys[x];
+                    var v = request.Cookies[k].Value;
+
+                    this.Cookies.Add(k, v);
                 }
             }
             if ((flags & HttpCaptureFlags.Form) == HttpCaptureFlags.Form)
             {
-                foreach (string key in request.Form.Keys)
+                for (int x = 0; x < request.Form.Count; x++)
                 {
-                    Form.Add(key, request.Form[key]);
+
+                    var k = request.Form.AllKeys[x];
+                    var v = request.Form[k];
+                   
+                    this.Form.Add(k, v);
                 }
             }      
       
             if ((flags & HttpCaptureFlags.Headers) == HttpCaptureFlags.Headers)
             {
-                foreach (string key in request.Headers.Keys)
+                for (int x = 0; x < request.Headers.Count; x++)
                 {
-                    Headers.Add(key, request.Headers[key]);
+
+                    var k = request.Headers.AllKeys[x];
+                    var v = request.Headers[k];
+
+                    this.Headers.Add(k, v);
                 }
             }
         }

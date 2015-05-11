@@ -10,11 +10,12 @@ using System.Web;
 
 using HashTag.Text;
 using HashTag.Web;
+using System.Security;
 
 namespace HashTag.Diagnostics
 {
     /// <summary>
-    /// Facade to set values on the underlying EntLib.LogEntry message to be persisted to log
+    /// Facade to set values on the underlying message to be persisted to log
     /// </summary>
     public class LogMessageBuilder
     {
@@ -144,7 +145,33 @@ namespace HashTag.Diagnostics
         public LogMessageBuilder Catch(Exception ex)
         {
             _message.AddException(ex);
+            HttpException httpException = ex as HttpException;
+
+            if (httpException != null)
+            {
+                _message.Properties.Add("HTTP_STATUS_CODE", httpException.GetHttpCode().ToString());
+                _message.Properties.Add("HTTP_HTML_ERROR_MESSAGE", tryGetHtmlErrorMessage(httpException));
+            }
             return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        /// <remarks>From Elmah::Error.cs</remarks>
+        private static string tryGetHtmlErrorMessage(HttpException e)
+        {
+            try
+            {
+                return e.GetHtmlErrorMessage();
+            }
+            catch (SecurityException se)
+            {
+                Trace.WriteLine(se);
+                return null;
+            }
         }
 
         /// <summary>
