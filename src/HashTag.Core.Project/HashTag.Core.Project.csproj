@@ -205,7 +205,6 @@
     </Compile>
     <Compile Include="Diagnostics\MachineContext.cs" />
     <Compile Include="Diagnostics\MessagePriority.cs" />
-    <Compile Include="Diagnostics\RuntimeContext.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceConfig.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceListenerConfig.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceSourceCollection.cs" />

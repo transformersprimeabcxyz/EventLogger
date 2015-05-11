@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using HashTag.Text;
 using System.Collections.Specialized;
 using System.Runtime.Serialization;
+using HashTag.Collections;
 
 
 namespace HashTag.Diagnostics
@@ -315,20 +316,20 @@ namespace HashTag.Diagnostics
         /// Returns a list of property/values of the machine taken at the time this class was created.  Used most frequently in logging scenarios
         /// </summary>
         /// <returns></returns>
-        public NameValueCollection ToList()
+        public PropertyBag ToList()
         {
-            NameValueCollection nvc = new NameValueCollection();
-            nvc.Add("HostName", this.HostName);
-            nvc.Add("Identity", this.Identity);
-            nvc.Add("AppDomainName", this.AppDomainName);
-            nvc.Add("ProcessId", this.ProcessId);
-            nvc.Add("ProcessName", this.ProcessName);
-            nvc.Add("ManagedThreadName", this.ManagedThreadName);
-            nvc.Add("Win32ThreadId", this.win32ThreadId);
-            nvc.Add("ClassName", this.ClassName);
-            nvc.Add("MethodName", this.MethodName);
-            nvc.Add("StackTrace", StackTrace);
-            return nvc;
+            var retList = new PropertyBag();
+            retList.Add("HostName", this.HostName);
+            retList.Add("Identity", this.Identity);
+            retList.Add("AppDomainName", this.AppDomainName);
+            retList.Add("ProcessId", this.ProcessId);
+            retList.Add("ProcessName", this.ProcessName);
+            retList.Add("ManagedThreadName", this.ManagedThreadName);
+            retList.Add("Win32ThreadId", this.win32ThreadId);
+            retList.Add("ClassName", this.ClassName);
+            retList.Add("MethodName", this.MethodName);
+            retList.Add("StackTrace", StackTrace);
+            return retList;
         }
 
         /// <summary>
