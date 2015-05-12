@@ -341,39 +341,6 @@ namespace HashTag.Diagnostics
             return Serialize.To.Xml(this);
             
         }
-
-
-        #region IXmlSerializable Members
-
-        /// <summary>
-        /// IXmlSerializable Interface Implementation
-        /// </summary>
-        /// <returns>Null</returns>
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Not Implemented.  Class is intended for for serialization only.
-        /// </summary>
-        /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
-        {
-            throw new NotImplementedException("This class is intended to be serialized only.  Deserialization is not supported");
-        }
-
-        /// <summary>
-        /// Generate an XML representation of this class. &gt;MachineContext&lt; is the first node returned.
-        /// </summary>
-        /// <param name="writer">Writer to which Xml of this object is sent</param>
-        public void WriteXml(XmlWriter writer)
-        {
-            ToXml(writer);
-        }
-
-        #endregion
-
         
     } //machine context
 }

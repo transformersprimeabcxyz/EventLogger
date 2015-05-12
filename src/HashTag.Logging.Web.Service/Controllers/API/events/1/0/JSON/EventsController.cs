@@ -34,34 +34,10 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
         }
 
         [Route(""),HttpPost]
-        public TestRequest SaveError(TestRequest request)
+        public TestRequest SaveEvent(LogMessage request)
         {
-            LogHttpContext ctx = new LogHttpContext(HttpContext.Current,HttpCaptureFlags.All);
 
-            request = new TestRequest();
-            request.UUID = Guid.NewGuid().ToString();
-            request.Vars.Add("key", "val");
-            request.Vars.Add("key", "val");
-            request.Vars.Add("key", "val");
-            request.Vars.Add("key", "<test>asfasf</text>");
-            var x = JsonConvert.SerializeObject(request, Formatting.Indented);
-            var y = Serialize.To.Xml(request);
-            return request;
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            return null;
         }
     }
 

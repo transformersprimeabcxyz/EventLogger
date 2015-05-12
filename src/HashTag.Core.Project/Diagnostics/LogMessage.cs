@@ -289,7 +289,7 @@ namespace HashTag.Diagnostics
         /// Attributes about the current HTTP context.  Usually set when an Error or Higher is logged
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public NameValueCollection HttpContext { get; set; }
+        public LogHttpContext HttpContext { get; set; }
 
         /// <summary>
         /// Stack trace, machine name, thread identifiers and other runtime process specific contextual information
@@ -309,6 +309,9 @@ namespace HashTag.Diagnostics
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object Reference { get; set; }
 
+        /// <summary>
+        /// Id that correlates multiple events on a single request
+        /// </summary>
         [JsonProperty]
         public Guid ActivityId
         {
@@ -344,6 +347,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public PropertyBag Properties { get; set; }
+
         public void AddProperty(string key, string value)
         {
             if (Properties == null) Properties = new PropertyBag();

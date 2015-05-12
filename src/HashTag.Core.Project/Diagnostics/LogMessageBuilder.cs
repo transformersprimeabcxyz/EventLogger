@@ -175,13 +175,14 @@ namespace HashTag.Diagnostics
         }
 
         /// <summary>
-        /// Extract specific HTTP information and store it in message's HttpContext collection
+        /// Extract specific HTTP information and store it in message's HttpContext collection.
+        /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
         /// </summary>
         /// <param name="flags">Determines which information to collect from context</param>
         /// <returns></returns>
         public LogMessageBuilder CaptureHttp(HttpCaptureFlags flags)
         {
-           // _message.HttpContext = WebUtils.ExpandCurrentContext(flags);
+            _message.HttpContext = new LogHttpContext(HttpContext.Current, flags);
             return this;
         }
 
