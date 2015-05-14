@@ -34,10 +34,9 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
         }
 
         [Route(""),HttpPost]
-        public TestRequest SaveEvent(LogMessage request)
+        public HttpResponseMessage SaveEvent(LogMessage request)
         {
-
-            return null;
+            return base.Request.CreateResponse<string>(HttpStatusCode.Created, "ehllo");            
         }
     }
 

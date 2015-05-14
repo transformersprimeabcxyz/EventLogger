@@ -261,7 +261,7 @@ namespace HashTag.Diagnostics
             {
                 string operation = sf.GetMethod().Name;
                 Type t = sf.GetMethod().ReflectedType;
-                if (t.Namespace != namespaceName)
+                if (t!=null && t.Namespace != namespaceName)
                 {
                     _className = t.FullName;
                     _methodName = operation;
