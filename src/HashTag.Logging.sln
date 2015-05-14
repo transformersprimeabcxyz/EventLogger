@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__SupportProjects", "__Supp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Core.RestClient", "HashTag.Core.RestClient\HashTag.Core.RestClient.csproj", "{49139C04-DC1A-420C-83AE-072BD986E2EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Connector.MSSQL", "HashTag.Logging.Connector.MSSQL\HashTag.Logging.Connector.MSSQL.csproj", "{1837960F-BB20-44A1-AF38-E96A55C9EEBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,15 @@ Global
 		{49139C04-DC1A-420C-83AE-072BD986E2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49139C04-DC1A-420C-83AE-072BD986E2EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49139C04-DC1A-420C-83AE-072BD986E2EF}.Release|x86.ActiveCfg = Release|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Net40|Any CPU.ActiveCfg = Release|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Net40|Any CPU.Build.0 = Release|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Net40|x86.ActiveCfg = Release|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

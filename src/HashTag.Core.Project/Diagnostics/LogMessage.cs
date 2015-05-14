@@ -37,7 +37,7 @@ namespace HashTag.Diagnostics
             : base()
         {
             TimeStamp = DateTime.Now;
-            MessageId = Guid.NewGuid();
+            MessageUUID = Guid.NewGuid();
             Categories = new List<string>();
         }
         public LogMessage(string message = null, params object[] args)
@@ -55,11 +55,11 @@ namespace HashTag.Diagnostics
         }
 
         /// <summary>
-        /// Unique identifier for this message.  Used when comparing messages in different message sinks.
+        /// Unique identifier for this message.  Used when comparing messages in different message sinks. (https://www.ietf.org/rfc/rfc4122.txt)
         /// </summary>
         [DataMember]
         [JsonProperty]
-        public Guid MessageId { get; set; }
+        public Guid MessageUUID { get; set; }
 
         private string _title;
         /// <summary>
@@ -191,7 +191,7 @@ namespace HashTag.Diagnostics
                     _applicationKey = CoreConfig.ApplicationName;
                 }
                 return _applicationKey;
-            }
+            }   
             set
             {
                 _applicationKey = value;

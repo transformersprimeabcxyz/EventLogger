@@ -207,6 +207,10 @@
       <Project>{c92dc151-a0ba-4a5e-a20e-620ec9c06aff}</Project>
       <Name>HashTag.Elmah</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\HashTag.Logging.Web.Library\HashTag.Logging.Web.Library.csproj">
+      <Project>{6881591d-3a09-4a80-85be-564222cd9595}</Project>
+      <Name>HashTag.Logging.Web.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

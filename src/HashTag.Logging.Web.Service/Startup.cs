@@ -5,6 +5,8 @@ using System.Web.Routing;
 using System.Web.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Serialization;
+using HashTag.Logging.Web.Library;
+using Newtonsoft.Json;
 
 namespace HashTag.Logging.Web.Service
 {
@@ -43,6 +45,14 @@ namespace HashTag.Logging.Web.Service
             //    url: "{controller}/{action}/{id}",
             //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             //);
+            var settings = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                TypeNameHandling = TypeNameHandling.All,
+                Formatting = Formatting.Indented
+            };
+            settings.Converters.Add(new NameValueCollectionConverter());
+            JsonConvert.DefaultSettings = () => settings;
         }
         public static void Register(HttpConfiguration config)
         {
@@ -54,6 +64,11 @@ namespace HashTag.Logging.Web.Service
             var jsonResolver = new DefaultContractResolver(); //allow [Serializable] attribute on classes (for ELMAH compatiability)
             jsonResolver.IgnoreSerializableAttribute = true;           
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = jsonResolver;
+            var jsonFormatter = config.Formatters.JsonFormatter;
+
+            var settings = jsonFormatter.SerializerSettings;
+            settings.Converters.Add(new NameValueCollectionConverter());
+
             config.Formatters.XmlFormatter.UseXmlSerializer = true;
         }
     }
