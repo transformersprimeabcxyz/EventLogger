@@ -179,6 +179,7 @@
     <Compile Include="Diagnostics\ILog.cs" />
     <Compile Include="Diagnostics\InternalLogger.cs" />
     <Compile Include="Diagnostics\LogHttpContext.cs" />
+    <Compile Include="Diagnostics\LogRuntimeContext.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\LocalFileTraceListener.cs" />
@@ -293,7 +294,7 @@
     <Compile Include="Configuration\ConfigManager.Merge.cs" />
     <Compile Include="Extensions.Collections.cs" />
     <None Include="packages.config" />
-    <None Include="_Config And Notes\Sample.Annotated.config">
+    <None Include="App_ReadMe\Sample.Annotated.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -329,7 +330,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CoreResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Config And Notes\License.txt" />
+    <EmbeddedResource Include="App_ReadMe\License.txt" />
     <EmbeddedResource Include="Net\MimeTypes.xml" />
     <EmbeddedResource Include="Net\Images\32x32\mime_pdf_32x32bmp.bmp" />
   </ItemGroup>

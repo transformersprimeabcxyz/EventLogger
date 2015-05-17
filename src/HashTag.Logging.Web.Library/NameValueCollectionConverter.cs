@@ -8,61 +8,55 @@ using System.Threading.Tasks;
 
 namespace HashTag.Logging.Web.Library
 {
-    internal class NameValuePair
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-    }
-
+    /// <summary>
+    /// Custom converter for (de)serializing NameValueCollection
+    /// Add an instance to the settings Converters collection
+    /// </summary>
+    [Citation("http://milenkodj.blogspot.com/2014/08/jsonnet-serialization-of.html")]
     public class NameValueCollectionConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (!(value is NameValueCollection))
-            {
+            var collection = value as NameValueCollection;
+            if (collection == null)
                 return;
-            }
 
-            var collection = (NameValueCollection)value;
-            var container = collection.AllKeys.Select(key => new NameValuePair
+            writer.WriteStartObject();
+            foreach (var key in collection.AllKeys)
             {
-                Name = key,
-                Value = collection[key]
-            }).ToList();
-
-            var serialized = JsonConvert.SerializeObject(container);
-
-            writer.WriteRawValue(serialized);
+                writer.WritePropertyName(key);
+                writer.WriteValue(collection.Get(key));
+            }
+            writer.WriteEndObject();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object originalValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return reader.Value;
+            var nameValueCollection = new NameValueCollection();
+            var key = "";
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonToken.StartObject)
+                {
+                    nameValueCollection = new NameValueCollection();
+                }
+                if (reader.TokenType == JsonToken.EndObject)
+                {
+                    return nameValueCollection;
+                }
+                if (reader.TokenType == JsonToken.PropertyName)
+                {
+                    key = reader.Value.ToString();
+                }
+                if (reader.TokenType == JsonToken.String)
+                    nameValueCollection.Add(key, reader.Value.ToString());
+            }
+            return nameValueCollection;
         }
 
         public override bool CanConvert(Type objectType)
         {
-            var t = (IsNullableType(objectType))
-                        ? Nullable.GetUnderlyingType(objectType)
-                        : objectType;
-
-            return typeof(NameValueCollection).IsAssignableFrom(t);
-        }
-
-        public static bool IsNullable(Type type)
-        {
-            return type != null && (!type.IsValueType || IsNullableType(type));
-        }
-
-        public static bool IsNullableType(Type type)
-        {
-            if (type == null)
-            {
-                return false;
-            }
-
-            return (type.IsGenericType &&
-                    type.GetGenericTypeDefinition() == typeof(Nullable<>));
+            return objectType == typeof(NameValueCollection);
         }
     }
 }

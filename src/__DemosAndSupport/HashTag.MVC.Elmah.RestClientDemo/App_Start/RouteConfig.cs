@@ -26,8 +26,8 @@ namespace HashTag.MVC.Elmah.RestClientDemo
             var settings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                TypeNameHandling = TypeNameHandling.All,
-                Formatting = Formatting.Indented
+                TypeNameHandling = TypeNameHandling.None,
+                Formatting = Formatting.Indented,                
             };
             settings.Converters.Add(new NameValueCollectionConverter());
             JsonConvert.DefaultSettings = () => settings;

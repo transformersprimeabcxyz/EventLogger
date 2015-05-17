@@ -32,7 +32,7 @@ namespace HashTag.Logging.Web.Library
             dbEvent.Exceptions = JsonConvert.SerializeObject(error.Exceptions, Formatting.Indented);
             dbEvent.HostName = error.MachineName;
             dbEvent.HttpContext = JsonConvert.SerializeObject(error.HttpContext,Formatting.Indented);
-            dbEvent.Identity = JsonConvert.SerializeObject(error.UserContext,Formatting.Indented); //?
+            dbEvent.UserContext = "???";
             dbEvent.MachineContext = JsonConvert.SerializeObject(error.MachineContext,Formatting.Indented);
             dbEvent.Message = error.MessageText;
             dbEvent.Module = error.ApplicationSubKey;

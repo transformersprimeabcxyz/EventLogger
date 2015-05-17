@@ -184,13 +184,14 @@ namespace Elmah
         {
             ErrorLog log;
 
-            if (context != null)
-            {
-                log = (ErrorLog) context.Items[_contextKey];
+            //if (context != null)
+            //{
+            //    object t1 = context.Items[_contextKey];
+            //    log = (ErrorLog)t1;
 
-                if (log != null)
-                    return log;
-            }
+            //    if (log != null)
+            //        return log;
+            //}
 
             //
             // Determine the default store type from the configuration and 

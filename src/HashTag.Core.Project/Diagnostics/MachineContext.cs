@@ -203,6 +203,9 @@ namespace HashTag.Diagnostics
 
         private void getSystemProperties()
         {
+           
+                
+
             this.HostName = Environment.MachineName;
             this.AppDomainName = AppDomain.CurrentDomain.FriendlyName;
             this.ManagedThreadName = Thread.CurrentThread.Name;

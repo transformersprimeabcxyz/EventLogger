@@ -36,10 +36,16 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
         [Route(""),HttpPost]
         public HttpResponseMessage SaveEvent(LogMessage request)
         {
-            EventRepository repo = new EventRepository();
-            repo.StoreEvent(request);
-            
-            return base.Request.CreateResponse<string>(HttpStatusCode.Created, "ehllo");            
+            try
+            {
+                EventRepository repo = new EventRepository();
+                repo.StoreEvent(request);
+            }
+            catch(Exception ex)
+            {
+                var s = JsonConvert.SerializeObject(ex, Formatting.Indented);
+            }
+            return base.Request.CreateResponse<LogMessage>(HttpStatusCode.Created, request);            
         }
     }
 

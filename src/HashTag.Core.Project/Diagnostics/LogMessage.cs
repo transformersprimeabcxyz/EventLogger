@@ -40,11 +40,26 @@ namespace HashTag.Diagnostics
             MessageUUID = Guid.NewGuid();
             Categories = new List<string>();
         }
+        /// <summary>
+        /// Sets severity to Information and message text (if any)
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public LogMessage(string message = null, params object[] args)
             : this()
         {
             this.Severity = TraceEventType.Information;
+            if (message != null)
+            {
+                this.MessageText = string.Format(message, args);
+            }
         }
+        /// <summary>
+        /// Sets Severity to Error and message text
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public LogMessage(Exception ex, string message = null, params object[] args)
             : this(message, args)
         {
@@ -52,6 +67,7 @@ namespace HashTag.Diagnostics
             {
                 this.AddException(ex);
             }
+            this.Severity = TraceEventType.Error;
         }
 
         /// <summary>
@@ -83,7 +99,7 @@ namespace HashTag.Diagnostics
                     {
                         if (Exceptions != null && Exceptions.Count > 0)
                         {
-                            msg = Exceptions[0].Message.Left(60, "...");
+                            msg = Exceptions[0].GetBaseException().Message.Left(60, "...");
                         }
                     }
                     return msg;
@@ -301,7 +317,7 @@ namespace HashTag.Diagnostics
         /// Identity (both thread and Http if available) and authentication status 
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public NameValueCollection UserContext { get; set; }
+        public PropertyBag UserContext { get; set; }
 
         /// <summary>
         /// Miscellaneous informaition caller wishes to persist to log.  (e.g. record id, invoice number, loop index, etc) ToString() is called on Reference
@@ -443,7 +459,13 @@ namespace HashTag.Diagnostics
         }
 
 
+        /// <summary>
+        /// Set uninitialized fields to their calculated values.  After this these values won't automatically change baseed on dependent properties (e.g. priority, code, event id, user)
+        /// </summary>
+        public void Fix()
+        {
 
+        }
 
 
     }

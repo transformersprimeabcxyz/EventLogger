@@ -199,6 +199,10 @@
       <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
       <Name>HashTag.Core.Project</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\HashTag.Core.RestClient\HashTag.Core.RestClient.csproj">
+      <Project>{49139c04-dc1a-420c-83ae-072bd986e2ef}</Project>
+      <Name>HashTag.Core.RestClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\HashTag.Elmah.RestProxy\HashTag.Elmah.RestProxy.csproj">
       <Project>{b191913a-1c54-4356-b436-f8cfa2f269f9}</Project>
       <Name>HashTag.Elmah.RestProxy</Name>

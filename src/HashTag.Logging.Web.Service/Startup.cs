@@ -48,7 +48,7 @@ namespace HashTag.Logging.Web.Service
             var settings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                TypeNameHandling = TypeNameHandling.All,
+                //TypeNameHandling = TypeNameHandling.All,
                 Formatting = Formatting.Indented
             };
             settings.Converters.Add(new NameValueCollectionConverter());

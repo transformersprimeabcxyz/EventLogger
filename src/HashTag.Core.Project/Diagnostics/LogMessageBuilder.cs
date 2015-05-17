@@ -11,6 +11,7 @@ using System.Web;
 using HashTag.Text;
 using HashTag.Web;
 using System.Security;
+using HashTag.Collections;
 
 namespace HashTag.Diagnostics
 {
@@ -155,6 +156,11 @@ namespace HashTag.Diagnostics
             return this;
         }
 
+        public LogMessageBuilder Fix()
+        {
+
+            return this;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -250,7 +256,7 @@ namespace HashTag.Diagnostics
         {
             if (_message.UserContext == null)
             {
-                _message.UserContext = new System.Collections.Specialized.NameValueCollection();
+                _message.UserContext = new PropertyBag();
             }
             if (HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null)
             {
@@ -260,6 +266,8 @@ namespace HashTag.Diagnostics
             {
                 _message.UserContext.Add("ThreadUser", string.Format("{0}, IsAuthenticated: {1}", Thread.CurrentPrincipal.Identity.Name, Thread.CurrentPrincipal.Identity.IsAuthenticated));
             }
+
+            _message.UserContext.Add("EnvUser",Environment.UserName);
             return this;
         }
 

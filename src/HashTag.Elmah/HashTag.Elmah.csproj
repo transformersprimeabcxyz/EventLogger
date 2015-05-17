@@ -11,7 +11,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>HashTag.Elmah</AssemblyName>
+    <AssemblyName>Elmah</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -238,7 +238,7 @@
     <Compile Include="XmlText.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ErrorLog.css" />
+    <EmbeddedResource Include="ErrorLog.css" />
     <Content Include="mkmdb.vbs" />
     <Content Include="MySql.sql" />
     <Content Include="Oracle.sql" />

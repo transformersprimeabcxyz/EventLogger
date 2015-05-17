@@ -50,7 +50,7 @@ namespace HashTag.Diagnostics
             //	_filterList (generally just those in base Exception class)
             //-------------------------------------------------------			
             this.Properties = Reflector.GetPublicProperties(ex, _filterList);
-            
+            var x = ex.TargetSite.ReflectedType.Assembly.GetName().Version;
             TargetSite = (ex.TargetSite == null)?"(null)":ex.TargetSite.ToString();
             ErrorCode = Reflector.GetProtectedProperty<int>("HResult", ex, default(int)).ToString();
         }
