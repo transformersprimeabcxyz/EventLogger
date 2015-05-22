@@ -43,7 +43,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="messageBlock">A block of messages that needs persisted to permanent storage</param>
         /// <returns>True if persister did not throw unhandled error</returns>
-        bool PersistMessages(List<LogMessage> messageBlock);
+        bool PersistMessages(List<LogEvent> messageBlock);
 
         /// <summary>
         /// Tell persister to force writing any log messages it might be storing in its private internal buffers

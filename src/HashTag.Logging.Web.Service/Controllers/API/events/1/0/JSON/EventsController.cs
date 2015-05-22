@@ -34,7 +34,7 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
         }
 
         [Route(""),HttpPost]
-        public HttpResponseMessage SaveEvent(LogMessage request)
+        public HttpResponseMessage SaveEvent(LogEvent request)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
             {
                 var s = JsonConvert.SerializeObject(ex, Formatting.Indented);
             }
-            return base.Request.CreateResponse<LogMessage>(HttpStatusCode.Created, request);            
+            return base.Request.CreateResponse<LogEvent>(HttpStatusCode.Created, request);            
         }
     }
 

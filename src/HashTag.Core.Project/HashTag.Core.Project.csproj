@@ -143,6 +143,7 @@
       <HintPath>..\..\lib\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
@@ -177,9 +178,12 @@
     <Compile Include="CoreConfig.Log.cs" />
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
     <Compile Include="Diagnostics\ILog.cs" />
+    <Compile Include="Diagnostics\ILogEventFactory.cs" />
     <Compile Include="Diagnostics\InternalLogger.cs" />
+    <Compile Include="Diagnostics\LogFactory.cs" />
     <Compile Include="Diagnostics\LogHttpContext.cs" />
     <Compile Include="Diagnostics\LogRuntimeContext.cs" />
+    <Compile Include="Diagnostics\LogUserContext.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\LocalFileTraceListener.cs" />
@@ -189,7 +193,7 @@
     <Compile Include="Diagnostics\Log.cs" />
     <Compile Include="Diagnostics\Log.LastChance.cs" />
     <Compile Include="Diagnostics\Log.New.cs" />
-    <Compile Include="Diagnostics\LogMessage.cs" />
+    <Compile Include="Diagnostics\LogEvent.cs" />
     <Compile Include="Diagnostics\LogException.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\MemoryCache.cs" />
@@ -200,12 +204,12 @@
     <Compile Include="Data\IDetachable.cs" />
     <Compile Include="Data\LinqBase.cs" />
     <Compile Include="Data\LinqEntityBase.cs" />
-    <Compile Include="Diagnostics\LogMessageBuffer.cs" />
-    <Compile Include="Diagnostics\LogMessageBuilder.cs">
+    <Compile Include="Diagnostics\LogEventBuffer.cs" />
+    <Compile Include="Diagnostics\LogEventBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\MachineContext.cs" />
-    <Compile Include="Diagnostics\MessagePriority.cs" />
+    <Compile Include="Diagnostics\LogMachineContext.cs" />
+    <Compile Include="Diagnostics\LogEventPriority.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceConfig.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceListenerConfig.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceSourceCollection.cs" />

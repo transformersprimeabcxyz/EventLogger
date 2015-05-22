@@ -3,14 +3,14 @@ namespace HashTag.Diagnostics
 {
     public interface ILog:IDisposable
     {
-        LogMessageBuilder Critical { get; }
-        LogMessageBuilder Error { get; }
-        LogMessageBuilder Info { get; }
+        LogEventBuilder Critical { get; }
+        LogEventBuilder Error { get; }
+        LogEventBuilder Info { get; }
         string LogName { get; set; }
-        LogMessageBuilder Start { get; }
-        LogMessageBuilder Stop { get; }
-        LogMessageBuilder Verbose { get; }
-        LogMessageBuilder Warning { get; }
-        void Write(LogMessage message);
+        LogEventBuilder Start { get; }
+        LogEventBuilder Stop { get; }
+        LogEventBuilder Verbose { get; }
+        LogEventBuilder Warning { get; }
+        void Write(LogEvent message);
     }
 }

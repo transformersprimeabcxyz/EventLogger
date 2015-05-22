@@ -24,7 +24,7 @@ namespace HashTag.Diagnostics
     /// create a default EventId in LogMessage
     /// </remarks>
     [DataContract(Namespace = CoreConfig.WcfNamespace)]
-    public enum MessagePriority
+    public enum LogEventPriority
     {
         
         /// <summary>

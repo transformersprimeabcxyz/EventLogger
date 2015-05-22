@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +9,7 @@ using HashTag.Text;
 using System.Collections.Specialized;
 using System.Runtime.Serialization;
 using HashTag.Collections;
+using Newtonsoft.Json;
 
 
 namespace HashTag.Diagnostics
@@ -18,23 +18,63 @@ namespace HashTag.Diagnostics
     /// Probe system for machine centric properties
     /// </summary>
         [DataContract(Namespace = CoreConfig.WcfNamespace)]
-    public sealed class MachineContext 
+    public sealed class LogMachineContext 
     {
         
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineContext()
+        public LogMachineContext()
         {
             getSystemProperties();
         }
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
+        public string CommandLine { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Is64BitOperatingSystem { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Is64BitProcess { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string OsVersion { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? ProcessorCount { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string AppFolder { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string DomainConfigFile { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string DomainAppName { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? DomainId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string DomainCtxIdentity { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string DomainAppIdentity { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string DomainAssmVersion { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string DomainAssmName { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         private static string _hostName = Environment.MachineName;
         /// <summary>
         /// Computer where this event occured.  Can be different than the computer where
         /// message is actually stored.  If not explicitly set, use runtime information
         /// </summary>
         [DataMember]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string HostName
         {
             get
@@ -50,122 +90,53 @@ namespace HashTag.Diagnostics
                 _hostName = value;
             }
         }
-        private string _identity = Environment.UserDomainName + "/" + Environment.UserName;
-        /// <summary>
-        /// Identity (usually username) process is running under when application created this
-        /// message.
-        /// </summary>
-        [DataMember]
-        public string Identity
-        {
-            get
-            {
-                return _identity;
-            }
-            set
-            {
-                _identity = value;
-            }
-        }
-        private string _appDomainName;
+      
 
         /// <summary>
         /// The <see cref="AppDomain"/> in which the program is running
         /// </summary>
         [DataMember]
-        public string AppDomainName
-        {
-            get
-            {
-                return _appDomainName;
-            }
-            set
-            {
-                _appDomainName = value;
-            }
-        }
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string AppDomainName { get; set; }
         
-        private string _userDomainName = Environment.UserDomainName;
-        /// <summary>
-        /// Identity domain caller of this application is running under
-        /// </summary>
-        [DataMember]
-        public string UserDomainName
-        {
-            get { return _userDomainName; }
-            set { _userDomainName = value; }
-        }
-    
-
-        private string _processId;
+   
         /// <summary>
         /// The Win32 process ID for the current running process.
         /// </summary>
         [DataMember]
-        public string ProcessId
-        {
-            get
-            {
-                return _processId;
-            }
-            set
-            {
-                _processId = value;
-            }
-        }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string ProcessId { get; set; }
+      
 
-        private string _processName;
         /// <summary>
         /// The name of the current running process.
         /// </summary>
         [DataMember]
-        public string ProcessName
-        {
-            get
-            {
-                return _processName;
-            }
-            set
-            {
-                _processName = value;
-            }
-        }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string ProcessName { get; set; }
 
-        private string _managedThreadName;
         /// <summary>
         /// The name of the .NET thread.
         /// </summary>
         ///  <seealso cref="Win32ThreadId"/>
         [DataMember]
-        public string ManagedThreadName
-        {
-            get
-            {
-                return _managedThreadName;
-            }
-            set
-            {
-                _managedThreadName = value;
-            }
-        }
-
-        private string win32ThreadId;
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string ManagedThreadName { get; set; }
+        
         /// <summary>
         /// The Win32 Thread ID for the current thread.
         /// </summary>
         [DataMember]
-        public string Win32ThreadId
-        {
-            get
-            {
-                return win32ThreadId;
-            }
-            set
-            {
-                win32ThreadId = value;
-            }
-        }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Win32ThreadId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string StackTrace { get; set; }
+
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public long? WorkingMemoryBytes { get; set; }
+
         #region Win32 calls
 
         string _ipAddressList;
@@ -174,6 +145,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         [Citation("20080901",Source="http://www.geekpedia.com/tutorial149_Get-the-IP-address-in-a-Windows-application.html",SourceDate="October 27th 2005")]
         [DataMember]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string IPAddressList
         {
             get
@@ -203,11 +175,39 @@ namespace HashTag.Diagnostics
 
         private void getSystemProperties()
         {
-           
-                
+            this.CommandLine = Environment.CommandLine;
+            this.Is64BitOperatingSystem = Environment.Is64BitOperatingSystem;
+            this.Is64BitProcess = Environment.Is64BitProcess;
+            this.OsVersion = Environment.OSVersion.VersionString;
+            this.ProcessorCount = Environment.ProcessorCount;
+            this.StackTrace = Environment.StackTrace;
+            this.WorkingMemoryBytes = Environment.WorkingSet;
+
+            if (AppDomain.CurrentDomain != null)
+            {
+                this.AppDomainName = AppDomain.CurrentDomain.FriendlyName;
+                this.DomainId = AppDomain.CurrentDomain.Id;
+                if (AppDomain.CurrentDomain.ActivationContext != null)
+                    this.DomainCtxIdentity = AppDomain.CurrentDomain.ActivationContext.Identity.FullName;
+
+                if (AppDomain.CurrentDomain.ApplicationIdentity != null)
+                    this.DomainAppIdentity = AppDomain.CurrentDomain.ApplicationIdentity.FullName;
+
+                if (AppDomain.CurrentDomain.DomainManager != null && AppDomain.CurrentDomain.DomainManager.EntryAssembly != null)
+                {
+                    this.DomainAssmVersion = AppDomain.CurrentDomain.DomainManager.EntryAssembly.GetName().Version.ToString();
+                    this.DomainAssmName = AppDomain.CurrentDomain.DomainManager.EntryAssembly.FullName;
+                }
+                if (AppDomain.CurrentDomain.SetupInformation != null)
+                {
+                    this.DomainAppName = AppDomain.CurrentDomain.SetupInformation.ApplicationName;
+                    this.DomainConfigFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+                    this.AppFolder = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+                }
+            }
 
             this.HostName = Environment.MachineName;
-            this.AppDomainName = AppDomain.CurrentDomain.FriendlyName;
+             
             this.ManagedThreadName = Thread.CurrentThread.Name;
             this.ProcessId = Utils.Win32.GetCurrentProcessId().ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
             var currentProc = System.Diagnostics.Process.GetCurrentProcess();
@@ -220,6 +220,7 @@ namespace HashTag.Diagnostics
             _methodName = MethodName;
             _ipAddressList = IPAddressList; //force load of lazy loaded properties
         }
+
         #endregion
 
 
@@ -228,6 +229,7 @@ namespace HashTag.Diagnostics
         /// Name of first non-Utilities class within this stack trace.  NOTE:  Will return "" if called from any method within the same namespace as this method. HashTag.Diagnostics
         /// </summary>
         [DataMember]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string ClassName
         {
             get
@@ -238,23 +240,7 @@ namespace HashTag.Diagnostics
             }
             set { _className = value; }
         }
-        private string _stackTrace = Environment.StackTrace;
-
-        /// <summary>
-        /// Return a string that represents the stack trace at the moment of this call
-        /// </summary>
-         [DataMember]
-        public string StackTrace
-        {
-            get
-            {
-                return _stackTrace;
-            }
-            set
-            {
-                _stackTrace = value;
-            }
-        }
+     
         private void getStackTraceInfo()
         {
             StackTrace st = new StackTrace();
@@ -278,6 +264,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Name of non-Utilities method that is calling this method. NOTE:  Will return "" if called from any method within the same namespace as this method. 
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string MethodName
         {
             get
@@ -298,13 +285,12 @@ namespace HashTag.Diagnostics
             try
             {
                 writer.WriteStartElement("MachineContext");
-                writer.WriteElementString("HostName", this.HostName);
-                writer.WriteElementString("Identity", this.Identity);
+                writer.WriteElementString("HostName", this.HostName);                
                 writer.WriteElementString("AppDomainName", this.AppDomainName);
                 writer.WriteElementString("ProcessId", this.ProcessId);
                 writer.WriteElementString("ProcessName", this.ProcessName);
                 writer.WriteElementString("ManagedThreadName", this.ManagedThreadName);
-                writer.WriteElementString("Win32ThreadId", this.win32ThreadId);
+                writer.WriteElementString("Win32ThreadId", this.Win32ThreadId);
                 writer.WriteElementString("ClassName", this.ClassName);
                 writer.WriteElementString("MethodName", this.MethodName);
                 writer.WriteElementString("StackTrace", StackTrace);
@@ -322,13 +308,12 @@ namespace HashTag.Diagnostics
         public PropertyBag ToList()
         {
             var retList = new PropertyBag();
-            retList.Add("HostName", this.HostName);
-            retList.Add("Identity", this.Identity);
+            retList.Add("HostName", this.HostName);            
             retList.Add("AppDomainName", this.AppDomainName);
             retList.Add("ProcessId", this.ProcessId);
             retList.Add("ProcessName", this.ProcessName);
             retList.Add("ManagedThreadName", this.ManagedThreadName);
-            retList.Add("Win32ThreadId", this.win32ThreadId);
+            retList.Add("Win32ThreadId", this.Win32ThreadId);
             retList.Add("ClassName", this.ClassName);
             retList.Add("MethodName", this.MethodName);
             retList.Add("StackTrace", StackTrace);
@@ -344,6 +329,8 @@ namespace HashTag.Diagnostics
             return Serialize.To.Xml(this);
             
         }
-        
+
+
+     
     } //machine context
 }

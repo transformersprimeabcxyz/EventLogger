@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace HashTag.Diagnostics
 {
-    public class LogMessageBuffer : IDisposable
+    public class LogEventBuffer : IDisposable
     {
         private ReaderWriterLockSlim _bufferLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-        private ConcurrentQueue<LogMessage> _buffer = new ConcurrentQueue<LogMessage>();
+        private ConcurrentQueue<LogEvent> _buffer = new ConcurrentQueue<LogEvent>();
 
         private Timer _bufferTimer;
 
         /// <summary>
         /// Write a block of messages to store. NOTE: Fired on separate thread
         /// </summary>
-        public Action<List<LogMessage>> PersistMessageHandler;
+        public Action<List<LogEvent>> PersistMessageHandler;
 
         private void onTimer(object state)
         {
@@ -49,8 +49,8 @@ namespace HashTag.Diagnostics
             if (PersistMessageHandler == null) return;
             if (_buffer.Count == 0) return;
 
-            var listOfMessagesToPersist = new List<LogMessage>();
-            LogMessage msg;
+            var listOfMessagesToPersist = new List<LogEvent>();
+            LogEvent msg;
             while (_buffer.TryDequeue(out msg))
             {
                 listOfMessagesToPersist.Add(msg);
@@ -69,13 +69,13 @@ namespace HashTag.Diagnostics
             _bufferTimer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
-        public LogMessageBuffer()
+        public LogEventBuffer()
         {
             _bufferTimer = new Timer(onTimer, null, Timeout.Infinite, Timeout.Infinite);
             StartTimer();
         }
 
-        public void SubmitMessage(LogMessage msg)
+        public void SubmitMessage(LogEvent msg)
         {
             _buffer.Enqueue(msg);
             
@@ -105,7 +105,7 @@ namespace HashTag.Diagnostics
         {
             Dispose(true);
         }
-        ~LogMessageBuffer()
+        ~LogEventBuffer()
         {
             Dispose(false);
         }

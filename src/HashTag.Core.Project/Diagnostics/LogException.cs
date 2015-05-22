@@ -7,6 +7,10 @@ using System.Reflection;
 using HashTag.Reflection;
 using System.Collections;
 using HashTag.Collections;
+using System.ComponentModel.DataAnnotations;
+using System.Web;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace HashTag.Diagnostics
 {
@@ -23,6 +27,7 @@ namespace HashTag.Diagnostics
         {
             Properties = new List<Property>();
             Data = new List<Property>();
+            ExceptionId = Guid.NewGuid();
         }
 
         public LogException(Exception ex)
@@ -35,7 +40,7 @@ namespace HashTag.Diagnostics
             ExceptionType = ex.GetType().FullName;
             if (ex.InnerException != null)
             {
-                InnerException = new LogException(ex.InnerException );
+                InnerException = new LogException(ex.InnerException);
             }
 
             foreach (object key in ex.Data.Keys)
@@ -50,10 +55,42 @@ namespace HashTag.Diagnostics
             //	_filterList (generally just those in base Exception class)
             //-------------------------------------------------------			
             this.Properties = Reflector.GetPublicProperties(ex, _filterList);
-            var x = ex.TargetSite.ReflectedType.Assembly.GetName().Version;
-            TargetSite = (ex.TargetSite == null)?"(null)":ex.TargetSite.ToString();
-            ErrorCode = Reflector.GetProtectedProperty<int>("HResult", ex, default(int)).ToString();
+
+            TargetSite = (ex.TargetSite == null) ? "(null)" : ex.TargetSite.ToString();
+
+            if (ex is HttpException)
+            {
+                var webEx = ex as HttpException;
+                ErrorCode = webEx.ErrorCode.ToString();
+                HttpHtmlMessage = webEx.GetHtmlErrorMessage();
+                HttpWebEventCode = webEx.WebEventCode;
+                HttpStatusValue = webEx.GetHttpCode();
+                HttpStatusCode = ((System.Net.HttpStatusCode)HttpStatusValue).ToString();
+            }
+            else
+            {
+                ErrorCode = Reflector.GetProtectedProperty<int>("HResult", ex, default(int)).ToString();
+            }
+
+
         }
+
+
+        [Key, DataMember]
+        public Guid ExceptionId { get; set; }
+
+        [DataMember, Citation("https://msdn.microsoft.com/en-us/library/system.web.management.webeventcodes%28v=vs.110%29.aspx")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? HttpWebEventCode { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int?  HttpStatusValue { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string HttpStatusCode { get; set; }
+        
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
+        public string HttpHtmlMessage { get; set; }
 
         [DataMember]
         public List<Property> Properties { get; set; }
@@ -95,50 +132,24 @@ namespace HashTag.Diagnostics
         /// Get's the innermost exception or a reference to this instance if there are no inner exceptions
         /// </summary>
         /// <returns></returns>
-        public LogException GetBaseException()
+        public LogException GetBaseException
         {
-            var retEx = this;
-            while (retEx.InnerException != null)
+            get
             {
-                retEx = retEx.InnerException;
+                var retEx = this;
+                while (retEx.InnerException != null)
+                {
+                    retEx = retEx.InnerException;
+                }
+                return retEx;
             }
-            return retEx;
         }
 
         public object Clone()
         {
-            var retEx = new LogException()
-            {
-                ErrorCode = this.ErrorCode,
-                ExceptionType = this.ExceptionType,
-                HelpLink = this.HelpLink,
-                Message = this.Message,
-                Source = this.Source,
-                StackTrace = this.StackTrace,
-                TargetSite = this.TargetSite
-            };
-            if (InnerException != null)
-            {
-                retEx.InnerException = (LogException)InnerException.Clone();
-            }
-            if (Data != null && Data.Count > 0)
-            {
-                foreach (var item in Data)
-                {
-                    retEx.Data.Add(item.Clone() as Property);
-                }
-            }
-
-            if (Properties != null && Properties.Count > 0)
-            {
-                foreach (var prop in Properties)
-                {
-                    retEx.Properties.Add(prop.Clone() as Property);
-                }
-            }
-            return retEx;
+            return (object)JsonConvert.DeserializeObject<LogEvent>(JsonConvert.SerializeObject(this));     
         }
-        
+
         public override string ToString()
         {
             return this.Expand();
@@ -147,5 +158,6 @@ namespace HashTag.Diagnostics
         {
             return this.Expand(initialOffset);
         }
+
     }
 }

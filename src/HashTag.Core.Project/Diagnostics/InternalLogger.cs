@@ -70,7 +70,7 @@ namespace HashTag.Diagnostics
             Write(messageFormat, args);
         }
 
-        public void Write(LogMessage message)
+        public void Write(LogEvent message)
         {
             if (_logLock.TryEnterWriteLock(CoreConfig.Log.InternalHandlerTimeOutMs))
             {

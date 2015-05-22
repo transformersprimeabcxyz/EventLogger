@@ -18,7 +18,7 @@ namespace HashTag.Diagnostics
 
         }
 
-        public bool PersistMessages(List<LogMessage> messageBlock)
+        public bool PersistMessages(List<LogEvent> messageBlock)
         {
             if (messageBlock == null || messageBlock.Count == 0)
             {

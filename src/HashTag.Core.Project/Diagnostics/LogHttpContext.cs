@@ -21,6 +21,7 @@ namespace HashTag.Diagnostics
             var request = context.Request;
             if (request == null)
             {
+               
                 return;
             }
 
@@ -36,6 +37,7 @@ namespace HashTag.Diagnostics
                     
                     var k = request.ServerVariables.AllKeys[x];
                     var v = request.ServerVariables[k];
+                    if (string.IsNullOrEmpty(v)) continue;
                     if (string.Compare("AUTH_PASSWORD",k,true )==0 && string.IsNullOrWhiteSpace(v))
                     {
                         v = "****";
@@ -154,6 +156,7 @@ namespace HashTag.Diagnostics
         /// Gets a collection representing the form variables captured as 
         /// part of diagnostic data for the error.
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public PropertyBag Form
         {
             get
@@ -175,7 +178,7 @@ namespace HashTag.Diagnostics
         /// Gets a collection representing the client cookies
         /// captured as part of diagnostic data for the error.
         /// </summary>
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public PropertyBag Cookies
         {
              get

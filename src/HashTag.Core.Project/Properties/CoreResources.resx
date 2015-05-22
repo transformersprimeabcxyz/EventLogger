@@ -157,7 +157,7 @@
     <comment>&lt;appSettings&gt; key to retrieve this value from</comment>
   </data>
   <data name="HashTag.Diagnostics.Default.ApplicationLogLevels.defaultValue" xml:space="preserve">
-    <value>Information</value>
+    <value>All</value>
     <comment>Filter for log messages passed to connector.  Comma delimited list of System.Diagnostics.SourceLevels Default: Information</comment>
   </data>
   <data name="HashTag.Diagnostics.Default.ApplicationLogLevels.redirectToKey" xml:space="preserve">

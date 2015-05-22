@@ -36,7 +36,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Critical' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public LogMessageBuilder Critical
+        public LogEventBuilder Critical
         {
             get
             {
@@ -47,7 +47,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Error' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public LogMessageBuilder Error
+        public LogEventBuilder Error
         {
             get
             {
@@ -58,7 +58,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Warning' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public LogMessageBuilder Warning
+        public LogEventBuilder Warning
         {
             get
             {
@@ -69,7 +69,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Information' level message.
         /// </summary>
-        public LogMessageBuilder Info
+        public LogEventBuilder Info
         {
             get
             {
@@ -80,7 +80,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Verbose' level message.
         /// </summary>
-        public LogMessageBuilder Verbose
+        public LogEventBuilder Verbose
         {
             get
             {
@@ -91,7 +91,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Operation starting' message.
         /// </summary>
-        public LogMessageBuilder Start
+        public LogEventBuilder Start
         {
             get
             {
@@ -103,7 +103,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Operation stopping' message.
         /// </summary>
-        public LogMessageBuilder Stop
+        public LogEventBuilder Stop
         {
             get
             {
@@ -111,9 +111,9 @@ namespace HashTag.Diagnostics
             }
         }
 
-        private LogMessageBuilder newLogMessageBuilder(TraceEventType eventType)
+        private LogEventBuilder newLogMessageBuilder(TraceEventType eventType)
         {
-            var msg = new LogMessage();
+            var msg = new LogEvent();
 
             if (string.IsNullOrEmpty(_logName) == false)
             {
@@ -135,13 +135,13 @@ namespace HashTag.Diagnostics
             msg.LoggerName = _logName;
             msg.TimeStamp = DateTime.Now;
 
-            return new LogMessageBuilder(msg, Write);
+            return new LogEventBuilder(msg, Write);
         }
 
         /// <summary>
         /// Persist message to logging sub-system.  Called by log message builder
         /// </summary>
-        public void Write(LogMessage message)
+        public void Write(LogEvent message)
         {
             //filter not supported message levels
             if (!_logLevels.IsEnabled(message.Severity)) return;

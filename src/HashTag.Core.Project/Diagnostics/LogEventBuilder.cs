@@ -18,40 +18,46 @@ namespace HashTag.Diagnostics
     /// <summary>
     /// Facade to set values on the underlying message to be persisted to log
     /// </summary>
-    public class LogMessageBuilder
+    public class LogEventBuilder
     {
-        Action<LogMessage> _writeAction;
-        LogMessage _message;
+        Action<LogEvent> _writeAction;
+        LogEvent _message;
 
-        internal LogMessageBuilder(LogMessage messageToBuild, Action<LogMessage> writeAction)
+        internal LogEventBuilder(LogEvent messageToBuild, Action<LogEvent> writeAction)
         {
             _writeAction = writeAction;
             _message = messageToBuild;
         }
 
         /// <summary>
-        /// Persist all built up properties to persistent store
+        /// Persist all built up properties to persistent store.  This MUST be called for peristance to take place and MUST be last method in fluent chain
         /// </summary>
         /// <param name="message">Message text of log message.  May include any standard string.format paramters</param>
         /// <param name="args">Any argument to supply to <paramref name="message"/></param>
-        public LogMessage Write(string message, params object[] args)
+        public LogEvent Write(string message, params object[] args)
         {
             _message.MessageText = TextUtils.StringFormat(message, args);
             if (_writeAction != null)
             {
+                _message.Fix();
                 _writeAction(_message);
             }
             return _message;
         }
 
         /// <summary>
-        /// Persist an object to log.  Uses <paramref name="messageData"/>.ToString() to serialize the message
+        /// Persist an object to log.  Uses <paramref name="messageData"/>.ToString() to serialize the message.   This MUST be called for peristance to take place and MUST be last method in fluent chain
         /// </summary>
         /// <param name="messageData">Data to be persisted to log.</param>
-        public LogMessage Write(object messageData = null)
+        public LogEvent Write(object messageData = null)
         {
+            
             if (messageData != null)
             {
+                if (messageData is Exception)
+                {
+                    return Catch(messageData as Exception).Write();
+                }
                 Write(messageData.ToString());
             }
             else
@@ -66,11 +72,11 @@ namespace HashTag.Diagnostics
 
         
         /// <summary>
-        /// Persist all built up properties to persistent store
+        /// Returns a reference to message being constructed by builder.  Conceptually similar to StringBuilder.ToString() except exposes actual object instead of a copy
         /// </summary>
         /// <param name="message">Message text of log message.  May include any standard string.format paramters</param>
         /// <param name="args">Any argument to supply to <paramref name="message"/></param>
-        public LogMessage  Message(string message, params object[] args)
+        public LogEvent  Message(string message, params object[] args)
         {
             _message.MessageText = TextUtils.StringFormat(message, args);
             
@@ -78,10 +84,10 @@ namespace HashTag.Diagnostics
         }
 
         /// <summary>
-        /// Persist an object to log.  Uses <paramref name="messageData"/>.ToString() to serialize the message
+        /// Returns a reference to message being constructed by builder.  Conceptually similar to StringBuilder.ToString() except exposes actual object instead of a copy
         /// </summary>
         /// <param name="messageData">Data to be persisted to log.</param>
-        public LogMessage Message(object messageData = null)
+        public LogEvent Message(object messageData = null)
         {
             if (messageData != null)
             {
@@ -96,9 +102,21 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="eventId">User defined numerical id of message</param>
         /// <returns></returns>
-        public LogMessageBuilder WithId(int eventId)
+        public LogEventBuilder WithId(int eventId)
         {
             _message.EventId = eventId;
+            return this;
+        }
+            
+        /// <summary>
+        /// Textual (N09099, AP3933) or numeric (9932, 5321) that identifies this message.  These codes, if used, should be unique within a Source but might be unique across several sources.  Message Codes uniquely identify a particular event. Each event source can define its own numbered events 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public LogEventBuilder WithCode(string code, params object[] args)
+        {
+            _message.EventCode = string.Format(code, args);
             return this;
         }
 
@@ -107,30 +125,30 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="moduleName">Name of sub-part of application</param>
         /// <returns></returns>
-        public LogMessageBuilder ForModule(string moduleName)
+        public LogEventBuilder ForModule(string moduleName)
         {
             _message.ApplicationSubKey = moduleName;
             return this;
         }
 
         /// <summary>
-        /// Add a name to a group.  Groups map to EntLib categories and can be used for log filtering
+        /// Add a name to a group (e.g. database, A/P). May have more than one
         /// </summary>
         /// <param name="groupName">Name of group (category)</param>
         /// <returns></returns>
-        public LogMessageBuilder InGroup(string groupName)
+        public LogEventBuilder InGroup(string groupName)
         {
             _message.Categories.Add(groupName);
             return this;
         }
 
         /// <summary>
-        /// Add a new value to the the ExtendedProperties KeyValue pair collection for this message
+        /// Add a new value to the KeyValue pair collection for this message
         /// </summary>
         /// <param name="key">Name for item.</param>
         /// <param name="value">Value to add.  Uses <paramref name="value"/>.ToString() to store value</param>
         /// <returns></returns>
-        public LogMessageBuilder Collect(string key, object value) // extended properties
+        public LogEventBuilder Collect(string key, object value) // extended properties
         {
             _message.Properties.Add(key, value.ToString());
             return this;
@@ -143,42 +161,19 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="ex">Hydrated exception to store</param>
         /// <returns></returns>
-        public LogMessageBuilder Catch(Exception ex)
+        public LogEventBuilder Catch(Exception ex)
         {
             _message.AddException(ex);
-            HttpException httpException = ex as HttpException;
-
-            if (httpException != null)
-            {
-                _message.Properties.Add("HTTP_STATUS_CODE", httpException.GetHttpCode().ToString());
-                _message.Properties.Add("HTTP_HTML_ERROR_MESSAGE", tryGetHtmlErrorMessage(httpException));
-            }
+           
             return this;
         }
 
-        public LogMessageBuilder Fix()
+        public LogEventBuilder Fix()
         {
-
+            _message.Fix();
             return this;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        /// <remarks>From Elmah::Error.cs</remarks>
-        private static string tryGetHtmlErrorMessage(HttpException e)
-        {
-            try
-            {
-                return e.GetHtmlErrorMessage();
-            }
-            catch (SecurityException se)
-            {
-                Trace.WriteLine(se);
-                return null;
-            }
-        }
+    
 
         /// <summary>
         /// Extract specific HTTP information and store it in message's HttpContext collection.
@@ -186,7 +181,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="flags">Determines which information to collect from context</param>
         /// <returns></returns>
-        public LogMessageBuilder CaptureHttp(HttpCaptureFlags flags)
+        public LogEventBuilder CaptureHttp(HttpCaptureFlags flags)
         {
             _message.HttpContext = new LogHttpContext(HttpContext.Current, flags);
             return this;
@@ -198,7 +193,7 @@ namespace HashTag.Diagnostics
         /// <param name="reference"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public LogMessageBuilder Reference(string reference, params object[] args)
+        public LogEventBuilder Reference(string reference, params object[] args)
         {
             _message.Reference = (object)string.Format(reference, args);
             return this;
@@ -208,7 +203,7 @@ namespace HashTag.Diagnostics
         /// Convenience.  Set the Title of message to <paramref name="reference"/>.  Value is <paramref name="reference"/>.ToString()
         /// </summary>
         /// <returns></returns>
-        public LogMessageBuilder Reference(object reference)
+        public LogEventBuilder Reference(object reference)
         {
             _message.Reference = (object)reference.ToString();
             return this;
@@ -219,9 +214,9 @@ namespace HashTag.Diagnostics
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
         /// </summary>
         /// <returns></returns>
-        public LogMessageBuilder CaptureHttp()
+        public LogEventBuilder CaptureHttp()
         {
-            return CaptureHttp(HttpCaptureFlags.Url | HttpCaptureFlags.Form);
+            return CaptureHttp(HttpCaptureFlags.All);
         }
 
         /// <summary>
@@ -230,7 +225,7 @@ namespace HashTag.Diagnostics
         /// <param name="message">Text of title</param>
         /// <param name="args">Any arguments to supply to <paramref name="message"/></param>
         /// <returns></returns>
-        public LogMessageBuilder TitleAs(string message, params object[] args)
+        public LogEventBuilder TitleAs(string message, params object[] args)
         {
             _message.Title = TextUtils.StringFormat(message, args);
             return this;
@@ -241,9 +236,9 @@ namespace HashTag.Diagnostics
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
         /// </summary>
         /// <returns></returns>
-        public LogMessageBuilder CaptureMachineContext()
+        public LogEventBuilder CaptureMachineContext()
         {
-            _message.MachineContext = new MachineContext();
+            _message.MachineContext = new LogMachineContext();
             return this;
         }
 
@@ -252,22 +247,9 @@ namespace HashTag.Diagnostics
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
         /// </summary>
         /// <returns></returns>
-        public LogMessageBuilder CaptureIdentity()
+        public LogEventBuilder CaptureIdentity()
         {
-            if (_message.UserContext == null)
-            {
-                _message.UserContext = new PropertyBag();
-            }
-            if (HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null)
-            {
-                _message.UserContext.Add("HttpUser", string.Format("{0}, IsAuthenticated: {1}", HttpContext.Current.User.Identity.Name, HttpContext.Current.User.Identity.IsAuthenticated));
-            }
-            if (Thread.CurrentPrincipal != null && Thread.CurrentPrincipal.Identity != null)
-            {
-                _message.UserContext.Add("ThreadUser", string.Format("{0}, IsAuthenticated: {1}", Thread.CurrentPrincipal.Identity.Name, Thread.CurrentPrincipal.Identity.IsAuthenticated));
-            }
-
-            _message.UserContext.Add("EnvUser",Environment.UserName);
+            _message.UserContext = new LogUserContext();
             return this;
         }
 

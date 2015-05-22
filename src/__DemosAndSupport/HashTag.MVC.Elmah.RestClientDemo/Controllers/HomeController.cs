@@ -16,7 +16,8 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 {
     public class HomeController : Controller
     {
-        ILog _log = Log.NewLog(typeof(HomeController));
+        ILog _log = LogFactory.Create.NewLog(typeof(HomeController));
+
         public ActionResult Index()
         {
             
@@ -27,7 +28,9 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 
             }
             catch(Exception ex)
-            { 
+            {
+                var msg = _log.Error.Catch(ex).Message();
+                var x = JsonConvert.SerializeObject(msg,Formatting.Indented);
                 throw;
             }
             

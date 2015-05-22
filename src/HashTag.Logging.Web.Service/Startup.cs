@@ -1,12 +1,15 @@
-﻿using System.Web;
-using System.Web.Optimization;
-using System.Web.Mvc;
-using System.Web.Routing;
-using System.Web.Http;
-using System.Net.Http.Headers;
-using Newtonsoft.Json.Serialization;
+﻿using HashTag.Diagnostics;
 using HashTag.Logging.Web.Library;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Net.Http.Headers;
+using System.Web;
+using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.OData.Builder;
+using System.Web.OData.Extensions;
+using System.Web.Optimization;
+using System.Web.Routing;
 
 namespace HashTag.Logging.Web.Service
 {
@@ -30,6 +33,12 @@ namespace HashTag.Logging.Web.Service
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/LogServerScripts").Include(
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/bootstrap.js",
+                      "~/Scripts/respond.js")
+                        );
         }
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -70,6 +79,15 @@ namespace HashTag.Logging.Web.Service
             settings.Converters.Add(new NameValueCollectionConverter());
 
             config.Formatters.XmlFormatter.UseXmlSerializer = true;
+
+            ODataModelBuilder builder = new ODataConventionModelBuilder();
+
+            builder.EntitySet<LogEvent>("events").EntityType.HasKey(p => p.UUID);
+
+            config.MapODataServiceRoute(
+                routeName: "ODataRoute",
+                routePrefix: "odata",
+                model: builder.GetEdmModel());
         }
     }
 }

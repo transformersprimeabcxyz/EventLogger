@@ -8,21 +8,21 @@ namespace HashTag.Diagnostics
 {
     public static class DiagnosticExtensions
     {
-        public static MessagePriority ToPriority(this TraceEventType eventType)
+        public static LogEventPriority ToPriority(this TraceEventType eventType)
         {
 
             switch (eventType)
             {
 
-                case TraceEventType.Critical: return MessagePriority.Highest;
-                case TraceEventType.Error: return MessagePriority.VeryHigh;
-                case TraceEventType.Warning: return MessagePriority.High; 
-                case TraceEventType.Information: return MessagePriority.Normal;
-                case TraceEventType.Verbose: return MessagePriority.Low; 
-                case TraceEventType.Start: return MessagePriority.VeryLow; 
-                case TraceEventType.Stop: return MessagePriority.VeryLow;
+                case TraceEventType.Critical: return LogEventPriority.Highest;
+                case TraceEventType.Error: return LogEventPriority.VeryHigh;
+                case TraceEventType.Warning: return LogEventPriority.High; 
+                case TraceEventType.Information: return LogEventPriority.Normal;
+                case TraceEventType.Verbose: return LogEventPriority.Low; 
+                case TraceEventType.Start: return LogEventPriority.VeryLow; 
+                case TraceEventType.Stop: return LogEventPriority.VeryLow;
                 default:
-                    return MessagePriority.Normal;
+                    return LogEventPriority.Normal;
             }
         }
         public static bool IsEnabled(this SourceLevels sourceLevel, TraceEventType eventType)

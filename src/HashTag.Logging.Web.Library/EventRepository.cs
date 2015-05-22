@@ -14,12 +14,12 @@ namespace HashTag.Logging.Web.Library
     public class EventRepository:IEventRepository
     {
 
-        public void StoreEvent(LogMessage error)
+        public void StoreEvent(LogEvent error)
         {
             var ctx = new dbEventContext();
 
             var dbEvent = new dbEvent();
-            dbEvent.UUID = error.MessageUUID.ToString();
+            dbEvent.UUID = error.UUID.ToString();
             dbEvent.AllJson = JsonConvert.SerializeObject(error, Formatting.Indented);
             dbEvent.Application = error.ApplicationKey;
             dbEvent.Categories = JsonConvert.SerializeObject(error.Categories, Formatting.Indented);

@@ -32,7 +32,7 @@ namespace HashTag.Diagnostics
                 return;
             }
 
-            var msg = new LogMessage(format, args)
+            var msg = new LogEvent(format, args)
             {
                  EventId = id,
                   Severity =eventType,
@@ -84,7 +84,7 @@ namespace HashTag.Diagnostics
 
         public override void WriteLine(string message)
         {
-            var msg = new LogMessage(message)
+            var msg = new LogEvent(message)
             {
                 Severity = TraceEventType.Information
             };
@@ -93,7 +93,7 @@ namespace HashTag.Diagnostics
         }
         public void WriteLine(string message, params object[] args)
         {
-            var msg = new LogMessage(message,args)
+            var msg = new LogEvent(message,args)
             {
                 Severity = TraceEventType.Information
             };

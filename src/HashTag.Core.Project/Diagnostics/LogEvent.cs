@@ -1,12 +1,4 @@
-﻿/**
-/// HashTag.Core Library
-/// Copyright © 2005-2012
-///
-
-
-
-**/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +11,7 @@ using System.Collections.Specialized;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using HashTag.Properties;
+using System.ComponentModel.DataAnnotations;
 
 namespace HashTag.Diagnostics
 {
@@ -27,17 +20,17 @@ namespace HashTag.Diagnostics
     /// </summary>
     [Serializable]
     [DataContract(Namespace = CoreConfig.WcfNamespace)]
-    public partial class LogMessage
+    public partial class LogEvent
     {
         
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LogMessage()
+        public LogEvent()
             : base()
         {
             TimeStamp = DateTime.Now;
-            MessageUUID = Guid.NewGuid();
+            UUID = Guid.NewGuid();
             Categories = new List<string>();
         }
         /// <summary>
@@ -45,7 +38,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public LogMessage(string message = null, params object[] args)
+        public LogEvent(string message = null, params object[] args)
             : this()
         {
             this.Severity = TraceEventType.Information;
@@ -60,7 +53,7 @@ namespace HashTag.Diagnostics
         /// <param name="ex"></param>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public LogMessage(Exception ex, string message = null, params object[] args)
+        public LogEvent(Exception ex, string message = null, params object[] args)
             : this(message, args)
         {
             if (ex != null)
@@ -75,7 +68,8 @@ namespace HashTag.Diagnostics
         /// </summary>
         [DataMember]
         [JsonProperty]
-        public Guid MessageUUID { get; set; }
+        [Key]
+        public Guid UUID { get; set; }
 
         private string _title;
         /// <summary>
@@ -99,7 +93,7 @@ namespace HashTag.Diagnostics
                     {
                         if (Exceptions != null && Exceptions.Count > 0)
                         {
-                            msg = Exceptions[0].GetBaseException().Message.Left(60, "...");
+                            msg = Exceptions[0].GetBaseException.Message.Left(60, "...");
                         }
                     }
                     return msg;
@@ -232,7 +226,7 @@ namespace HashTag.Diagnostics
             }
         }
 
-        private MessagePriority? _priority = null;
+        private LogEventPriority? _priority = null;
         /// <summary>
         /// Get and Sets how important the sender of this message considers this message.  Most implementations
         /// will not explictly set this value and allow message to determine priority based on log severity.
@@ -240,7 +234,7 @@ namespace HashTag.Diagnostics
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(Order = -60)]
-        public MessagePriority Priority
+        public LogEventPriority Priority
         {
             get
             {
@@ -270,7 +264,7 @@ namespace HashTag.Diagnostics
         /// Resets internal priority to a value that matches LogLevel of this message
         /// </summary>
         /// <returns>Messages current priority</returns>
-        internal MessagePriority priorityReset()
+        internal LogEventPriority priorityReset()
         {
             _priority = this.Severity.ToPriority();
             return _priority.Value;
@@ -291,7 +285,10 @@ namespace HashTag.Diagnostics
             {
                 if (_messageText == null)
                 {
-                    return ToString();
+                    if (Exceptions != null && Exceptions.Count > 0)
+                    {
+                        return Exceptions[0].GetBaseException.Message; //similar to what Elmah does
+                    }
                 }
                 return _messageText;
             }
@@ -311,13 +308,13 @@ namespace HashTag.Diagnostics
         /// Stack trace, machine name, thread identifiers and other runtime process specific contextual information
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public MachineContext MachineContext { get; set; }
+        public LogMachineContext MachineContext { get; set; }
 
         /// <summary>
         /// Identity (both thread and Http if available) and authentication status 
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public PropertyBag UserContext { get; set; }
+        public LogUserContext UserContext { get; set; }
 
         /// <summary>
         /// Miscellaneous informaition caller wishes to persist to log.  (e.g. record id, invoice number, loop index, etc) ToString() is called on Reference
@@ -382,7 +379,7 @@ namespace HashTag.Diagnostics
             {
                 if (_eventid.HasValue == false)
                 {
-                    var baseValue = _priority.HasValue ? ((int)_priority.Value) : (int)MessagePriority.Normal;
+                    var baseValue = _priority.HasValue ? ((int)_priority.Value) : (int)LogEventPriority.Normal;
                     return baseValue + (int)Severity;
                 }
                 return _eventid.Value;
@@ -464,7 +461,10 @@ namespace HashTag.Diagnostics
         /// </summary>
         public void Fix()
         {
-
+            Title = Title;
+            ApplicationKey = ApplicationKey;
+            Priority = Priority;
+            MessageText = MessageText;
         }
 
 
