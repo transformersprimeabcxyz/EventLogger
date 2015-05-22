@@ -87,7 +87,7 @@ namespace HashTag.Diagnostics
         /// Default constructor
         /// </summary>
         /// <param name="logName"></param>
-        internal Log(string logName)
+        internal Log(string logName):this()
         {
             _logName = logName;
         }

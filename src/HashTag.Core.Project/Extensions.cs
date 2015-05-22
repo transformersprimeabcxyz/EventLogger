@@ -95,7 +95,7 @@ namespace HashTag
         /// <param name="paramValue">Value of parameter being added</param>
         /// <param name="args">Any optional arguments to supply to parameter value text</param>
         /// <returns>Reference to target exception</returns>
-        public static Exception AddParam(this Exception ex, string paramName, object paramValue, params object[] args)
+        public static Exception AddData(this Exception ex, string paramName, object paramValue, params object[] args)
         {
             ex.Data[paramName] = string.Format(paramValue.ToString(), args);
             return ex;

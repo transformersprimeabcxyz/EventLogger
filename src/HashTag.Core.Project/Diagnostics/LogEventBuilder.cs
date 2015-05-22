@@ -62,6 +62,7 @@ namespace HashTag.Diagnostics
             }
             else
             {
+                _message.Fix();
                 if (_writeAction != null)
                 {
                     _writeAction(_message);
@@ -70,6 +71,7 @@ namespace HashTag.Diagnostics
             return _message;
         }
 
+     
         
         /// <summary>
         /// Returns a reference to message being constructed by builder.  Conceptually similar to StringBuilder.ToString() except exposes actual object instead of a copy
