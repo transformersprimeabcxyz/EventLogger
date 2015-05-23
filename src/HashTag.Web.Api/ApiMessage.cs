@@ -24,11 +24,11 @@ namespace HashTag.Web.Api
         /// <summary>
         /// String severitiy of this message (e.g. 'error','warning','info').
         /// </summary>
-        public string StatusCode
+        public string MessageStatusCode
         {
             get
             {
-                return Status.ToString();
+                return MessageStatus.ToString();
             }
         }
 
@@ -43,7 +43,7 @@ namespace HashTag.Web.Api
         /// <summary>
         /// Determines how important the creator of this message considers it. (default: Info)  If not explicitly set returns Error if Exception is set, otherwise return Info
         /// </summary>
-        public ApiMessageStatus Status
+        public ApiMessageStatus MessageStatus
         {
             get
             {
@@ -115,7 +115,7 @@ namespace HashTag.Web.Api
         {
             get
             {
-                if (Status >= ApiMessageStatus.Error) return false;
+                if (MessageStatus >= ApiMessageStatus.Error) return false;
 
                 return true;
             }

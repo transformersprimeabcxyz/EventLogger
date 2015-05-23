@@ -23,6 +23,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Core.RestClient", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Connector.MSSQL", "HashTag.Logging.Connector.MSSQL\HashTag.Logging.Connector.MSSQL.csproj", "{1837960F-BB20-44A1-AF38-E96A55C9EEBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Web.Api", "HashTag.Web.Api\HashTag.Web.Api.csproj", "{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{280FF685-F0D1-46BE-9FFF-290430DD3811}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +117,15 @@ Global
 		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1837960F-BB20-44A1-AF38-E96A55C9EEBE}.Release|x86.ActiveCfg = Release|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Net40|Any CPU.ActiveCfg = Release|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Net40|Any CPU.Build.0 = Release|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Net40|x86.ActiveCfg = Release|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +135,6 @@ Global
 		{55B5D26B-95EC-436A-BCCC-684DCF88F9CB} = {E3CF7125-5D53-4D44-B808-021488E0FAF3}
 		{4CCD8FCC-8BFD-4787-8D0F-67994CB1D83D} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 		{49139C04-DC1A-420C-83AE-072BD986E2EF} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
+		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 	EndGlobalSection
 EndGlobal

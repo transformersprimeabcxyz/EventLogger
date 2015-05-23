@@ -95,7 +95,7 @@ namespace HashTag.Web.Api
         }
         public ApiMessageBuilder Status(ApiMessageStatus status)
         {
-            _msg.Status  = status;
+            _msg.MessageStatus  = status;
             return this;
         }
 
