@@ -47,7 +47,7 @@ namespace HashTag.Collections
     /// This is the second level of caching.
     /// </summary>
     /// <typeparam name="T">Type of object that is being buffered</typeparam>
-    public abstract class AsyncBuffer<T> : IDisposable
+    public class AsyncBuffer<T> : IDisposable
     {
 
         //-----------------------------------------------------------
@@ -160,7 +160,13 @@ namespace HashTag.Collections
         /// Event handler to execute when buffer needs to flush page(s) of objects
         /// </summary>
         /// <param name="objectItems"></param>
-        protected abstract void OnBufferAction(List<T> objectItems);
+        protected void OnBufferAction(List<T> objectItems)
+        {
+            if (_bufferAction == null)
+            {
+                _bufferAction(objectItems);
+            }
+        }
 
         /// <summary>
         /// Constructor that supplies an explict Action />

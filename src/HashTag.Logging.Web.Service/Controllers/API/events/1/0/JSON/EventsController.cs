@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -24,26 +25,15 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
     public class EventsController : ApiController
     {
        [Route(""),HttpPost,ValidateLogEvent]
-        public HttpResponseMessage SaveEvent(LogEvent request)
+        public async Task<HttpResponseMessage> SaveEvent(List<LogEvent> request)
         {
             var response = new ApiResponseBase<Guid>();
             response.Header.HttpStatus = HttpStatusCode.Accepted;
-            response.Body = request.UUID;
 
             try
             {
                 EventRepository repo = new EventRepository();
-                if (request != null && request.UUID == Guid.Empty)
-                {
-                    request.UUID = Guid.NewGuid();
-                }
-                if (string.IsNullOrWhiteSpace(request.MessageText) && request.Exceptions != null && request.Exceptions.Count > 0)
-                {
-                    request.MessageText = request.Exceptions[0].Message;
-                }
-
                 repo.StoreEvent(request);
-                response.Header.Links.Add(base.Request.RequestUri.ToString()+"/"+request.UUID.ToString(), "self", request.UUID.ToString());
                 return base.Request.CreateResponse<ApiResponseBase<Guid>>(response.Header.HttpStatus, response);            
             }
             catch(Exception ex)
