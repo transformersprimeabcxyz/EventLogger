@@ -1,4 +1,5 @@
 ﻿using Elmah;
+using HashTag.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace HashTag.Logging.Web.Library.Interfaces
 {
     public interface IEventRepository
     {
-        void StoreEvent(Error error);
+        void StoreEvent(LogEvent error);
+
+        List<LogEvent> GetEvents(string applicationName, int pageIndex, int pageSize);
     }
 }

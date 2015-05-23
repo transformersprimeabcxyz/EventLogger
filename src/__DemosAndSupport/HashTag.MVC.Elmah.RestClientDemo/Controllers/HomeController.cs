@@ -29,8 +29,8 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             }
             catch(Exception ex)
             {
-                var msg = _log.Error.Catch(ex).Message();
-                var x = JsonConvert.SerializeObject(msg,Formatting.Indented);
+               // var msg = _log.Error.Catch(ex).Message();
+              //  var x = JsonConvert.SerializeObject(msg,Formatting.Indented);
                 throw;
             }
             

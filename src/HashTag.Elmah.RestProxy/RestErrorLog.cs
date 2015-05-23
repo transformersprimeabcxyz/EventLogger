@@ -86,32 +86,20 @@ namespace HashTag.Elmah.RestProxy
         {
             ILog log = HashTag.Diagnostics.LogFactory.Create.NewLog(this);
             var lm = log.Error.Catch(error.Exception).Fix().Message();
-            var q = JsonConvert.SerializeObject(lm, Formatting.Indented);
             var x = sendData(lm).Result;
 
-            return x.UUID.ToString();
+            return x.ToString();
         }
 
-        private async Task<LogEvent> sendData(LogEvent lm)
+        private async Task<Guid> sendData(LogEvent lm)
         {
             using (var client = new HttpClient())
             {
                 var msg = new HttpRequestMessage(HttpMethod.Post, "http://localhost:60104/api/events/0/0/j");
-                msg.Content = new StringContent(JsonConvert.SerializeObject(lm, Formatting.Indented), System.Text.Encoding.UTF8, "application/json");
+            //    msg.Content = new StringContent(JsonConvert.SerializeObject(lm, Formatting.Indented), System.Text.Encoding.UTF8, "application/json");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                return await client.SendAsync(msg, HttpCompletionOption.ResponseContentRead).ContinueWith<LogEvent>(continueAction =>
-                    {
-                        switch (continueAction.Status)
-                        {
-                            case TaskStatus.RanToCompletion:
-                                var httpResult = continueAction.Result;
-                                httpResult.EnsureSuccessStatusCode();
-                                var returnText = httpResult.Content.ReadAsStringAsync().Result;
-                                return JsonConvert.DeserializeObject<LogEvent>(returnText);
-                        }
-                        return null;
-                    }).ConfigureAwait(false);
+                var response = client.PostAsJsonAsync(msg.RequestUri, lm).Result;
+                return response.Content.ReadAsAsync<Guid>().Result;               
             }
         }
 

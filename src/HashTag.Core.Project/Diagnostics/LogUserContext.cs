@@ -26,7 +26,7 @@ namespace HashTag.Diagnostics
             }
             EnvUserName = Environment.UserName;
             UserDomain = Environment.UserDomainName;
-            
+            IsInteractive = Environment.UserInteractive;
         }
 
         public string ThreadPrincipal { get; set; }
@@ -35,7 +35,7 @@ namespace HashTag.Diagnostics
         public string UserDomain { get; set; }
         public string AppDomainIdentity { get; set; }
 
-        public bool IsInteractive { get; set; }
+        public bool? IsInteractive { get; set; }
         private string _defaultUser;
         public string DefaultUser
         {
@@ -43,7 +43,7 @@ namespace HashTag.Diagnostics
             {
                 if (string.IsNullOrWhiteSpace(_defaultUser))
                 {
-                    return HttpUser ?? ThreadPrincipal ?? EnvUserName;
+                    return HttpUser ?? ThreadPrincipal ?? EnvUserName ?? AppDomainIdentity;
                 }
                 return _defaultUser;
             }

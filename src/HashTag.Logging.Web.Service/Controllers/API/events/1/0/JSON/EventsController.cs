@@ -12,60 +12,52 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using System.Web.Http.ModelBinding;
+
 
 namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
 {
     [RoutePrefix("api/events/0/0/j")]
     public class EventsController : ApiController
     {
-        [Route(""),HttpGet]
-        public IEnumerable<string> GetStuff()
-        {
-            var repo = new EventRepository();
-            var err = new Error()
-            {
-                
-            };
-
-         //   repo.StoreEvent(err);
-
-            return new string[] { "hello", DateTime.Now.ToString() };
-        }
-
-        [Route(""),HttpPost]
+       [Route(""),HttpPost,ValidateLogEvent]
         public HttpResponseMessage SaveEvent(LogEvent request)
         {
             try
             {
                 EventRepository repo = new EventRepository();
+                if (request != null && request.UUID == Guid.Empty)
+                {
+                    request.UUID = Guid.NewGuid();
+                }
+                if (string.IsNullOrWhiteSpace(request.MessageText) && request.Exceptions != null && request.Exceptions.Count > 0)
+                {
+                    request.MessageText = request.Exceptions[0].Message;
+                }
                 repo.StoreEvent(request);
             }
             catch(Exception ex)
             {
+                var ss = new LogException(ex);
                 var s = JsonConvert.SerializeObject(ex, Formatting.Indented);
             }
-            return base.Request.CreateResponse<LogEvent>(HttpStatusCode.Created, request);            
+            return base.Request.CreateResponse<Guid>(HttpStatusCode.Created, request.UUID);            
         }
     }
 
-    public class ElmahErrorBinder:IModelBinder
+    
+    public class ValidateLogEventAttribute : ActionFilterAttribute
     {
-
-        public bool BindModel(System.Web.Http.Controllers.HttpActionContext actionContext, ModelBindingContext bindingContext)
+        public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            return true;
+            
+            if (actionContext.ModelState.IsValid == false)
+            {
+                actionContext.Response = actionContext.Request.CreateErrorResponse(
+                    HttpStatusCode.BadRequest, actionContext.ModelState);
+            }
         }
-    }
-    public class TestRequest
-    {
-        public TestRequest()
-        {
-            Vars = new PropertyBag();
-            //Vars = new NameValueCollection();
-        }
-        public string UUID { get; set; }
-        public PropertyBag Vars { get; set; }
-        
     }
 }

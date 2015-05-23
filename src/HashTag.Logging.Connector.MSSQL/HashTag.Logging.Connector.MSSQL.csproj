@@ -49,13 +49,11 @@
     <Compile Include="DbDescriptorUpdater.cs" />
     <Compile Include="dbEvent.cs" />
     <Compile Include="dbEventContext.cs" />
-    <Compile Include="Migrations\201505141850098_initial.cs" />
-    <Compile Include="Migrations\201505141850098_initial.Designer.cs">
-      <DependentUpon>201505141850098_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505142039034_dbComments.cs" />
-    <Compile Include="Migrations\201505142039034_dbComments.Designer.cs">
-      <DependentUpon>201505142039034_dbComments.cs</DependentUpon>
+    <Compile Include="dbEventHttpContext.cs" />
+    <Compile Include="dbEventUserContext.cs" />
+    <Compile Include="Migrations\201505230228496_Initial.cs" />
+    <Compile Include="Migrations\201505230228496_Initial.Designer.cs">
+      <DependentUpon>201505230228496_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,11 +71,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201505141850098_initial.resx">
-      <DependentUpon>201505141850098_initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505142039034_dbComments.resx">
-      <DependentUpon>201505142039034_dbComments.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505230228496_Initial.resx">
+      <DependentUpon>201505230228496_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

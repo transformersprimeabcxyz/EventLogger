@@ -29,7 +29,7 @@ namespace HashTag.Diagnostics
         public LogEvent()
             : base()
         {
-            TimeStamp = DateTime.Now;
+          //  TimeStamp = DateTime.Now;
             UUID = Guid.NewGuid();
             Categories = new List<string>();
         }
@@ -164,12 +164,12 @@ namespace HashTag.Diagnostics
             }
         }
 
-        private string _activeEnvironment = CoreConfig.ActiveEnvironment;
+        private string _activeEnvironment = ""; 
         /// <summary>
         /// Returns the currently active environment the application is running in (dev, qa, production, demo, etc) (Default: .config HashTag.Application.Environment)
         /// </summary>
         [DataMember]
-        [JsonProperty]
+        [JsonProperty,Required]
         public string ActiveEnvironment
         {
             get { return _activeEnvironment; }
@@ -185,28 +185,12 @@ namespace HashTag.Diagnostics
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string ApplicationSubKey { get; set; }
 
-        private string _applicationKey = CoreConfig.ApplicationName;
-
         /// <summary>
         /// Gets the name of the application.  If not explicitly set using &lt;appSettings name="HashTag.Application.Name"...&gt;
         /// </summary>
         [DataMember]
-        [JsonProperty]
-        public string ApplicationKey
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_applicationKey) == true)
-                {
-                    _applicationKey = CoreConfig.ApplicationName;
-                }
-                return _applicationKey;
-            }   
-            set
-            {
-                _applicationKey = value;
-            }
-        }
+        [JsonProperty, Required]
+        public string ApplicationKey {get;set;}
 
         private TraceEventType _logLevel = TraceEventType.Information;
         /// <summary>
@@ -349,7 +333,7 @@ namespace HashTag.Diagnostics
         /// Name of host that created this message
         /// </summary>
         [JsonProperty]
-        public string MachineName { get { return _machineName; } set { _machineName = value; } }
+        public string MachineName { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Categories { get; set; }
@@ -396,6 +380,8 @@ namespace HashTag.Diagnostics
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string EventCode { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string UserIdentity { get; set; }
 
         /// <summary>
         /// Standard format for this class
@@ -465,6 +451,32 @@ namespace HashTag.Diagnostics
             ApplicationKey = ApplicationKey;
             Priority = Priority;
             MessageText = MessageText;
+            if (string.IsNullOrWhiteSpace(this.MachineName))
+            {
+                this.MachineName = Environment.MachineName;
+            }
+             
+
+            if (string.IsNullOrEmpty(ApplicationKey) == true)
+            {
+                ApplicationKey = CoreConfig.ApplicationName;
+            }
+            if (string.IsNullOrWhiteSpace(ActiveEnvironment))
+            {
+                ActiveEnvironment = CoreConfig.ActiveEnvironment;
+            }
+
+            if (string.IsNullOrWhiteSpace(UserIdentity))
+            {
+                if (UserContext != null)
+                {
+                    UserIdentity = UserContext.DefaultUser;
+                }
+                if (string.IsNullOrWhiteSpace(UserIdentity))
+                {
+                    UserIdentity = CoreConfig.ActiveUserName;
+                }
+            }
         }
 
 

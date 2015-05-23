@@ -5,7 +5,7 @@ namespace HashTag.Logging.Connector.MSSQL.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<dbEventContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<HashTag.Logging.Connector.MSSQL.dbEventContext>
     {
         public Configuration()
         {
@@ -26,9 +26,6 @@ namespace HashTag.Logging.Connector.MSSQL.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-
-           var updater = new DbDescriptionUpdater<dbEventContext>(context);
-            updater.UpdateDatabaseDescriptions();
         }
     }
 }
