@@ -1,0 +1,25 @@
+﻿{
+    "MaxInternalBufferSize": 300,
+    "BufferSweepMs": 1000,
+    "CacheTimeOutMs": 1000,
+    "BufferFlushFilters": [
+
+
+    ],
+    "ShouldWriteFilters": [
+
+    ],
+    "WriterPipeline" : [
+        {
+            "Name": "InternalWriter",
+            "Type": "HashTagDotNet.Logging.TraceSourceWriter, HashTagDotnet.Logging",
+            "Filters": [
+
+            ],
+            "Config": { 
+
+            }
+        }
+
+    ]
+}

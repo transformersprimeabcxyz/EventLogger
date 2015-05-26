@@ -271,6 +271,13 @@ namespace HashTag.Collections
             }
         }
 
+        /// <summary>
+        /// Empty internal buffer and submit records to buffer action
+        /// </summary>
+        public void Flush()
+        {
+
+        }
 
 
         /// <summary>

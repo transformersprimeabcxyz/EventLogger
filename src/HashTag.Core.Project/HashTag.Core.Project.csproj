@@ -179,7 +179,11 @@
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
     <Compile Include="Diagnostics\ILog.cs" />
     <Compile Include="Diagnostics\ILogEventFactory.cs" />
+    <Compile Include="Diagnostics\ILogEventFilter.cs" />
+    <Compile Include="Diagnostics\ILogEventProcessor.cs" />
+    <Compile Include="Diagnostics\ILogEventWriter.cs" />
     <Compile Include="Diagnostics\InternalLogger.cs" />
+    <Compile Include="Diagnostics\LogEventProcessor.cs" />
     <Compile Include="Diagnostics\LogFactory.cs" />
     <Compile Include="Diagnostics\LogHttpContext.cs" />
     <Compile Include="Diagnostics\LogRuntimeContext.cs" />
