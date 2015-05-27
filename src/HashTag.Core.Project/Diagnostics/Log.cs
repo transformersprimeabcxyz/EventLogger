@@ -145,8 +145,7 @@ namespace HashTag.Diagnostics
         {
             //filter not supported message levels
             if (!_logLevels.IsEnabled(message.Severity)) return;
-
-            _messageBuffer.SubmitMessage(message); //send message to internal async message cache and immediately return
+            Log.Processor.Submit(message); //send message to internal async message cache and immediately return
         }
 
         private bool _isDisposed = false;

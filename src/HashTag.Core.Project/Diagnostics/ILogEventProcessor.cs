@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HashTag.Diagnostics
 {
-    public interface ILogEventProcessor
+    public interface ILogEventProcessor:ILogWorker
     {
         Guid Submit(LogEvent evt);
 
@@ -13,9 +13,6 @@ namespace HashTag.Diagnostics
 
         void Stop();
         void Start();
-
-        void Configure();
-
         
     }
 }

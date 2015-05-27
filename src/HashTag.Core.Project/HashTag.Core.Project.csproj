@@ -177,16 +177,20 @@
     <Compile Include="Configuration\IConfigProvider.cs" />
     <Compile Include="CoreConfig.Log.cs" />
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
+    <Compile Include="Diagnostics\EventGetRequest.cs" />
     <Compile Include="Diagnostics\ILog.cs" />
     <Compile Include="Diagnostics\ILogEventFactory.cs" />
     <Compile Include="Diagnostics\ILogEventFilter.cs" />
     <Compile Include="Diagnostics\ILogEventProcessor.cs" />
     <Compile Include="Diagnostics\ILogEventWriter.cs" />
+    <Compile Include="Diagnostics\ILogWorker.cs" />
     <Compile Include="Diagnostics\InternalLogger.cs" />
+    <Compile Include="Diagnostics\Log.Config.cs" />
     <Compile Include="Diagnostics\LogEventProcessor.cs" />
     <Compile Include="Diagnostics\LogFactory.cs" />
     <Compile Include="Diagnostics\LogHttpContext.cs" />
     <Compile Include="Diagnostics\LogRuntimeContext.cs" />
+    <Compile Include="Diagnostics\LogSaveResponse.cs" />
     <Compile Include="Diagnostics\LogUserContext.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs" />
@@ -305,6 +309,7 @@
     <None Include="App_ReadMe\Sample.Annotated.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Resources\DefaultLogConfig.json" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

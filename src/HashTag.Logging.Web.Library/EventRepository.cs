@@ -110,13 +110,14 @@ namespace HashTag.Logging.Web.Library
             throw new NotImplementedException();
         }
 
-        public void StoreEvent(List<LogEvent> request)
+        public List<LogSaveResponse> StoreEvent(List<LogEvent> request)
         {
-            if (request == null || request.Count == 0) return;
+            if (request == null || request.Count == 0) return null ;
             for(int x=0;x<request.Count;x++)
             {
                 _buffer.Submit(request[x]);
             }
+            return null;
         }
     }
 }

@@ -1,25 +1,65 @@
 ﻿{
-    "MaxInternalBufferSize": 300,
-    "BufferSweepMs": 1000,
-    "CacheTimeOutMs": 1000,
-    "BufferFlushFilters": [
+    "ProcessorFactory": {
+        "Type": "HashTag.Diagnostics.LogEventProcessor, HashTag.Core",
+        "Config": {
+            "Processor": {
+                "BufferBlockSize": 300,
+                "BufferSweepMs": 1000,
+                "CacheTimeOutMs": 1000,
+                "BufferWriteTimeOutMs": 5000,
+                "ForceFlushFilters": [
 
+                ]
+            },
+            "Pipeline": [
+                {
+                    "Name": "HashTag.Diagnostics.TraceEventWriter",
+                    "Type": "asdasf, asf",
+                    "OnError": [ "SQLDirect" ],
+                    "OnSuccess": [ ],
+                    "Config": {
 
-    ],
-    "ShouldWriteFilters": [
+                    }
+                },
+                {
+                    "Name": "SQLDirect",
+                    "Type": "",
+                    "OnError": [ "LocalFile" ],
+                    "OnSuccess": [ ],
+                    "Config": {
 
-    ],
-    "WriterPipeline" : [
-        {
-            "Name": "InternalWriter",
-            "Type": "HashTagDotNet.Logging.TraceSourceWriter, HashTagDotnet.Logging",
-            "Filters": [
+                    }
+                },
+                {
+                    "Name": "LocalFile",
+                    "Type": "",
+                    "OnError": [ "Internal" ],
+                    "OnSuccess": [ ],
+                    "Config": {
 
+                    }
+                },
+                {
+                    "Name": "Internal",
+                    "Type": "",
+                    "OnError": [ ],
+                    "OnSuccess": [ ],
+                    "Config": {
+
+                    }
+                }
             ],
-            "Config": { 
+            "ShouldLogFilters": [
+                {
+                    "Name": "",
+                    "Type": "asda, q234r234",
+                    "Config": {
 
-            }
+                    }
+
+                }
+            ]
         }
+    }
 
-    ]
 }

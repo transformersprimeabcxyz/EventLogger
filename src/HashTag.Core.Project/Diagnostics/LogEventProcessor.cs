@@ -1,4 +1,6 @@
 ﻿using HashTag.Collections;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,52 +9,93 @@ using System.Threading.Tasks;
 
 namespace HashTag.Diagnostics
 {
-    public class LogEventProcessor
+    public class LogEventProcessor : ILogEventProcessor
     {
-        private static LogEventProcessorSettings _settings;
-        public static Func<LogEventProcessorSettings> DefaultSettings { get; set; }
-        public static AsyncBuffer<LogEvent> _buffer = new AsyncBuffer<LogEvent>(writeEvents);
-        static LogEventProcessor()
+        private LogEventProcessorSettings _settings;
+        
+        private AsyncBuffer<LogEvent> _buffer;
+
+
+        public LogEventProcessor()
         {
+            _buffer = new AsyncBuffer<LogEvent>(writeEvents);
 
         }
-        private static void writeEvents(List<LogEvent> eventBlock)
+        public LogEventProcessor(JObject config)
         {
-            removeUnecessaryEvents(eventBlock, _settings.Filters);
-            foreach (ILogEventWriter writer in _settings.Pipeline)
-            {
-                if (writer.WriteBlock(eventBlock,_settings) == true) break;
-            }
+            Initialize(config);
         }
 
-        private static void removeUnecessaryEvents(List<LogEvent> eventBlock, List<ILogEventFilter> filters)
+        private void writeEvents(List<LogEvent> eventBlock)
+        {
+            var writingTask = Task.Factory.StartNew(() =>
+                {
+                    removeUnqualifiedEvents(eventBlock, _settings.ShouldLogEventFilters);
+                    foreach (ILogEventWriter writer in _settings.Pipeline)
+                    {
+                        if (writer.WriteBlock(eventBlock, _settings) == true) break;
+                    }
+                });
+            writingTask.Wait(_settings.Processor.BufferWriteTimeOutMs);
+        }
+
+        private static void removeUnqualifiedEvents(List<LogEvent> eventBlock, List<ILogEventFilter> filters)
         {
             if (filters == null || filters.Count == 0) return;
 
             if (eventBlock == null || eventBlock.Count == 0) return;
 
-            foreach(var filter in filters)
-            { 
-                eventBlock.RemoveAll(evt=>!filter.ShouldLog(evt));
-            }
-        }
-
-        public LogEvent Submit(LogEvent le)
-        {
-            _buffer.Submit(le);
-            if (shouldFlushBuffer(le,_settings.ShouldFlushBufferFilters))
+            foreach (var filter in filters)
             {
-                _buffer.Flush();
+                eventBlock.RemoveAll(evt => !filter.Matches(evt));
             }
-            return le;
         }
 
         private bool shouldFlushBuffer(LogEvent le, List<ILogEventFilter> filters)
         {
             if (le == null || filters == null || filters.Count == 0) return true;
-            return filters.Any(filter => filter.ShouldLog(le) == true);
+            return filters.Any(filter => filter.Matches(le) == true);
         }
 
+        public Guid Submit(LogEvent evt)
+        {
+            _buffer.Submit(evt);
+            if (shouldFlushBuffer(evt, _settings.Processor.ForceFlushFilters.ToList()))
+            {
+                Flush();
+            }
+            return evt.UUID;
+        }
+
+        public void Flush()
+        {
+            _buffer.Flush();
+        }
+
+        public void Stop()
+        {
+            _buffer.Stop();
+        }
+
+        public void Start()
+        {
+            _buffer.Start();
+        }
+
+        public void Initialize(object config)
+        {
+            if (!(config is JObject)) return;
+
+            var serializer = new Newtonsoft.Json.JsonSerializer();
+            serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Objects;
+
+            _settings = ((JObject)config).ToObject<LogEventProcessorSettings>(serializer);
+            _buffer = new AsyncBuffer<LogEvent>();
+            _buffer.MaxPageSize = _settings.Processor.BufferBlockSize;
+            _buffer.BufferSweepMs = _settings.Processor.BufferSweepMs;
+            _buffer.CacheTimeOutMs = _settings.Processor.CacheTimeOutMs;
+            _buffer.Start();
+        }
     }
 
     public class LogEventProcessorSettings
@@ -60,20 +103,26 @@ namespace HashTag.Diagnostics
         public LogEventProcessorSettings()
         {
             Pipeline = new List<ILogEventWriter>();
-            Filters = new List<ILogEventFilter>();
-
-            MaxInternalBufferSize = 300;
-            BufferSweepMs = 1000;
-            CacheTimeOutMs = 1000;
+            ShouldLogEventFilters = new List<ILogEventFilter>();
+            Processor = new LogEventProcessorBufferSettings();
         }
 
-        public int MaxInternalBufferSize { get; set; }
+        public LogEventProcessorBufferSettings Processor { get; set; }
+        public List<ILogEventWriter> Pipeline { get; set; }
+        public List<ILogEventFilter> ShouldLogEventFilters { get; set; }
+
+    }
+    public class LogEventProcessorBufferSettings
+    {
+        public LogEventProcessorBufferSettings()
+        {
+            // ForceFlushFilters = new List<ILogEventFilter>();
+            ForceFlushFilters = new ILogEventFilter[] { };
+        }
+        public int BufferBlockSize { get; set; }
         public int BufferSweepMs { get; set; }
         public int CacheTimeOutMs { get; set; }
-
-        public List<ILogEventWriter> Pipeline { get; set; }
-        public List<ILogEventFilter> Filters { get; set; }
-        public List<ILogEventFilter> ShouldFlushBufferFilters { get; set; }
-
+        public int BufferWriteTimeOutMs { get; set; }
+        public ILogEventFilter[] ForceFlushFilters { get; set; }
     }
 }

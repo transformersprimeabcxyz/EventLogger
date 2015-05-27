@@ -5,8 +5,8 @@ using System.Text;
 
 namespace HashTag.Diagnostics
 {
-    public interface ILogEventFilter:ILogWorker
+    public interface ILogWorker
     {
-        bool Matches(LogEvent logEvent);
+        void Initialize(object config);
     }
 }

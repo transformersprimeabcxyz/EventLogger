@@ -27,14 +27,14 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
        [Route(""),HttpPost,ValidateLogEvent]
         public async Task<HttpResponseMessage> SaveEvent(List<LogEvent> request)
         {
-            var response = new ApiResponseBase<Guid>();
+            var response = new ApiResponseBase<List<LogSaveResponse>>();
             response.Header.HttpStatus = HttpStatusCode.Accepted;
 
             try
             {
                 EventRepository repo = new EventRepository();
-                repo.StoreEvent(request);
-                return base.Request.CreateResponse<ApiResponseBase<Guid>>(response.Header.HttpStatus, response);            
+                var saveResponse = repo.StoreEvent(request);
+                return base.Request.CreateResponse<ApiResponseBase<List<LogSaveResponse>>>(response.Header.HttpStatus, response);            
             }
             catch(Exception ex)
             {
@@ -45,6 +45,13 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
             }
             
         }
+
+       [Route(""), HttpGet, ValidateLogEvent]
+       public async Task<HttpResponseMessage> GetEvents([FromUri] EventGetRequest request)
+       {
+           return null;
+
+       }
     }
 
     

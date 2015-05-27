@@ -202,6 +202,7 @@ namespace HashTag.Collections
                         {
                             _queueLock.EnterWriteLock();
                             _eventQueue.Enqueue(_currentPage);
+                            Flush();  
                         }
                         finally
                         {
@@ -276,9 +277,16 @@ namespace HashTag.Collections
         /// </summary>
         public void Flush()
         {
-
+            sweepQueue(null);
         }
-
+        public void Stop()
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite); //suspend timer
+        }
+        public void Start()
+        {
+            _timer.Change(0, _bufferSweepMs);
+        }
 
         /// <summary>
         /// Look over queue of object pages and create worker threads for each page.  Threads are responsible for
@@ -287,7 +295,7 @@ namespace HashTag.Collections
         /// <param name="context">not used.  Needed for compatibility with OnTimer event hander</param>
         private void sweepQueue(object context)
         {
-            _timer.Change(Timeout.Infinite, Timeout.Infinite); //suspend timer
+            Stop();
 
             try
             {
@@ -415,7 +423,7 @@ namespace HashTag.Collections
             }
             finally //always
             {
-                _timer.Change(0, _bufferSweepMs); //restart timer
+                Start(); //restart timer
             }
         }
 

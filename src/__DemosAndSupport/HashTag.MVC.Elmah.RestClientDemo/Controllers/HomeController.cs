@@ -23,8 +23,20 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             
             try
             {
-                
-             throw new NotImplementedException("hello isn't working today...so leave already");
+
+                LogEventProcessorSettings settings = new LogEventProcessorSettings();
+                settings.Pipeline.Add(new TestWriter());
+                settings.Processor.ForceFlushFilters = new ILogEventFilter[] { new TestFilter() };
+                settings.ShouldLogEventFilters.Add(new TestFilter());
+                settings.ShouldLogEventFilters.Add(new TestFilter());
+                var s = JsonConvert.SerializeObject(settings,new JsonSerializerSettings()
+                    {
+                         TypeNameHandling = TypeNameHandling.Objects
+                    });
+
+
+                Log.Configure(); 
+             //throw new NotImplementedException("hello isn't working today...so leave already");
 
             }
             catch(Exception ex)
@@ -47,6 +59,19 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+    }
+    public class TestFilter :ILogEventFilter
+    {
+
+        public bool Matches(LogEvent logEvent)
+        {
+            return true;
+        }
+
+        public void Initialize(object config)
+        {
+            
         }
     }
 }
