@@ -1,4 +1,5 @@
 ﻿using HashTag.Diagnostics;
+using HashTag.Logging.Connector.MSSQL;
 using HashTag.Logging.Web.Library;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -49,11 +50,7 @@ namespace HashTag.Logging.Web.Service
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapMvcAttributeRoutes();
-            //routes.MapRoute(
-            //    name: "Default",
-            //    url: "{controller}/{action}/{id}",
-            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            //);
+            
             var settings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -82,12 +79,14 @@ namespace HashTag.Logging.Web.Service
 
             ODataModelBuilder builder = new ODataConventionModelBuilder();
 
-            builder.EntitySet<LogEvent>("events").EntityType.HasKey(p => p.UUID);
+            builder.EntitySet<dbEvent>("4").EntityType.HasKey(p => p.UUID);
 
             config.MapODataServiceRoute(
                 routeName: "ODataRoute",
-                routePrefix: "odata",
+                routePrefix: "events/0/0/O",
                 model: builder.GetEdmModel());
+
+            config.EnsureInitialized(); //is this necessary?
         }
     }
 }

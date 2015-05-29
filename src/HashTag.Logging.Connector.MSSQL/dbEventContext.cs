@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace HashTag.Logging.Connector.MSSQL
 {
-    public class dbEventContext : DbContext
+    public class DbEventContext : DbContext
     {
-        public dbEventContext()
+        public DbEventContext()
             : base("dbLog")
         {
 

@@ -5,14 +5,14 @@ namespace HashTag.Logging.Connector.MSSQL.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<HashTag.Logging.Connector.MSSQL.dbEventContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<HashTag.Logging.Connector.MSSQL.DbEventContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(HashTag.Logging.Connector.MSSQL.dbEventContext context)
+        protected override void Seed(HashTag.Logging.Connector.MSSQL.DbEventContext context)
         {
             //  This method will be called after migrating to the latest version.
 
