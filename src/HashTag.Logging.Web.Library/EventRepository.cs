@@ -25,7 +25,7 @@ namespace HashTag.Logging.Web.Library
         public static void saveEventBlock(List<LogEvent> eventBlock)
         {
 
-            var ctx = new DbEventContext();
+            var ctx = new EventContext();
 
             //for (int x = 0; x < eventBlock.Count; x++)
             //{

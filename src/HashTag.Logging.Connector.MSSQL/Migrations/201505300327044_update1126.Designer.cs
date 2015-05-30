@@ -7,13 +7,13 @@ namespace HashTag.Logging.Connector.MSSQL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class update1126 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(update1126));
         
         string IMigrationMetadata.Id
         {
-            get { return "201505230228496_Initial"; }
+            get { return "201505300327044_update1126"; }
         }
         
         string IMigrationMetadata.Source

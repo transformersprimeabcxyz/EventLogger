@@ -38,6 +38,10 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\..\lib\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -53,9 +57,21 @@
     <Compile Include="dbEventContext.cs" />
     <Compile Include="dbEventHttpContext.cs" />
     <Compile Include="dbEventUserContext.cs" />
-    <Compile Include="Migrations\201505230228496_Initial.cs" />
-    <Compile Include="Migrations\201505230228496_Initial.Designer.cs">
-      <DependentUpon>201505230228496_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201505300252319_initial.cs" />
+    <Compile Include="Migrations\201505300252319_initial.Designer.cs">
+      <DependentUpon>201505300252319_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505300321153_update1121.cs" />
+    <Compile Include="Migrations\201505300321153_update1121.Designer.cs">
+      <DependentUpon>201505300321153_update1121.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505300323556_update1123.cs" />
+    <Compile Include="Migrations\201505300323556_update1123.Designer.cs">
+      <DependentUpon>201505300323556_update1123.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505300327044_update1126.cs" />
+    <Compile Include="Migrations\201505300327044_update1126.Designer.cs">
+      <DependentUpon>201505300327044_update1126.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,8 +89,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201505230228496_Initial.resx">
-      <DependentUpon>201505230228496_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505300252319_initial.resx">
+      <DependentUpon>201505300252319_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505300321153_update1121.resx">
+      <DependentUpon>201505300321153_update1121.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505300323556_update1123.resx">
+      <DependentUpon>201505300323556_update1123.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505300327044_update1126.resx">
+      <DependentUpon>201505300327044_update1126.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
