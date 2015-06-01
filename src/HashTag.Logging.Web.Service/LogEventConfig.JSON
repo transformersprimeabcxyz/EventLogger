@@ -2,64 +2,44 @@
     "ProcessorFactory": {
         "Type": "HashTag.Diagnostics.LogEventProcessor, HashTag.Core",
         "Config": {
-            "Processor": {
-                "BufferBlockSize": 300,
-                "BufferSweepMs": 1000,
-                "CacheTimeOutMs": 1000,
-                "BufferWriteTimeOutMs": 5000,
-                "ForceFlushFilters": [
-
-                ]
-            },
-            "Pipeline": [
-                {
-                    "Name": "HashTag.Diagnostics.TraceEventWriter",
-                    "Type": "asdasf, asf",
-                    "OnError": [ "SQLDirect" ],
-                    "OnSuccess": [ ],
-                    "Config": {
-
-                    }
-                },
-                {
-                    "Name": "SQLDirect",
-                    "Type": "",
-                    "OnError": [ "LocalFile" ],
-                    "OnSuccess": [ ],
-                    "Config": {
-
-                    }
-                },
-                {
-                    "Name": "LocalFile",
-                    "Type": "",
-                    "OnError": [ "Internal" ],
-                    "OnSuccess": [ ],
-                    "Config": {
-
-                    }
-                },
-                {
-                    "Name": "Internal",
-                    "Type": "",
-                    "OnError": [ ],
-                    "OnSuccess": [ ],
-                    "Config": {
-
-                    }
-                }
-            ],
-            "ShouldLogFilters": [
-                {
-                    "Name": "",
-                    "Type": "asda, q234r234",
-                    "Config": {
-
-                    }
-
-                }
+            "BufferAutoFlushSize": 300,
+            "BufferWriteToFileSize": 1000,
+            "BufferSweepMs": 1000,
+            "CacheTimeOutMs": 1000,
+            "BufferWriteTimeOutMs": 5000,
+            "ForceFlushFilters": [
+                "Filter1",
+                [ "Filter2", "Filter3" ]
             ]
-        }
-    }
+        },
+        "EnvironmentKey": "HashTag.Application.Environment",
+        "AppNameKey": "${HashTag.Application.Name}",
+        "Writers": [
+            {
+                "Type": "$(connectionName)"
+            },
+            {
+                "Name": "this is my writer",
+                "Type": "HashTag.Core.Diagnostics.TraceEventWriter,HashTag.Core",
+                "Config": {
 
+                }
+            },
+            {
+                "Name": "fail-over file writer",
+                "Type": "class,type",
+                "Config": {
+                    "path": [ "{app_data}", "" ]
+                }
+            }
+        ],
+        "Filters": [
+            {
+                "Name": "this is my writer",
+                "Type": "HashTag.Core.Diagnostics.TraceEventWriter,HashTag.Core",
+                "Config": {
+                }
+            }
+        ]
+    }
 }
