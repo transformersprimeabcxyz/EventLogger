@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/LogServerScripts")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -29,7 +29,7 @@
             </footer>
         </div>
     </div>
-    @Scripts.Render("~/bundles/LogServerScripts")
+    
     @RenderSection("scripts", required: false)
 </body>
 </html>

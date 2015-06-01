@@ -9,20 +9,28 @@ using System.Web.OData.Routing;
 using HashTag.Logging.Connector.MSSQL;
 using System.Web.OData.Query;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using HashTag.Logging.Web.Library;
+using HashTag.Diagnostics.MEX;
 
 namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.OData._4
 {
-    [ODataRoutePrefix("4")]
     public class EventsOdataController : ODataController
     {
         EventContext _ctx = new EventContext();
 
-        [ODataRoute]
-        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.All,PageSize=20)]
-        public IQueryable<Event> Get()
-        {          
+        [ODataRoute("4")]
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.All, PageSize = 100)]
+        public async Task<IQueryable<Event>> Get()
+        {
             return _ctx.Events;
         }
-
+        [ODataRoute("4({key})")]
+        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid key)
+        {            
+            return Ok(_ctx.Events.Include("Properties").Where(e => e.UUID == key));
+        }
     }
+
 }

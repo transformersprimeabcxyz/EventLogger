@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<div id="divEventPage">
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Time
+                </th>
+                <th>
+                    Severity
+                </th>
+                <th>
+                    Application
+                </th>
+                <th>
+                    Host
+                </th>
+                <th>
+                    User
+                </th>
+                <th>
+                    Source
+                </th>
+                <th>
+                    Message
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: eventRows">
+            <tr>
+                <td data-bind="text:  moment(eventDate).format('YY-MM-DD') "></td>
+                <td data-bind="text:  moment(eventDate).format('HH:mm:ss.SSS') "></td>
+                <td data-bind="text: eventTypeName"></td>
+                <td data-bind="text: eventApplication"></td>
+                <td data-bind="text: eventHost"></td>
+                <td data-bind="text: eventUser"></td>
+                <td data-bind="text: eventSource"></td>
+                <td>
+                    <span data-bind="text: eventMessage"></span>
+                    <a data-bind="attr: {href: detailsLink}">Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    var pageVm = null;
+    $(document).ready(function () {
+        pageVm = new eventVm("divEventPage");
+        pageVm.onReady();
+    })
+</script>

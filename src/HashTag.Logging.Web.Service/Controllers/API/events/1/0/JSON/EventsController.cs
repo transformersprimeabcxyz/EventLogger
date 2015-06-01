@@ -23,87 +23,21 @@ using System.Web.OData;
 using System.Web.OData.Query;
 using System.Web.OData.Extensions;
 
-namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.JSON
+namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0
 {
-    [RoutePrefix("events/0/0/j")]
+    [RoutePrefix("events/0/0")]
     public class EventsController : ApiController
     {
-        [Route(""), HttpPost, ValidateLogEvent]
-        public async Task<HttpResponseMessage> SaveEvent(List<LogEvent> request)
-        {
-            var response = new ApiResponseBase<List<LogSaveResponse>>();
-            response.Header.HttpStatus = HttpStatusCode.Accepted;
-
-            try
-            {
-                EventRepository repo = new EventRepository();
-                var saveResponse = repo.StoreEvent(request);
-                return base.Request.CreateResponse<ApiResponseBase<List<LogSaveResponse>>>(response.Header.HttpStatus, response);
-            }
-            catch (Exception ex)
-            {
-                response.Header.HttpStatus = HttpStatusCode.InternalServerError;
-                response.Header.Messages.Add(ex);
-                response.Header.Messages[0].MessageStatus = ApiMessageStatus.Error;
-                return base.Request.CreateResponse<ApiResponseBase>(response.Header.HttpStatus, response);
-            }
-
-        }
-
-        [Route("dummy"), HttpPost, ValidateLogEvent]
-        public async Task<HttpResponseMessage> SaveEvent(List<Event> request)
-        {
-           
-            var response = new EventSaveResponse();
-            response.Results.Add(new EventSaveItem()
-            {
-                StatusCode = HttpStatusCode.Accepted,
-                Ordinal = request.Count,
-                EventUUID = Guid.NewGuid()
-            });
-            return base.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "hello");
-        }
 
         EventContext _ctx = new EventContext();
-        [Route("4"), HttpGet, ValidateLogEvent]
-        public IHttpActionResult GetEvents(ODataQueryOptions<Event> opts)
+
+        [Route(""), HttpPost]
+        public async Task<HttpResponseMessage> SaveEvent(List<Event> request)
         {
-            ODataQuerySettings settings = new ODataQuerySettings()
-            {
-                PageSize = 1,
-                EnsureStableOrdering = true
-            };
-            
-            IQueryable results = opts.ApplyTo(_ctx.Events.AsQueryable(), settings);
-            
-            var x = new PageResult<Event>(
-                    results as IEnumerable<Event>,
-                    Request.ODataProperties().NextLink,
-                    Request.ODataProperties().TotalCount);
-
-            return base.Ok<PageResult<Event>>(x);
-
+            var repo = new EventRepository();
+            EventSaveResponse response = repo.SubmitEventList(request);
+            return Request.CreateResponse<EventSaveResponse>(HttpStatusCode.Accepted, response);
         }
     }
 
-
-    public class ValidateLogEventAttribute : ActionFilterAttribute
-    {
-        public override void OnActionExecuting(HttpActionContext actionContext)
-        {
-
-            //if (actionContext.ModelState.IsValid == false)
-            //{
-            //    var response = new ApiResponseBase();
-            //    response.Header.HttpStatus = HttpStatusCode.BadRequest;
-            //    foreach(var modelError in actionContext.ModelState)
-            //    {
-            //        var x = modelError.Key;
-            //        var y = modelError.Value.Errors[0].ErrorMessage;
-            //        response.Header.Messages.Add(ApiMessageStatus.Error,"{0} {1}", x, y);
-            //    }
-            //    actionContext.Response = actionContext.Request.CreateResponse<ApiResponseBase>(HttpStatusCode.BadRequest, response);
-            //}
-        }
-    }
 }

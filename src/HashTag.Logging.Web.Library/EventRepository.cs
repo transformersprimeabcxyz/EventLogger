@@ -1,12 +1,14 @@
 ﻿using Elmah;
 using HashTag.Collections;
 using HashTag.Diagnostics;
+using HashTag.Diagnostics.MEX;
 using HashTag.Logging.Connector.MSSQL;
 using HashTag.Logging.Web.Library.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,110 +16,136 @@ namespace HashTag.Logging.Web.Library
 {
     public class EventRepository : IEventRepository
     {
-        public static AsyncBuffer<LogEvent> _buffer = new AsyncBuffer<LogEvent>(saveEventBlock);
+        private static AsyncBuffer<Event> _buffer = new AsyncBuffer<Event>(saveEventBlock);
 
-        public void StoreEvent(LogEvent error)
+        private static void saveEventBlock(List<Event> eventBlock)
         {
-            _buffer.Submit(error);
+            try
+            {
+                var ctx = new EventContext();
 
-        }
-
-        public static void saveEventBlock(List<LogEvent> eventBlock)
-        {
-
-            var ctx = new EventContext();
-
-            //for (int x = 0; x < eventBlock.Count; x++)
-            //{
-            //    var error = eventBlock[x];
-            //    var dbEvent = new dbEvent();
-            //    dbEvent.UUID = error.UUID.ToString();
-            //    dbEvent.EventDate = error.TimeStamp;
-            //    dbEvent.Message = error.MessageText;
-            //    dbEvent.Application = error.ApplicationKey;
-            //    dbEvent.Environment = error.ActiveEnvironment;
-            //    dbEvent.Categories = error.Categories != null && error.Categories.Count > 0 ? JsonConvert.SerializeObject(error.Categories, Formatting.Indented) : (string)null;
-            //    dbEvent.Channel = error.LoggerName;
-            //    dbEvent.Module = error.ApplicationSubKey;
-            //    dbEvent.CorrelationUUID = error.ActivityId.ToString();
-            //    dbEvent.EventCode = error.EventCode;
-            //    dbEvent.EventId = error.EventId;
-            //    if (error.Exceptions != null && error.Exceptions.Count > 0)
-            //    {
-            //        var firstEx = error.Exceptions[0];
-            //        var baseEx = error.Exceptions[0].GetBaseException;
-            //        dbEvent.ExceptionBaseMessage = baseEx.Message;
-            //        dbEvent.ExceptionBaseSource = baseEx.Source;
-            //        dbEvent.ExceptionBaseType = baseEx.ExceptionType;
-
-            //        dbEvent.ExceptionMessage = firstEx.Message;
-            //        dbEvent.ExceptionSource = firstEx.Source;
-            //        dbEvent.ExceptionType = firstEx.ExceptionType;
-
-            //        dbEvent.Exceptions = JsonConvert.SerializeObject(error.Exceptions);
-            //    }
-
-            //    dbEvent.HostName = error.MachineName;
-            //    if (error.HttpContext != null)
-            //    {
-            //        dbEvent.HttpContext.Cookies = error.HttpContext.Cookies != null && error.HttpContext.Form.Count > 0 ? JsonConvert.SerializeObject(error.HttpContext.Cookies, Formatting.Indented) : (string)null;
-            //        dbEvent.HttpContext.Form = error.HttpContext.Form != null && error.HttpContext.Form.Count > 0 ? JsonConvert.SerializeObject(error.HttpContext.Form, Formatting.Indented) : (string)null;
-            //        dbEvent.HttpContext.Header = error.HttpContext.Headers != null && error.HttpContext.Headers.Count > 0 ? JsonConvert.SerializeObject(error.HttpContext.Headers, Formatting.Indented) : (string)null;
-            //        dbEvent.HttpContext.HtmlMessage = "need this data!";
-            //        dbEvent.HttpContext.StatusCode = "need this data!";
-            //        dbEvent.HttpContext.StatusValue = -100;
-            //        dbEvent.HttpContext.WebEventValue = -100;
-            //    }
-
-            //    if (error.MachineContext != null)
-            //    {
-            //        dbEvent.MachineContext = JsonConvert.SerializeObject(error.MachineContext);
-            //    }
-
-            //    dbEvent.PriorityCode = error.Priority.ToString();
-            //    dbEvent.PriorityValue = (int)error.Priority;
-            //    if (error.Properties != null && error.Properties.Count > 0)
-            //    {
-            //        dbEvent.Properties = JsonConvert.SerializeObject(error.Properties, Formatting.Indented);
-            //    }
-            //    dbEvent.Reference = error.Reference != null ? error.Reference.ToString() : (string)null;
-            //    dbEvent.SeverityCode = error.Severity.ToString();
-            //    dbEvent.SeverityValue = (int)error.Severity;
-            //    if (error.UserContext != null)
-            //    {
-            //        dbEvent.UserContext.AppDomainIdentity = error.UserContext.AppDomainIdentity;
-            //        dbEvent.UserContext.EnvUserName = error.UserContext.EnvUserName;
-            //        dbEvent.UserContext.HttpUser = error.UserContext.HttpUser;
-            //        dbEvent.UserContext.IsInteractive = error.UserContext.IsInteractive;
-            //        dbEvent.UserContext.ThreadPrincipal = error.UserContext.ThreadPrincipal;
-            //        dbEvent.UserContext.DefaultUser = dbEvent.UserIdentity ?? error.UserContext.DefaultUser;
-            //        dbEvent.UserIdentity = dbEvent.UserIdentity ?? error.UserContext.DefaultUser;
-            //    }
-            //    else
-            //    {
-            //        dbEvent.UserIdentity = error.UserIdentity;
-            //    }
-
-            //    ctx.Events.Add(dbEvent);
-
+                for (int x = 0; x < eventBlock.Count; x++)
+                {
+                    ctx.Events.Add(eventBlock[x]);
+                }
                 ctx.SaveChanges();
-           // }
+            }
+            catch(Exception ex)
+            {
+                var s = ex.ToString();
+            }        
         }
 
-
-        public List<LogEvent> GetEvents(string applicationName, int pageIndex, int pageSize)
+        public EventSaveResponse SubmitEventList(List<Event> request)
         {
-            throw new NotImplementedException();
+            var response = new EventSaveResponse();
+            
+            for (int x = 0; x < request.Count; x++)
+            {
+                var @event = request[x];
+
+                EventSaveItem validationResponse = validateEvent(@event);
+                
+                validationResponse.Index = x;
+                response.Results.Add(validationResponse);
+                
+                if (validationResponse.StatusCode == HttpStatusCode.Accepted)
+                {
+                    _buffer.Submit(@event);
+                }
+            }
+            
+            response.SubmittedEventCount = response.Results.Count(r => r.StatusCode == HttpStatusCode.Accepted);
+            response.IsOk = response.SubmittedEventCount == response.Results.Count;
+            return response;
         }
 
-        public List<LogSaveResponse> StoreEvent(List<LogEvent> request)
+        private EventSaveItem validateEvent(Event evt)
         {
-            //if (request == null || request.Count == 0) return null ;
-            //for(int x=0;x<request.Count;x++)
-            //{
-            //    _buffer.Submit(request[x]);
-            //}
-            return null;
+            var retVal = new EventSaveItem();
+            retVal.StatusCode = HttpStatusCode.Accepted;
+
+            if (evt.UUID == Guid.Empty)
+            {
+                evt.UUID = Guid.NewGuid();
+            }
+            retVal.EventUUID = evt.UUID;
+
+            if (string.IsNullOrWhiteSpace(evt.Application))
+            {
+                retVal.StatusCode = HttpStatusCode.BadRequest;
+                retVal.Message = "Application field is required.  Event not submitted for storage.";
+                return retVal;
+            }
+            if (evt.Application != null && evt.Application.Length >= 100)
+            {
+                retVal.StatusCode = HttpStatusCode.BadRequest;
+                retVal.Message = "Application field must not be greater than 100 characters.  Event not submitted for storage.";
+                return retVal;
+            }
+            if (string.IsNullOrWhiteSpace(evt.Message))
+            {
+                retVal.StatusCode = HttpStatusCode.BadRequest;
+                retVal.Message = "Message field is required.  Event not submitted for storage.";
+                return retVal;
+            }
+            if (evt.Message != null && evt.Message.Length >= 8000)
+            {
+                retVal.StatusCode = HttpStatusCode.BadRequest;
+                retVal.Message = "Message field must be less than 8,000 characters.  Event not submitted for storage.";
+                return retVal;
+            }
+            if (evt.EventDate == default(DateTime))
+            {
+                retVal.Message = "Sender should set event date before submitting event to service.  Using event service time instead.";
+                evt.EventDate = DateTime.Now;
+            }
+      
+            if (evt.EventType == null || string.IsNullOrWhiteSpace(evt.EventTypeName))
+            {
+                retVal.StatusCode = HttpStatusCode.BadRequest;
+                retVal.Message = "EventType must be one of these values: Critical, Error, Warning, Information, Verbose, Start, Stop, Suspend, Resume, Transfer.  Event not submitted for storage.";
+                return retVal;
+            }
+            if (evt.Properties != null)
+            {
+                for(int x =0;x<evt.Properties.Count;x++)
+                {
+                    var property = evt.Properties[x];
+                    if (property.UUID == Guid.Empty)
+                    {
+                        property.UUID = Guid.NewGuid();
+                    }
+                    property.EventUUID = evt.UUID;
+
+                    if (string.IsNullOrWhiteSpace(property.Name))
+                    {
+                        retVal.Message = string.Format("Property[{0}].Name must not be empty.  Event not submitted for storage",x);
+                        retVal.StatusCode = HttpStatusCode.BadRequest;
+                        return retVal;
+                    }
+                    if (property.Name != null && property.Name.Length>=30)
+                    {
+                        retVal.Message = string.Format("Property[{0}].Name must not be longer than 30 characters.  Event not submitted for storage",x);
+                        retVal.StatusCode = HttpStatusCode.BadRequest;
+                        return retVal;
+                    }
+                    if (property.Value != null && property.Value.Length>=8000)
+                    {
+                        retVal.Message = string.Format("Property[{0}].Value must not be longer than 8000 characters.  Event not submitted for storage",x);
+                        retVal.StatusCode = HttpStatusCode.BadRequest;
+                        return retVal;
+                    }
+                    if (property.Group!= null && property.Group.Length>=20)
+                    {
+                        retVal.Message = string.Format("Property[{0}].Group must not be longer than 20 characters.  Event not submitted for storage",x);
+                        retVal.StatusCode = HttpStatusCode.BadRequest;
+                        return retVal;
+                    }
+                }
+            }
+            return retVal;
         }
+
     }
 }

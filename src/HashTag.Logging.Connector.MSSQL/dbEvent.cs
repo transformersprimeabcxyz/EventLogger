@@ -26,9 +26,15 @@ namespace HashTag.Logging.Connector.MSSQL
         [Index("IDX_dbProperty__Event_Name",1)]
         public Guid EventUUID { get; set; }
 
+        [Column(Order = 25,TypeName="varchar")]
+        [Index("IDX_dbProperty__Group_Name", 1)]
+        [MaxLength(20)]
+        public string Group { get; set; }
+
         [Index("IDX_dbProperty__Event_Name",2)]
         [Index("IDX_dbProperty__Name", 1)]
-        [MaxLength(200), Column(TypeName = "varchar", Order = 30), Display(Name = "Name of computer generating this event (e.g. WS020GTR1)")]
+        [Index("IDX_dbProperty__Group_Name", 2)]
+        [MaxLength(30), Column(TypeName = "varchar", Order = 30), Display(Name = "Name of computer generating this event (e.g. WS020GTR1)")]
         public string Name { get; set; }
 
         [Column(TypeName = "varchar", Order = 40), Display(Name = "Name of computer generating this event (e.g. WS020GTR1)")]

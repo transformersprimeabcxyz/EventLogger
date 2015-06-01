@@ -12,11 +12,11 @@ namespace HashTag.Diagnostics.MEX
     {
         public EventSaveItem(int ordinal=0,HttpStatusCode statusCode = HttpStatusCode.Unused)
         {
-            Ordinal = ordinal;
+            Index = ordinal;
             StatusCode = statusCode;
 
         }
-        public int Ordinal { get; set; }
+        public int Index { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public Guid EventUUID { get; set; }
 
@@ -29,6 +29,8 @@ namespace HashTag.Diagnostics.MEX
         {
             Results = new List<EventSaveItem>();
         }
+        public bool IsOk { get; set; }
+        public int SubmittedEventCount { get; set; }
         public List<EventSaveItem> Results { get; set; }
     }
 }

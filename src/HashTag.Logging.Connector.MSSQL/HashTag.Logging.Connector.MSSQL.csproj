@@ -73,6 +73,10 @@
     <Compile Include="Migrations\201505300327044_update1126.Designer.cs">
       <DependentUpon>201505300327044_update1126.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505301556202_AddGroupField.cs" />
+    <Compile Include="Migrations\201505301556202_AddGroupField.Designer.cs">
+      <DependentUpon>201505301556202_AddGroupField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -100,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505300327044_update1126.resx">
       <DependentUpon>201505300327044_update1126.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505301556202_AddGroupField.resx">
+      <DependentUpon>201505301556202_AddGroupField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

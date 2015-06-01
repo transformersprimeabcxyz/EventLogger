@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<div id="divBody" class="col-md-12">
+    <table style="width:100%;padding:6px 6px 6px 6px;margin: 5px" border="1">
+        <tr>
+            <td width="15%">
+                <strong>Event Date</strong>
+            </td>
+            <td width="30%">
+                <span data-bind="text: moment(header().eventDate).format('YY-MM-DD')"></span><br />
+                <span data-bind="text: moment(header().eventDate).format('HH:mm:ss.SSS')"></span>
+            </td>
+            <td>
+                <strong width="15%">Severity</strong>
+            </td>
+            <td>
+                <span data-bind="text: header().eventTypeName"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>Application</strong>
+            </td>
+            <td>
+                <span data-bind="text: header().eventApplication"></span>
+            </td>
+            <td>
+                <strong>Source</strong>
+            </td>
+            <td>
+                <span data-bind="text:header().eventSource"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>User</strong>
+            </td>
+            <td>
+                <span data-bind="text:header().eventUser"></span>
+            </td>
+            <td>
+                <strong>Host</strong>
+            </td>
+            <td>
+                <span data-bind="text:header().eventHost"></span>
+            </td>
+        </tr>
+        <tr>
+           <td colspan="4">
+               <span data-bind="text:header().eventMessage"></span>
+           </td>
+        </tr>
+    </table>    
+    <div class="row panel">
+        <div class="row">
+            <div class="col-md-2">
+                <strong>Group</strong>
+            </div>
+            <div class="col-md-2">
+                <strong>Name</strong>
+            </div>
+            <div class="col-md-7">
+                <strong>Value</strong>
+            </div>
+        </div>
+        <div data-bind="foreach: properties">
+            <div class="row">
+                <div class="col-md-2">
+                    <span data-bind="text: group"></span>
+                </div>
+                <div class="col-md-2">
+                    <span data-bind="text: name"></span>
+                </div>
+                <div class="col-md-7">
+                    <span data-bind="text: value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var id = '@Model';
+    var details;
+    $(document).ready(function () {
+        details = new detailsVm("divBody", id);
+        details.onReady();
+    });
+</script>

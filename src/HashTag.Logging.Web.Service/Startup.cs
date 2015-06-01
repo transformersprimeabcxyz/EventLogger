@@ -37,8 +37,12 @@ namespace HashTag.Logging.Web.Service
 
             bundles.Add(new ScriptBundle("~/bundles/LogServerScripts").Include(
                         "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/knockout-3.3.0.js",
                         "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js")
+                        "~/Scripts/respond.js",
+                        "~/Scripts/moment.js",
+                        "~/Scripts/app/eventVm.js",
+                        "~/Scripts/app/detailsVm.js")
                         );
         }
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
@@ -50,7 +54,7 @@ namespace HashTag.Logging.Web.Service
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapMvcAttributeRoutes();
-            
+
             var settings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -68,7 +72,7 @@ namespace HashTag.Logging.Web.Service
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html")); //force JSON if format HTML request header is not specified
 
             var jsonResolver = new DefaultContractResolver(); //allow [Serializable] attribute on classes (for ELMAH compatiability)
-            jsonResolver.IgnoreSerializableAttribute = true;           
+            jsonResolver.IgnoreSerializableAttribute = true;
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = jsonResolver;
             var jsonFormatter = config.Formatters.JsonFormatter;
 
