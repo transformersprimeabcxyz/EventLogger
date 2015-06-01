@@ -1,9 +1,9 @@
 ﻿using Elmah;
 using HashTag.Collections;
 using HashTag.Diagnostics;
-using HashTag.Diagnostics.MEX;
 using HashTag.Logging.Connector.MSSQL;
-using HashTag.Logging.Web.Library.Interfaces;
+using HashTag.Logging.Service.API.Interfaces;
+using HashTag.Logging.Service.API.MEX;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

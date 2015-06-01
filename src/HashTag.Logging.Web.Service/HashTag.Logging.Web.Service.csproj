@@ -174,7 +174,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\API\events\1\0\JSON\EventsController.cs" />
+    <Compile Include="Controllers\API\events\1\0\EventsController.cs" />
     <Compile Include="Controllers\API\events\1\0\OData\4\EventsOdataController.cs" />
     <Compile Include="Controllers\EventSummaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -270,6 +270,10 @@
     <ProjectReference Include="..\HashTag.Logging.Connector.MSSQL\HashTag.Logging.Connector.MSSQL.csproj">
       <Project>{1837960f-bb20-44a1-af38-e96a55c9eebe}</Project>
       <Name>HashTag.Logging.Connector.MSSQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HashTag.Logging.Service.API\HashTag.Logging.Service.API.csproj">
+      <Project>{0b8b9317-6889-4d8a-9a73-ef0ab17bd552}</Project>
+      <Name>HashTag.Logging.Service.API</Name>
     </ProjectReference>
     <ProjectReference Include="..\HashTag.Logging.Web.Library\HashTag.Logging.Web.Library.csproj">
       <Project>{6881591d-3a09-4a80-85be-564222cd9595}</Project>

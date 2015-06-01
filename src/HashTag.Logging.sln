@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{280FF6
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Service.API", "HashTag.Logging.Service.API\HashTag.Logging.Service.API.csproj", "{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,6 +128,15 @@ Global
 		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Net40|Any CPU.ActiveCfg = Release|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Net40|Any CPU.Build.0 = Release|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Net40|x86.ActiveCfg = Release|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

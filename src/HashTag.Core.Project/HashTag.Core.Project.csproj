@@ -190,7 +190,6 @@
     <Compile Include="Diagnostics\LogFactory.cs" />
     <Compile Include="Diagnostics\LogHttpContext.cs" />
     <Compile Include="Diagnostics\LogRuntimeContext.cs" />
-    <Compile Include="Diagnostics\MEX\EventSaveResponse.cs" />
     <Compile Include="Diagnostics\MEX\LogSaveResponse.cs" />
     <Compile Include="Diagnostics\LogUserContext.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />

@@ -53,9 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbDescriptorUpdater.cs" />
-    <Compile Include="dbEvent.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="dbEventContext.cs" />
-    <Compile Include="dbEventHttpContext.cs" />
     <Compile Include="dbEventUserContext.cs" />
     <Compile Include="Migrations\201505300252319_initial.cs" />
     <Compile Include="Migrations\201505300252319_initial.Designer.cs">

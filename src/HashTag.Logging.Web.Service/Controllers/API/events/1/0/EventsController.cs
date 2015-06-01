@@ -18,10 +18,10 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Http.ModelBinding;
-using HashTag.Diagnostics.MEX;
 using System.Web.OData;
 using System.Web.OData.Query;
 using System.Web.OData.Extensions;
+using HashTag.Logging.Service.API.MEX;
 
 namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0
 {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace HashTag.Diagnostics.MEX
+namespace HashTag.Logging.Service.API.MEX
 {
     public class EventSaveItem
     {
