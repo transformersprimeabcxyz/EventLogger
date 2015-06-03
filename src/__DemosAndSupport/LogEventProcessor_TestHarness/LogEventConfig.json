@@ -1,0 +1,49 @@
+﻿{
+ 
+    "BufferConfig": {
+        "BufferAutoFlushSize": 100,
+        "FailOverSize": 200,
+        "BufferSweepMs": 300,   
+        "CacheTimeOutMs": 400,
+        "BufferWriteTimeOutMs": {
+            "Default": "500",
+            "ConfigKey": "Lookup Key"            
+        },
+        "FlushFilters": [
+            "600",
+            {
+                "Name": "700",
+                "Config": {
+                    "switchValue": "Error",
+                    "key2": "value2"
+                }
+            },
+            [ "800", "900" ]
+        ]
+    },
+    "PipeLine": [
+        "1000",
+        {
+            "Name": "1100",
+            "Config": {
+                "switchValue": "Error"
+            }
+        },
+        [ "1200", "1300" ]
+    ],
+    "Writers": [
+        
+        {
+            "Name": "1400",
+            "Config": {
+                "switchValue": "Error"
+            }
+        },
+        {
+            "Name": "1500",
+            "Config": {
+                "switchValue": "Error"
+            }
+        }
+    ]
+}

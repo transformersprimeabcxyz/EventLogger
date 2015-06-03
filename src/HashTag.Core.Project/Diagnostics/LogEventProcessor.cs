@@ -21,7 +21,7 @@ namespace HashTag.Diagnostics
             _buffer = new AsyncBuffer<LogEvent>(writeEvents);
 
         }
-        public LogEventProcessor(JObject config)
+        public LogEventProcessor(LogEventProcessorSettings config)
         {
             Initialize(config);
         }

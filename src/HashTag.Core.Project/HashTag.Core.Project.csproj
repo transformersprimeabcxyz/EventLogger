@@ -176,6 +176,13 @@
     <Compile Include="Configuration\RemoteConfigSetting.cs" />
     <Compile Include="Configuration\IConfigProvider.cs" />
     <Compile Include="CoreConfig.Log.cs" />
+    <Compile Include="Diagnostics\Config\LogProcessorConfiguration.cs" />
+    <Compile Include="Diagnostics\Config\ConfigProvider.cs" />
+    <Compile Include="Diagnostics\Config\ConfigValueConverter.cs" />
+    <Compile Include="Diagnostics\Config\ConfigValue.cs" />
+    <Compile Include="Diagnostics\Config\FilterConverter.cs" />
+    <Compile Include="Diagnostics\Config\ConfigProviderConverter.cs" />
+    <Compile Include="Diagnostics\Config\LogBufferConfiguration.cs" />
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
     <Compile Include="Diagnostics\MEX\EventGetRequest.cs" />
     <Compile Include="Diagnostics\Interfaces\ILog.cs" />

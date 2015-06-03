@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{280FF6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Service.API", "HashTag.Logging.Service.API\HashTag.Logging.Service.API.csproj", "{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogEventProcessor_TestHarness", "__DemosAndSupport\LogEventProcessor_TestHarness\LogEventProcessor_TestHarness.csproj", "{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,15 @@ Global
 		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0B8B9317-6889-4D8A-9A73-EF0AB17BD552}.Release|x86.ActiveCfg = Release|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Net40|Any CPU.ActiveCfg = Release|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Net40|Any CPU.Build.0 = Release|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Net40|x86.ActiveCfg = Release|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,5 +158,6 @@ Global
 		{4CCD8FCC-8BFD-4787-8D0F-67994CB1D83D} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 		{49139C04-DC1A-420C-83AE-072BD986E2EF} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
+		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF} = {E3CF7125-5D53-4D44-B808-021488E0FAF3}
 	EndGlobalSection
 EndGlobal
