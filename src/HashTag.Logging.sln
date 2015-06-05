@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Service.API
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogEventProcessor_TestHarness", "__DemosAndSupport\LogEventProcessor_TestHarness\LogEventProcessor_TestHarness.csproj", "{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Core.Tests", "HashTag.Core.Tests\HashTag.Core.Tests.csproj", "{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -148,6 +150,15 @@ Global
 		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF}.Release|x86.ActiveCfg = Release|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Net40|Any CPU.ActiveCfg = Release|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Net40|Any CPU.Build.0 = Release|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Net40|x86.ActiveCfg = Release|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -159,5 +170,6 @@ Global
 		{49139C04-DC1A-420C-83AE-072BD986E2EF} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 		{1E50E3C1-3D9D-491E-BD8A-C3C9FDE48722} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 		{88CC2B6A-468D-4DD0-953A-7FBF6C6CF9AF} = {E3CF7125-5D53-4D44-B808-021488E0FAF3}
+		{1E351F54-3E4A-4E51-A99F-A292F76AFEFF} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 	EndGlobalSection
 EndGlobal

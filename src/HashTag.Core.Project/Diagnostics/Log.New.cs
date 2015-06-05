@@ -65,7 +65,7 @@ namespace HashTag.Diagnostics
             var persistTask = Task.Factory.StartNew(() =>
                 {
                     var logSourceLevels = CoreConfig.Log.ApplicationLogLevels;
-                    logEventBlock.RemoveAll(msg => !logSourceLevels.IsEnabled(msg.Severity));
+                    logEventBlock.RemoveAll(msg => !logSourceLevels.IsEnabledFor(msg.Severity));
                     if (logEventBlock.Count > 0)
                     {
                         try

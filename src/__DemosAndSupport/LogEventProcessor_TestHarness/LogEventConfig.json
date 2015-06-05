@@ -1,49 +1,50 @@
 ﻿{
- 
     "BufferConfig": {
         "BufferAutoFlushSize": 100,
         "FailOverSize": 200,
-        "BufferSweepMs": 300,   
+        "BufferSweepMs": 300,
         "CacheTimeOutMs": 400,
         "BufferWriteTimeOutMs": {
             "Default": "500",
-            "ConfigKey": "Lookup Key"            
+            "ConfigKey": "Lookup Key"
         },
         "FlushFilters": [
-            "600",
-            {
-                "Name": "700",
-                "Config": {
-                    "switchValue": "Error",
-                    "key2": "value2"
-                }
-            },
-            [ "800", "900" ]
+            "Error Filter"
         ]
     },
+
     "PipeLine": [
-        "1000",
+
+        "TraceSource Writer",
         {
-            "Name": "1100",
+            "Name": "FileSystem Writer",
             "Config": {
-                "switchValue": "Error"
+                "sourceLevels": "Error"
             }
-        },
-        [ "1200", "1300" ]
+        }
     ],
     "Writers": [
-        
+
         {
-            "Name": "1400",
-            "Config": {
-                "switchValue": "Error"
-            }
+            "Name": "TraceSource Writer",
+            "Type": "HashTag.Diagnostics.Writers.TraceSourceWriter, HashTag.Core"
         },
+
         {
-            "Name": "1500",
-            "Config": {
-                "switchValue": "Error"
-            }
+            "Name": "FileSystem Writer",
+            "Type": "HashTag.Diagnostics.Writers.LocalFileWriter, HashTag.Core"
+        },
+
+        {
+            "Name": "LogEVentService Writer",
+            "Type": "HashTag.Diagnostics.Writers.EventServiceWriter, HashTag.Core"
+        }
+
+    ],
+    "Filters": [
+        {
+            "Nmae": "Error Filter",
+            "Type": "HashTag.Diagnostics.Filters.SourceLevelFilter, HashTag.Core"
         }
     ]
 }

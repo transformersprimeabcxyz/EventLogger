@@ -39,7 +39,7 @@ namespace HashTag.Diagnostics
             Log.Internal.Write("Configuring application log - trace source");
             if (internalNode.Count == 0) // create default internal source
             {
-                Log.Internal.Write("Application traces ource not configured. Building default");
+                Log.Internal.Write("Application traces source not configured. Building default");
                 var intSource = new TraceSource("{HashTag.ApplicationLog}");
                 var intListener = new JsonFileTraceListener();
                 intListener.LogFileName = logFilePath;

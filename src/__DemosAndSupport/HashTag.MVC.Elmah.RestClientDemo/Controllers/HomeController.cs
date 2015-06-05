@@ -25,7 +25,7 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             {
 
                 LogEventProcessorSettings settings = new LogEventProcessorSettings();
-                settings.Pipeline.Add(new TestWriter());
+               // settings.Pipeline.Add(new TestWriter());
                 settings.Processor.ForceFlushFilters = new ILogEventFilter[] { new TestFilter() };
                 settings.ShouldLogEventFilters.Add(new TestFilter());
                 settings.ShouldLogEventFilters.Add(new TestFilter());
@@ -72,6 +72,11 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
         public void Initialize(object config)
         {
             
+        }
+
+        public void Initialize(IDictionary<string, string> config)
+        {
+            throw new NotImplementedException();
         }
     }
 }

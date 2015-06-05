@@ -23,7 +23,7 @@ namespace HashTag.Diagnostics
         }
         public LogEventProcessor(LogEventProcessorSettings config)
         {
-            Initialize(config);
+           
         }
 
         private void writeEvents(List<LogEvent> eventBlock)
@@ -33,7 +33,7 @@ namespace HashTag.Diagnostics
                     removeUnqualifiedEvents(eventBlock, _settings.ShouldLogEventFilters);
                     foreach (ILogEventWriter writer in _settings.Pipeline)
                     {
-                        if (writer.WriteBlock(eventBlock, _settings) == true) break;
+                        if (writer.WriteEvents(eventBlock) == true) break;
                     }
                 });
             writingTask.Wait(_settings.Processor.BufferWriteTimeOutMs);
@@ -82,19 +82,19 @@ namespace HashTag.Diagnostics
             _buffer.Start();
         }
 
-        public void Initialize(object config)
+        public void Initialize(IDictionary<string,string> config)
         {
-            if (!(config is JObject)) return;
+            //if (!(config is JObject)) return;
 
-            var serializer = new Newtonsoft.Json.JsonSerializer();
-            serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Objects;
+            //var serializer = new Newtonsoft.Json.JsonSerializer();
+            //serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Objects;
 
-            _settings = ((JObject)config).ToObject<LogEventProcessorSettings>(serializer);
-            _buffer = new AsyncBuffer<LogEvent>();
-            _buffer.MaxPageSize = _settings.Processor.BufferBlockSize;
-            _buffer.BufferSweepMs = _settings.Processor.BufferSweepMs;
-            _buffer.CacheTimeOutMs = _settings.Processor.CacheTimeOutMs;
-            _buffer.Start();
+            //_settings = ((JObject)config).ToObject<LogEventProcessorSettings>(serializer);
+            //_buffer = new AsyncBuffer<LogEvent>();
+            //_buffer.MaxPageSize = _settings.Processor.BufferBlockSize;
+            //_buffer.BufferSweepMs = _settings.Processor.BufferSweepMs;
+            //_buffer.CacheTimeOutMs = _settings.Processor.CacheTimeOutMs;
+            //_buffer.Start();
         }
     }
 

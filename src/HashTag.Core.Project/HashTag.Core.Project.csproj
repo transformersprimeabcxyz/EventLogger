@@ -184,6 +184,7 @@
     <Compile Include="Diagnostics\Config\ConfigProviderConverter.cs" />
     <Compile Include="Diagnostics\Config\LogBufferConfiguration.cs" />
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
+    <Compile Include="Diagnostics\Filters\SourceLevelFilter.cs" />
     <Compile Include="Diagnostics\MEX\EventGetRequest.cs" />
     <Compile Include="Diagnostics\Interfaces\ILog.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogEventFactory.cs" />
@@ -232,6 +233,8 @@
     <Compile Include="Diagnostics\TraceSource\TraceSourceConnector.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceSourceFactory.cs" />
     <Compile Include="Diagnostics\TraceSource\TraceSourceTypes.cs" />
+    <Compile Include="Diagnostics\Writers\LocalFileWriter.cs" />
+    <Compile Include="Diagnostics\Writers\TraceSourceWriter.cs" />
     <Compile Include="Documentation\CiitationAttribute.cs" />
     <Compile Include="Documentation\CitationExclusionAttribute.cs" />
     <Compile Include="Collections\Generic\Enums.cs" />

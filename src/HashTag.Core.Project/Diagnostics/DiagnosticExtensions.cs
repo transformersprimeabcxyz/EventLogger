@@ -25,24 +25,40 @@ namespace HashTag.Diagnostics
                     return LogEventPriority.Normal;
             }
         }
-        public static bool IsEnabled(this SourceLevels sourceLevel, TraceEventType eventType)
+
+        public static bool IsEnabledFor(this SourceLevels sourceLevel, TraceEventType eventType)
         {
-            SourceLevels traceLevelEquivilant = SourceLevels.Off;
-            switch(eventType)
+            if (sourceLevel == SourceLevels.Off) return false;
+            if (sourceLevel == SourceLevels.All) return true;
+
+            SourceLevels convertedSourceLevel = eventType.ToSourceLevels();
+
+            return sourceLevel >= convertedSourceLevel;
+        }
+        
+        public static bool AreEqual(this SourceLevels sourceLevel, TraceEventType eventType)
+        {
+            
+            var convertedSourceLevel = eventType.ToSourceLevels();
+            return (sourceLevel & convertedSourceLevel) == convertedSourceLevel;
+        }
+
+        public static SourceLevels ToSourceLevels(this TraceEventType eventType)
+        {
+            switch (eventType)
             {
-                case TraceEventType.Critical: traceLevelEquivilant = SourceLevels.Critical; break;
-                case TraceEventType.Error: traceLevelEquivilant = SourceLevels.Error; break;
-                case TraceEventType.Information: traceLevelEquivilant = SourceLevels.Information; break;
+                case TraceEventType.Critical: return SourceLevels.Critical; 
+                case TraceEventType.Error: return SourceLevels.Error; break;
+                case TraceEventType.Information: return SourceLevels.Information; break;
                 case TraceEventType.Start:
                 case TraceEventType.Stop:
                 case TraceEventType.Suspend:
                 case TraceEventType.Transfer:
-                case TraceEventType.Resume: traceLevelEquivilant = SourceLevels.ActivityTracing; break;
-                case TraceEventType.Verbose: traceLevelEquivilant = SourceLevels.Verbose; break;
-                case TraceEventType.Warning: traceLevelEquivilant = SourceLevels.Warning; break;                
+                case TraceEventType.Resume: return SourceLevels.ActivityTracing; break;
+                case TraceEventType.Verbose: return SourceLevels.Verbose; break;
+                case TraceEventType.Warning: return SourceLevels.Warning; break;
             }
-
-            return (sourceLevel & traceLevelEquivilant) == traceLevelEquivilant;
+            return SourceLevels.Off;
         }
     }
 }

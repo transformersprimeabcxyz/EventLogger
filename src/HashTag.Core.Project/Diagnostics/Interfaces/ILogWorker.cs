@@ -7,6 +7,6 @@ namespace HashTag.Diagnostics
 {
     public interface ILogWorker
     {
-        void Initialize(object config);
+        void Initialize(IDictionary<string,string> config);
     }
 }
