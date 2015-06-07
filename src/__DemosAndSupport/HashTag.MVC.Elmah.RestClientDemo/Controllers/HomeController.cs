@@ -16,7 +16,7 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 {
     public class HomeController : Controller
     {
-        ILog _log = LogFactory.Create.NewLog(typeof(HomeController));
+        IEventLogger _log = LogEventLoggerFactory.NewLogger<HomeController>();
 
         public ActionResult Index()
         {
@@ -24,19 +24,7 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             try
             {
 
-                LogEventProcessorSettings settings = new LogEventProcessorSettings();
-               // settings.Pipeline.Add(new TestWriter());
-                settings.Processor.ForceFlushFilters = new ILogEventFilter[] { new TestFilter() };
-                settings.ShouldLogEventFilters.Add(new TestFilter());
-                settings.ShouldLogEventFilters.Add(new TestFilter());
-                var s = JsonConvert.SerializeObject(settings,new JsonSerializerSettings()
-                    {
-                         TypeNameHandling = TypeNameHandling.Objects
-                    });
-
-
-                Log.Configure(); 
-             //throw new NotImplementedException("hello isn't working today...so leave already");
+                
 
             }
             catch(Exception ex)

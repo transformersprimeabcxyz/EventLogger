@@ -20,10 +20,10 @@ namespace HashTag.Diagnostics
     /// </summary>
     public class LogEventBuilder
     {
-        Action<LogEvent> _writeAction;
+        Func<LogEvent,Guid> _writeAction;
         LogEvent _message;
 
-        internal LogEventBuilder(LogEvent messageToBuild, Action<LogEvent> writeAction)
+        internal LogEventBuilder(LogEvent messageToBuild, Func<LogEvent,Guid> writeAction)
         {
             _writeAction = writeAction;
             _message = messageToBuild;

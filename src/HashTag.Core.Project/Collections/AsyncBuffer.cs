@@ -30,6 +30,7 @@ using System.Threading;
 using HashTag.Configuration;
 using HashTag.Diagnostics;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace HashTag.Collections
 {
@@ -39,7 +40,7 @@ namespace HashTag.Collections
     /// <typeparam name="T">Type of object that is being buffered</typeparam>
     /// <param name="bufferedItems">List of items that will be acted on by the buffers Flush action</param>
     public delegate void AsyncBufferAction<T>(List<T> bufferedItems);
-  
+
     /// <summary>
     /// This class is responsible for collecting (buffering) objects before spooling them off to the
     /// action supplied in the constructor.  This is the first level of caching.  The action might also implement
@@ -90,7 +91,7 @@ namespace HashTag.Collections
         /// </summary>
         private int _cacheTimeOutMs = CACHE_TIMEOUT_MS;
 
-         /// <summary>
+        /// <summary>
         /// Number of objects (called events in log4Net) which will be acted on 
         /// Default: 300 Records.  Config Settings: HashTag.Buffer.MaxPageSize
         /// </summary>
@@ -100,7 +101,7 @@ namespace HashTag.Collections
             set { _maxPageSize = value; }
         }
 
-        
+
         /// <summary>
         /// Number of milliseconds appender sleep between writting full buffers to storage
         /// Default: 1000 Ms. Config Settings: HashTag.Buffer.Sweep
@@ -126,21 +127,19 @@ namespace HashTag.Collections
         //-----------------------------------------------------------
         // caching locks
         //-----------------------------------------------------------
-        private  ReaderWriterLockSlim _pageLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion); //locks currentPage of objects
-        private  ReaderWriterLockSlim _actionLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);  //locks operating system file being written to
-        private  ReaderWriterLockSlim _queueLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion); //locks buffer of queued up pages of objects messages
+        private ReaderWriterLockSlim _queueLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion); //locks buffer of queued up pages of objects messages
 
         //-----------------------------------------------------------
         // queued objects and list of pages
         //-----------------------------------------------------------
-        private  List<T> _currentPage = new List<T>(); //buffer to accumulate messages from object subsystem
+        //  private List<T> _currentPage = new List<T>(); //buffer to accumulate messages from object subsystem
 
-        private ConcurrentQueue<List<T>> _eventQueue = new ConcurrentQueue<List<T>>(); //preallocate MaxPageSize*10. (3000 objects/second for default).  
+        private ConcurrentQueue<T> _eventQueue = new ConcurrentQueue<T>(); //preallocate MaxPageSize*10. (3000 objects/second for default).  
 
-        private  DateTime _lastMessageReceived = DateTime.Now.AddDays(-365); //used for calculating cache timeouts
-        
+        private DateTime _lastMessageReceived = DateTime.Now.AddDays(-365); //used for calculating cache timeouts
+
         private Timer _timer = null; //Used for sweeping the queue of messages
-      
+
 
         /// <summary>
         /// Default constructor.  Start buffer sweep timer which will look through log queue and persist all pages of log messages is finds
@@ -172,12 +171,13 @@ namespace HashTag.Collections
         /// Constructor that supplies an explict Action />
         /// </summary>
         /// <param name="bufferAction"></param>
-        public AsyncBuffer(AsyncBufferAction<T> bufferAction):this()
+        public AsyncBuffer(AsyncBufferAction<T> bufferAction)
+            : this()
         {
             _bufferAction = bufferAction;
         }
 
-       
+
         /// <summary>
         /// Add an object to the list of queued up objects.  Only queuing is done 
         /// so the enqueing thread can return as quickly as possible.
@@ -185,44 +185,9 @@ namespace HashTag.Collections
         /// <param name="objectToBuffer">Entry that will be persisted</param>
         public void Submit(T objectToBuffer)
         {
-            try
-            {
-                _pageLock.EnterUpgradeableReadLock();
-                try
-                {
-                    _pageLock.EnterWriteLock();
-
-                    _lastMessageReceived = DateTime.Now; //mark _currentPage as not stale
-
-                    _currentPage.Add(objectToBuffer); //store event
-
-                    if (_currentPage.Count > _maxPageSize) //submit page of objects (messages) to queue for persisting on next sweep
-                    {
-                        try
-                        {
-                            _queueLock.EnterWriteLock();
-                            _eventQueue.Enqueue(_currentPage);
-                            Flush();  
-                        }
-                        finally
-                        {
-                            _queueLock.ExitWriteLock();
-                        }
-                        _currentPage = new List<T>(_maxPageSize);
-                    }
-                }
-                finally
-                {
-                    _pageLock.ExitWriteLock();
-                }
-            }
-            finally
-            {
-                if (_pageLock.IsUpgradeableReadLockHeld == true)
-                {
-                    _pageLock.ExitUpgradeableReadLock();
-                }
-            }
+            _lastMessageReceived = DateTime.Now; //mark _currentPage as not stale
+            _eventQueue.Enqueue(objectToBuffer);
+            
         }
 
         /// <summary>
@@ -230,45 +195,17 @@ namespace HashTag.Collections
         /// </summary>
         public virtual void OnClose()
         {
-            _timer.Change(0, Timeout.Infinite); //suspend timer
+            Stop();
             //-------------------------------------------------------
             // put any partially filled buffer directly into persistent store
             //-------------------------------------------------------
             try
             {
-                _pageLock.EnterWriteLock();
-                _queueLock.EnterWriteLock();
-                _actionLock.EnterWriteLock();
-                while(_eventQueue.Count > 0)
-                {
-                    List<T> queuedItem;
-                    _eventQueue.TryDequeue(out queuedItem);
-                    _bufferAction(queuedItem);
-                }
-                if (_currentPage.Count >= 0) //there are records to be flushed
-                {
-                    _bufferAction(_currentPage); // will block until other threads relinquish the persistent store
-                }
-
+                submitMessagesToAction();
             }
             catch (Exception ex)
             {
-               // Log.InternalLog(ex, "Error when closing AsyncBuffer<{0}>",typeof(T).FullName);
-            }
-            finally
-            {
-                if (_actionLock.IsWriteLockHeld == true)
-                {
-                    _actionLock.ExitWriteLock();
-                }
-                if (_queueLock.IsWriteLockHeld)
-                {
-                    _queueLock.ExitWriteLock();
-                }
-                if (_pageLock.IsWriteLockHeld)
-                {
-                    _pageLock.ExitWriteLock();
-                }
+                // Log.InternalLog(ex, "Error when closing AsyncBuffer<{0}>",typeof(T).FullName);
             }
         }
 
@@ -277,7 +214,21 @@ namespace HashTag.Collections
         /// </summary>
         public void Flush()
         {
-            sweepQueue(null);
+            try
+            {
+                if (_queueLock.TryEnterUpgradeableReadLock(250) == false) return; //another process is already processing event queue so we don't need to do it
+            }
+            finally
+            {
+                if (_queueLock.IsUpgradeableReadLockHeld)
+                {
+                    _queueLock.ExitUpgradeableReadLock();
+                }
+            }
+
+            Stop();
+            submitMessagesToAction();
+            Start();
         }
         public void Stop()
         {
@@ -299,135 +250,83 @@ namespace HashTag.Collections
 
             try
             {
-                try
+                DateTime currentDate = DateTime.Now;
+                if (_eventQueue.Count >= MaxPageSize || currentDate.Subtract(_lastMessageReceived).TotalMilliseconds > _cacheTimeOutMs)
                 {
-                    if (_queueLock.TryEnterUpgradeableReadLock(1000) == false) return; //can't get lock after 1 second so ignore and try again on next sweep
-                    if (_eventQueue.Count > 0)
-                    {
-                        List<List<T>> objectPages = new List<List<T>>();
-                        try
-                        {
-                            if (_queueLock.TryEnterWriteLock(1000) == false) return; //can't get lock after 1 second so ignore
-                            
-                            while (_eventQueue.Count > 0)  //empty buffer of objects as quickly as possible
-                            {
-                                List<T> queuedItem;
-                                _eventQueue.TryDequeue(out queuedItem);                               
-                                objectPages.Add(queuedItem);
-                            }
-                        }
-                        finally
-                        {
-                            _queueLock.ExitWriteLock();
-                        }
-                        // queue is now free to accept additional pages of inbound objects
-                        // now take pages and flush them out of the buffer
-                        try
-                        {
+                    _lastMessageReceived = currentDate; //reset cache timer
+                    submitMessagesToAction();
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                //swallow thread abort exception thrown when system is shutting down
+            }
+            catch (Exception)
+            {
+                //never throw an error from buffer
+            }
+            finally
+            {
+                Start();
+            }
 
-                            _actionLock.EnterWriteLock();
-                            foreach (List<T> objectPage in objectPages)
-                            {
-                                _bufferAction(objectPage);
-                                //do events goes here
-                            }
-                        }
-                        catch(Exception ex)
-                        {
-                            //Log.InternalLog(ex, "Error trying to flush objects out of buffer.");
-                        }
-                        finally
-                        {
-                            if (_actionLock.IsWriteLockHeld == true)
-                            {
-                                _actionLock.ExitWriteLock();
-                            }
-                        }
+        }
 
-                    }
-                }
-                catch (ThreadAbortException)
+        private void submitMessagesToAction()
+        {
+            try
+            {
+                if (_queueLock.TryEnterUpgradeableReadLock(250) == false) return; //can't get lock after 0.25 second so ignore and try again on next sweep
+                if (_eventQueue.Count > 0)
                 {
-                    //swallow thread abort exception thrown when system is shutting down
-                }
-                catch (Exception ex)
-                {
-                    //Log.InternalLog(ex, "Error queuing pages to thread pool");
-                    return;
-                }
-                finally
-                {
-                    if (_queueLock.IsUpgradeableReadLockHeld)
-                    {
-                        _queueLock.ExitUpgradeableReadLock();
-                    }
-                }
-                //-------------------------------------------------------
-                // if buffer is 'stale' then flush partial page
-                //-------------------------------------------------------
-                if (_pageLock.IsWriteLockHeld == false) //not currently appending records to buffer
-                {
+                    var objectsFromQueue = new List<T>();
+
                     try
                     {
-                        _pageLock.EnterUpgradeableReadLock();
-                        if (_currentPage.Count > 0)
-                        {
-                            DateTime currentDate = DateTime.Now;
+                        if (_queueLock.TryEnterWriteLock(1000) == false) return; //can't get lock after 1 second so ignore
 
-                            if (currentDate.Subtract(_lastMessageReceived).TotalMilliseconds > _cacheTimeOutMs)
+                        while (_eventQueue.Count > 0)  //empty buffer of objects as quickly as possible
+                        {
+                            T queuedItem;
+                            if (_eventQueue.TryDequeue(out queuedItem))
                             {
-                                try
-                                {
-                                    _pageLock.EnterWriteLock();
-                                    if (currentDate.Subtract(_lastMessageReceived).TotalMilliseconds > _cacheTimeOutMs)
-                                    {
-                                        try
-                                        {
-                                            _actionLock.EnterWriteLock();
-                                            _bufferAction(_currentPage);
-                                        }
-                                        finally
-                                        {
-                                            _actionLock.ExitWriteLock();
-                                        }
-                                        _currentPage = new List<T>(_maxPageSize);
-                                    }
-                                }
-                                finally
-                                {
-                                    if (_pageLock.IsWriteLockHeld)
-                                    {
-                                        _pageLock.ExitWriteLock();
-                                    }
-                                }
+                                objectsFromQueue.Add(queuedItem);
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        //Log.InternalLog("Error flushing partial buffer.{0}", Utils.Expand(ex));
                     }
                     finally
                     {
-                        if (_pageLock.IsUpgradeableReadLockHeld)
-                        {
-                            _pageLock.ExitUpgradeableReadLock();
-                        }
+                        _queueLock.ExitWriteLock();
                     }
-                } //if (_pageLock.IsWriteLockHeld == false) //not currently appending records to buffer
+
+                    if (objectsFromQueue.Count > 0)
+                    {
+                        Task.Factory.StartNew(() =>
+                            {
+                                _bufferAction(objectsFromQueue);
+                            });
+                    }
+                }
             }
-            catch (Exception ex) //always swallow any unhandled exceptions.  Logging should never throw an error
+            catch (ThreadAbortException)
             {
-                throw;
-                //.InternalLog(ex);
+                //swallow thread abort exception thrown when system is shutting down
             }
-            finally //always
+            catch (Exception ex)
             {
-                Start(); //restart timer
+                //Log.InternalLog(ex, "Error queuing pages to thread pool");
+                return;
+            }
+            finally
+            {
+                if (_queueLock.IsUpgradeableReadLockHeld)
+                {
+                    _queueLock.ExitUpgradeableReadLock();
+                }
             }
         }
 
-    //    protected abstract void OnFlushPage(IEnumerable<T> pageOfObjects);
+        //    protected abstract void OnFlushPage(IEnumerable<T> pageOfObjects);
 
         #region IDisposable Members
 

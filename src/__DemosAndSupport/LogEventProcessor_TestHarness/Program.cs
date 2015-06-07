@@ -1,5 +1,6 @@
 ﻿using HashTag.Diagnostics;
 using HashTag.Diagnostics.Config;
+using HashTag.Diagnostics.Writers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,30 +16,39 @@ namespace LogEventProcessor_TestHarness
     {
         static void Main(string[] args)
         {
-            var fileConfig = (string)loadConfig();
             
-            var baseSettings = @"{
-    ""EnvironmentKey"": ""HashTag.Application.Environment2"",
-    ""AppNameKey"": ""HashTag.Application.Name2"",
- ""PipeLine"": [
-        ""4000""],
-  ""Writers"": [ {
-            ""Name"": ""2400"",
-            ""Config"": {
-                ""switchValue"": ""Verbose""
-            }
-        }]
-            }";
+            
+            var lg = LogEventLoggerFactory.NewLogger<Program>();
 
-            var fileJson = JObject.Parse(fileConfig);
-            var baseJson = JObject.Parse(baseSettings);
-            fileJson.Merge(baseJson);
-            var mergedSettings = fileJson.ToString(Formatting.Indented);
+            var msg = lg.Info.Write("this is an error message");
+            
+            
+            
 
-            var tt = JsonConvert.DeserializeObject<LogProcessorConfiguration>(fileConfig);
-            var y = JsonConvert.SerializeObject(tt, Formatting.Indented);
+//            var fileConfig = (string)loadConfig();
+            
+//            var baseSettings = @"{
+//    ""EnvironmentKey"": ""HashTag.Application.Environment2"",
+//    ""AppNameKey"": ""HashTag.Application.Name2"",
+// ""PipeLine"": [
+//        ""4000""],
+//  ""Writers"": [ {
+//            ""Name"": ""2400"",
+//            ""Config"": {
+//                ""switchValue"": ""Verbose""
+//            }
+//        }]
+//            }";
 
-            Console.WriteLine(y);
+//            var fileJson = JObject.Parse(fileConfig);
+//            var baseJson = JObject.Parse(baseSettings);
+//            fileJson.Merge(baseJson);
+//            var mergedSettings = fileJson.ToString(Formatting.Indented);
+
+//            var tt = JsonConvert.DeserializeObject<LogProcessorConfiguration>(fileConfig);
+//            var y = JsonConvert.SerializeObject(tt, Formatting.Indented);
+
+           // Console.WriteLine(y);
             Console.ReadKey();
         }
 

@@ -36,7 +36,7 @@ namespace HashTag.Diagnostics
     public partial class Log
     {
 
-        private static LogEventBuffer _messageBuffer;
+        
         private volatile static bool _isInitialized = false;
         internal SourceLevels _logLevels { get; set; }
 
@@ -45,41 +45,12 @@ namespace HashTag.Diagnostics
         /// </summary>
         private static void initialize()
         {
-            if (_messageBuffer != null)
-            {
-                _messageBuffer.Dispose();
-                _messageBuffer = null;
-            }
-            _messageBuffer = new LogEventBuffer();
-            _messageBuffer.PersistMessageHandler = saveBlockOfMessages;
+           
 
             _isInitialized = true;
         }
 
-        /// <summary>
-        /// The message buffer is sending a block of messages to be persisted
-        /// </summary>
-        /// <param name="logEventBlock"></param>
-        private static void saveBlockOfMessages(List<LogEvent> logEventBlock)
-        {
-            var persistTask = Task.Factory.StartNew(() =>
-                {
-                    var logSourceLevels = CoreConfig.Log.ApplicationLogLevels;
-                    logEventBlock.RemoveAll(msg => !logSourceLevels.IsEnabledFor(msg.Severity));
-                    if (logEventBlock.Count > 0)
-                    {
-                        try
-                        {
-                            CoreConfig.Log.ActiveConnector.PersistMessages(logEventBlock);
-                        }
-                        catch (Exception ex)
-                        {
-                            //TODO handle persister exception here
-                        }
-                    }
-                });
-            persistTask.Wait(CoreConfig.Log.MessageBufferWriteTimeoutMs);
-        }
+      
 
 
 

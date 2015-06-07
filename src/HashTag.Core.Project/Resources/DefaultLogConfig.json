@@ -6,7 +6,7 @@
     ],
 
     "EventProcessor": {
-        "$comment": "You need one, and only one, IEventProcessor configured in any configuration",
+        "$comment": "You need one, and only one, IEventProcessor configured in any application",
         "Type": "HashTag.Diagnostics.LogEventProcessor, HashTag.Core",
         "Config": {
             "$type": "HashTag.Diagnostics.LogEventProcessorSettings, HashTag.Core",

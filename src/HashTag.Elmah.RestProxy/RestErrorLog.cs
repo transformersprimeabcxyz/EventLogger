@@ -89,7 +89,7 @@ namespace HashTag.Elmah.RestProxy
         public override string Log(e.Error error)
         {
             var id = new Guid();
-            ILog log = HashTag.Diagnostics.LogFactory.Create.NewLog(this);
+            IEventLogger log = HashTag.Diagnostics.LogEventLoggerFactory.NewLogger<RestErrorLog>();
             var lm = log.Error.Catch(error.Exception).Fix().Message();
             lm.UUID = id;
 

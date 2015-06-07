@@ -184,7 +184,7 @@ Log Event Supplemental - Machine Context
   */
     public class LogDemo
     {
-        ILog _log = LogFactory.Create.NewLog(typeof(LogDemo));
+        IEventLogger _log = LogEventLoggerFactory.NewLogger<LogDemo>();
 
         public void DoSomething()
         {
@@ -280,22 +280,22 @@ Log Event Supplemental - Machine Context
 
     public abstract class MyBaseClass
     {
-        private ILogFactory _factory;
-        private ILog __internalLog;
-        protected ILog _log
+        private IEventLoggerFactory _factory;
+        private IEventLogger __internalLog;
+        protected IEventLogger _log
         {
             get
             {
                 if (__internalLog != null) return __internalLog;
-                __internalLog = _factory.NewLog(this);
+                __internalLog = _factory.NewLogger(this);
                 return __internalLog;
             }
         }
         public MyBaseClass()
         {
-            _factory = new LogFactory();
+          //  _factory = new LogEventLoggerFactory();
         }
-        public MyBaseClass(ILogFactory logFactory)
+        public MyBaseClass(IEventLoggerFactory logFactory)
         {
             _factory = logFactory;
         }
@@ -328,7 +328,7 @@ Log Event Supplemental - Machine Context
         /// Injected logger. Can be used with automated testing scenarios
         /// </summary>
         /// <param name="log"></param>
-        public LogDemoWithBaseAndDI(ILogFactory logFactory)
+        public LogDemoWithBaseAndDI(IEventLoggerFactory logFactory)
             : base(logFactory)
         {
 

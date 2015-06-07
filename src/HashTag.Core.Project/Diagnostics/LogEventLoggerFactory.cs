@@ -7,15 +7,19 @@ using System.Text;
 
 namespace HashTag.Diagnostics
 {
-    public class LogFactory : ILogFactory
+    public class LogEventLoggerFactory 
     {
         private static ConcurrentDictionary<string, Log> _dictionary = new ConcurrentDictionary<string, Log>();
         public static string _defaultLogName { get; set; }
+
+        private static ILogEventProcessor _eventProcessor = new LogEventProcessor();
+
+
         /// <summary>
         /// Create a new log instance with application name.  (Default log level is set in .config HashTag.Diagnostics.LogLevel, Default:Vital)
         /// </summary>
         /// <returns></returns>
-        public ILog NewLog(SourceLevels allowedLogLevels =  SourceLevels.All)
+        public static IEventLogger NewLogger(SourceLevels allowedLogLevels =  SourceLevels.All)
         {
             if (string.IsNullOrEmpty(_defaultLogName) == true)
             {
@@ -25,16 +29,20 @@ namespace HashTag.Diagnostics
             return NewLog(_defaultLogName);
         }
 
+        public static IEventLogger NewLogger<T>(SourceLevels allowedLevels = SourceLevels.All)
+        {
+            return NewLogger(typeof(T), allowedLevels);
+        }
 
         /// <summary>
-        /// Create a default logger using full name of type (pattern from NHibernate)
+        /// Create a default logger using full name of type (pattern from log4Net)
         /// </summary>
         /// <param name="logLevels">List of levels (flags) of message severity to log</param>
         /// <param name="type">Type that will be using this logger</param>
         /// <returns>Instance of logger</returns>
-        public ILog NewLog(Type type, SourceLevels logLevels=SourceLevels.All)
+        public static IEventLogger NewLogger(Type type, SourceLevels logLevels = SourceLevels.All)
         {
-            return NewLog(type.FullName, logLevels);
+            return NewLogger(type.FullName, logLevels);
 
         }
 
@@ -43,9 +51,9 @@ namespace HashTag.Diagnostics
         /// Create a new log with a specific name.  LoggerLevel is set to 'Vital' (Information, Warning, Error, Critical)  (Default log level is set in .config HashTag.Diagnostics.LogLevel, Default:All)
         /// </summary>/// <param name="logName">Name of log (in logging system).  May not map to actual operating system file name</param>
         /// <returns>Created log</returns>
-        public ILog NewLog(string logName)
+        public static IEventLogger NewLog(string logName)
         {
-            return NewLog(logName, CoreConfig.Log.ApplicationLogLevels);
+            return NewLogger(logName, CoreConfig.Log.ApplicationLogLevels);
         }
 
         /// <summary>
@@ -54,7 +62,7 @@ namespace HashTag.Diagnostics
         /// <param name="logName">Name of log (in logging system).  May not map to actual operating system file name</param>
         /// <param name="allowedSourceLevels">Amount of logging this log will do</param>
         /// <returns>Created log or cached instance if already created one in application domain</returns>
-        public ILog NewLog(string logName, SourceLevels allowedSourceLevels=SourceLevels.All)
+        public static IEventLogger NewLogger(string logName, SourceLevels allowedSourceLevels = SourceLevels.All)
         {
             if (_dictionary.ContainsKey(logName) == true)
             {
@@ -63,53 +71,22 @@ namespace HashTag.Diagnostics
             }
             else
             {
-                Log log = new Log(logName, allowedSourceLevels);
+                Log log = new Log(logName, allowedSourceLevels)
+                {
+                    Write = _eventProcessor.Submit
+                };
                 _dictionary[logName] = log;
                 return log;
             }
         }
 
-        private static ILogFactory _logFactory;
-        public static ILogFactory Create
+        
+        public static IEventLogger NewLogger(object logNameFromObjectsType,SourceLevels allowedSourceLevels=SourceLevels.All)
         {
-            get
-            {
-                if (_logFactory == null)
-                {
-                    _logFactory = new LogFactory();
-                }
-                return _logFactory;
-            }
-        }
-
-
-        public virtual ILog NewLog(object logNameFromObjectsType,SourceLevels allowedSourceLevels=SourceLevels.All)
-        {
-            return NewLog(logNameFromObjectsType.GetType(),allowedSourceLevels);
+            return NewLogger(logNameFromObjectsType.GetType(),allowedSourceLevels);
         }
 
     }
 
-    public class LogFactory<T> :LogFactory,ILogFactory<T>
-    {
-
-        public virtual new ILog NewLog()
-        {
-            return base.NewLog(typeof(T));
-        }
-
-        public virtual new ILog NewLog(string logName)
-        {
-            return base.NewLog(logName);
-        }
-
-        public virtual new ILog NewLog(Type logNameFromType)
-        {
-            return base.NewLog(logNameFromType);
-        }
-        public virtual new ILog NewLog(object logNameFromObjectsType)
-        {
-            return base.NewLog(logNameFromObjectsType);
-        }
-    }
+  
 }

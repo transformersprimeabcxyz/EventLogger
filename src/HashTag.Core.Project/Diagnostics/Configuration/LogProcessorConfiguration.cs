@@ -14,6 +14,13 @@ namespace HashTag.Diagnostics.Config
             BufferConfig = new LogBufferConfiguration();
             EnvironmentKey = "HashTag.Application.Environment";
             AppNameKey = "HashTag.Application.Name";
+
+            Writers = new List<ConfigProvider>();
+            Writers.Add(new ConfigProvider()
+                {
+                    Name = "TraceSourceWriter",
+                    Type = "HashTag.Diagnostics.Writers.TraceSourceWriter, HashTag.Core"
+                });
         }
 
         public LogBufferConfiguration BufferConfig { get; set; }

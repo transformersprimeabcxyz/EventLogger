@@ -1,7 +1,7 @@
 ﻿using System;
 namespace HashTag.Diagnostics
 {
-    public interface ILog:IDisposable
+    public interface IEventLogger:IDisposable
     {
         LogEventBuilder Critical { get; }
         LogEventBuilder Error { get; }
@@ -11,6 +11,6 @@ namespace HashTag.Diagnostics
         LogEventBuilder Stop { get; }
         LogEventBuilder Verbose { get; }
         LogEventBuilder Warning { get; }
-        void Write(LogEvent message);
+        Func<LogEvent, Guid> Write { get; set; }
     }
 }

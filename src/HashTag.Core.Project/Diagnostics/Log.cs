@@ -17,7 +17,7 @@ namespace HashTag.Diagnostics
     /// <summary>
     /// Base class for writing messages to persistant store.
     /// </summary>
-    public sealed partial class Log : ILog
+    public sealed partial class Log : IEventLogger
     {
 
         private string _logName;
@@ -138,15 +138,7 @@ namespace HashTag.Diagnostics
             return new LogEventBuilder(msg, Write);
         }
 
-        /// <summary>
-        /// Persist message to logging sub-system.  Called by log message builder
-        /// </summary>
-        public void Write(LogEvent message)
-        {
-            //filter not supported message levels
-            if (!_logLevels.IsEnabledFor(message.Severity)) return;
-            Log.Processor.Submit(message); //send message to internal async message cache and immediately return
-        }
+        public Func<LogEvent, Guid> Write { get; set; }
 
         private bool _isDisposed = false;
         /// <summary>
