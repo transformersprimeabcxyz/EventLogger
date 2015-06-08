@@ -43,6 +43,7 @@ detailsVm = function (divNameToApplyBindingsTo, eventId) {
         x.detailsLink = "/Event/" + response.UUID;
         self.header(x);
 
+        response.Properties.sort(self.compare);
         for (propertyIndex = 0; propertyIndex < response.Properties.length; propertyIndex++) {
             var dbProperty = response.Properties[propertyIndex];
             var detail = new detailsPropertiesVm();
@@ -55,4 +56,14 @@ detailsVm = function (divNameToApplyBindingsTo, eventId) {
         }
 
     }
+
+    self.compare = function(a, b) {
+        if (a.Group < b.Group) return -1;
+        if (a.Group > b.Group) return 1;
+        if (a.Name < b.Name) return -1;
+        if (a.Name > b.Name) return 1;
+        return 0;
+    }
+
+    
 }

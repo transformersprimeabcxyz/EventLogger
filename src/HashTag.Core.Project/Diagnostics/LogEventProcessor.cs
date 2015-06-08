@@ -13,16 +13,14 @@ namespace HashTag.Diagnostics
 {
     public class LogEventProcessor : ILogEventProcessor,IDisposable
     {
-        
         private AsyncBuffer<LogEvent> _buffer;
-
-
+        
         public LogEventProcessor()
         {
             _buffer = new AsyncBuffer<LogEvent>(writeEvents)
             {
                 BufferSweepMs = 1000,
-                CacheTimeOutMs = 15000,
+                CacheTimeOutMs = 5000,
                 MaxPageSize = 100
             };
             _buffer.Start();
@@ -42,7 +40,7 @@ namespace HashTag.Diagnostics
 
         private bool shouldFlushBuffer(LogEvent le)
         {
-            return le.Severity <= TraceEventType.Warning;
+            return le.Severity <= TraceEventType.Warning; //flush on warning or more severe messages
         }
 
         public Guid Submit(LogEvent evt)

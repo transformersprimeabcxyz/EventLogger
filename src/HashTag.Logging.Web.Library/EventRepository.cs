@@ -7,6 +7,7 @@ using HashTag.Logging.Service.API.MEX;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -22,13 +23,16 @@ namespace HashTag.Logging.Web.Library
         {
             try
             {
-                var ctx = new EventContext();
-
-                for (int x = 0; x < eventBlock.Count; x++)
+                using (var ctx = new EventContext())
                 {
-                    ctx.Events.Add(eventBlock[x]);
+
+                    for (int x = 0; x < eventBlock.Count; x++)
+                    {
+                        //TODO: add WriteDate property immediately before saving event
+                        ctx.Events.Add(eventBlock[x]);
+                    }
+                    ctx.SaveChanges();
                 }
-                ctx.SaveChanges();
             }
             catch(Exception ex)
             {
@@ -39,7 +43,7 @@ namespace HashTag.Logging.Web.Library
         public EventSaveResponse SubmitEventList(List<Event> request)
         {
             var response = new EventSaveResponse();
-            
+            bool errorLevelSubmitted = false;
             for (int x = 0; x < request.Count; x++)
             {
                 var @event = request[x];
@@ -51,7 +55,11 @@ namespace HashTag.Logging.Web.Library
                 
                 if (validationResponse.StatusCode == HttpStatusCode.Accepted)
                 {
-                    _buffer.Submit(@event);
+                    _buffer.Submit(@event);  
+                    if (@event.EventType.HasValue && @event.EventType.Value <= TraceEventType.Warning)
+                    {
+                        _buffer.Flush();
+                    }
                 }
             }
             

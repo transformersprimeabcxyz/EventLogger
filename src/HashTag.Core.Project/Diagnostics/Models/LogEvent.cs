@@ -267,11 +267,11 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                if (_messageText == null)
+                if (string.IsNullOrWhiteSpace(_messageText))
                 {
                     if (Exceptions != null && Exceptions.Count > 0)
                     {
-                        return Exceptions[0].GetBaseException.Message; //similar to what Elmah does
+                        _messageText = Exceptions[0].GetBaseException.Message;
                     }
                 }
                 return _messageText;

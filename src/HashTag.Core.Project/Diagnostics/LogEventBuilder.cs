@@ -71,7 +71,18 @@ namespace HashTag.Diagnostics
             return _message;
         }
 
-     
+        public LogEvent Write(Exception ex, string message=null, params object[] args)
+        {
+            Catch(ex);
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return Write((object)null);
+            }
+            else
+            {
+                return Write(message, args);
+            }
+        }
         
         /// <summary>
         /// Returns a reference to message being constructed by builder.  Conceptually similar to StringBuilder.ToString() except exposes actual object instead of a copy

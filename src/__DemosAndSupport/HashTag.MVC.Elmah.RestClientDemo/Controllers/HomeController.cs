@@ -24,11 +24,15 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             try
             {
 
-                
+                var x = 1000;
+                while (--x > -1)
+                {
+                    var y = x / x;
+                }
 
             }
             catch(Exception ex)
-            {              
+            {           
                 throw;
             }
             

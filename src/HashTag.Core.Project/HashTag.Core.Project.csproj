@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -24,7 +24,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <PublishUrl>http://localhost/ScrimpNet.Core/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -152,6 +152,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -195,10 +200,12 @@
     <Compile Include="Diagnostics\Interfaces\ILogWorker.cs" />
     <Compile Include="Diagnostics\LogEventProcessor.cs" />
     <Compile Include="Diagnostics\LogEventLoggerFactory.cs" />
+    <Compile Include="Diagnostics\Models\Event.cs" />
     <Compile Include="Diagnostics\Models\LogHttpContext.cs" />
     <Compile Include="Diagnostics\Models\LogRuntimeContext.cs" />
     <Compile Include="Diagnostics\MEX\LogSaveResponse.cs" />
     <Compile Include="Diagnostics\Models\LogUserContext.cs" />
+    <Compile Include="Diagnostics\TraceListeners\EventServiceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\LocalFileTraceListener.cs" />

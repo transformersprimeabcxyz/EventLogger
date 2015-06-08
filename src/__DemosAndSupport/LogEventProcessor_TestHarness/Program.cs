@@ -20,7 +20,7 @@ namespace LogEventProcessor_TestHarness
             
             var lg = LogEventLoggerFactory.NewLogger<Program>();
 
-            var msg = lg.Info.Write("this is an error message");
+            var msg = lg.Error.Write("this is an error message");
             
             
             

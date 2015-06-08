@@ -21,7 +21,7 @@ namespace HashTag.Elmah.RestProxy
 
         private const int _maxAppNameLength = 60;
         
-        public static AsyncBuffer<LogEvent> _buffer = new AsyncBuffer<LogEvent>(saveEventBlock);
+      
 
         public RestErrorLog()
         {
@@ -34,36 +34,36 @@ namespace HashTag.Elmah.RestProxy
         /// </summary>
         public RestErrorLog(IDictionary config)
         {
-            if (config == null)
-                throw new ArgumentNullException("config");
+            //if (config == null)
+            //    throw new ArgumentNullException("config");
 
-            string connectionString = ConfigManager.ConnectionString("Elmah");
+            //string connectionString = ConfigManager.ConnectionString("Elmah");
 
-            //
-            // If there is no connection string to use then throw an 
-            // exception to abort construction.
-            //
+            ////
+            //// If there is no connection string to use then throw an 
+            //// exception to abort construction.
+            ////
 
-            if (connectionString.Length == 0)
-                throw new System.ApplicationException("Connection string is missing for the SQL error log.");
+            //if (connectionString.Length == 0)
+            //    throw new System.ApplicationException("Connection string is missing for the SQL error log.");
 
-            _connectionString = connectionString;
+            //_connectionString = connectionString;
 
-            //
-            // Set the application name as this implementation provides
-            // per-application isolation over a single store.
-            //
+            ////
+            //// Set the application name as this implementation provides
+            //// per-application isolation over a single store.
+            ////
 
-            string appName = "YourApplicationName"; // e.Mask.NullString((string)config["applicationName"]);
+            //string appName = "YourApplicationName"; // e.Mask.NullString((string)config["applicationName"]);
 
-            if (appName.Length > _maxAppNameLength)
-            {
-                throw new System.ApplicationException(string.Format(
-                    "Application name is too long. Maximum length allowed is {0} characters.",
-                    _maxAppNameLength.ToString("N0")));
-            }
+            //if (appName.Length > _maxAppNameLength)
+            //{
+            //    throw new System.ApplicationException(string.Format(
+            //        "Application name is too long. Maximum length allowed is {0} characters.",
+            //        _maxAppNameLength.ToString("N0")));
+            //}
 
-            ApplicationName = appName;
+            //ApplicationName = appName;
         }
 
         /// <summary>
@@ -72,13 +72,13 @@ namespace HashTag.Elmah.RestProxy
         /// </summary>
         public RestErrorLog(string connectionString)
         {
-            if (connectionString == null)
-                throw new ArgumentNullException("connectionString");
+            //if (connectionString == null)
+            //    throw new ArgumentNullException("connectionString");
 
-            if (connectionString.Length == 0)
-                throw new ArgumentException(null, "connectionString");
+            //if (connectionString.Length == 0)
+            //    throw new ArgumentException(null, "connectionString");
 
-            _connectionString = connectionString;
+            //_connectionString = connectionString;
         }
 
         /// <summary>
@@ -90,30 +90,12 @@ namespace HashTag.Elmah.RestProxy
         {
             var id = new Guid();
             IEventLogger log = HashTag.Diagnostics.LogEventLoggerFactory.NewLogger<RestErrorLog>();
-            var lm = log.Error.Catch(error.Exception).Fix().Message();
-            lm.UUID = id;
+            var lm = log.Error.Write(error.Exception);
 
-            _buffer.Submit(lm);
-
-            return id.ToString();
+            return lm.UUID.ToString();
         }
 
-        private static async Task sendData(List<LogEvent> lm)
-        {
-            using (var client = new HttpClient())
-            {
-                var msg = new HttpRequestMessage(HttpMethod.Post, "http://localhost:60104/api/events/0/0/j");
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = await client.PostAsJsonAsync(msg.RequestUri, lm);
-                
-            }
-        }
-
-        public static void saveEventBlock(List<LogEvent> eventBlock)
-        {
-            if (eventBlock == null || eventBlock.Count == 0) return;
-            sendData(eventBlock);
-        }
+      
         public override string Name
         {
             get { return "HashTag.EventService Proxy Log on http://localhost:60104/elmah"; }

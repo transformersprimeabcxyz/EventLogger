@@ -34,9 +34,16 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0
         [Route(""), HttpPost]
         public async Task<HttpResponseMessage> SaveEvent(List<Event> request)
         {
-            var repo = new EventRepository();
-            EventSaveResponse response = repo.SubmitEventList(request);
-            return Request.CreateResponse<EventSaveResponse>(HttpStatusCode.Accepted, response);
+
+            EventSaveResponse response = null;
+            Task.Factory.StartNew(() =>
+            {
+                var repo = new EventRepository();
+                response = repo.SubmitEventList(request);
+            }).Wait();
+            
+            HttpStatusCode  maxStatusCode = (HttpStatusCode) response.Results.Max(r => (int)r.StatusCode);
+            return Request.CreateResponse<EventSaveResponse>(maxStatusCode, response);
         }
     }
 
