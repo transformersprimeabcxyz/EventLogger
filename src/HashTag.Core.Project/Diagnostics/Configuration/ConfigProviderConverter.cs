@@ -25,7 +25,6 @@ namespace HashTag.Diagnostics.Config
                 {
                     Name = token.Value<string>()
                 };
-                    break;
                 case JTokenType.Object:
 
                     var retObject = new ConfigProvider();
@@ -50,8 +49,7 @@ namespace HashTag.Diagnostics.Config
                                 break;
                         }
                     }
-                    return retObject;
-                    break;
+                    return retObject;                    
             }
             return new ConfigProvider();
         }

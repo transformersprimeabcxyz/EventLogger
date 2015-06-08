@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HashTag.Diagnostics.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -69,12 +70,12 @@ namespace HashTag.Diagnostics.Writers
                 ts.Switch = new SourceSwitch(string.Format("{0}.{1}", traceSourceName, "SourceSwitch"), "All");
             }
 
-            var eventsToWrite = eventBlock.Where(evt => ts.Switch.ShouldTrace(evt.Severity)).ToList();
+            var eventsToWrite = eventBlock.Where(evt => ts.Switch.ShouldTrace(evt.EventType)).ToList();
             if (eventsToWrite.Count == 0) return;
 
-            var maxSeverity = (TraceEventType)eventsToWrite.Min(x => (int)x.Severity);
+            var maxSeverity = (TraceEventType)eventsToWrite.Min(x => (int)x.EventType);
 
-            if (eventsToWrite == null || eventsToWrite.Count == 0) return;
+            if (eventsToWrite.Count == 0) return;
 
             ts.Switch.Level = maxSeverity.ToSourceLevels();
             ts.TraceData(maxSeverity, default(int), eventsToWrite);

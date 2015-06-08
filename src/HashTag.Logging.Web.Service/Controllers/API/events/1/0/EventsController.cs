@@ -21,6 +21,7 @@ using System.Web.Http.ModelBinding;
 using System.Web.OData;
 using System.Web.OData.Query;
 using System.Web.OData.Extensions;
+using HashTag.Diagnostics.Models;
 using HashTag.Logging.Service.API.MEX;
 
 namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0
@@ -32,17 +33,19 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0
         EventContext _ctx = new EventContext();
 
         [Route(""), HttpPost]
-        public async Task<HttpResponseMessage> SaveEvent(List<Event> request)
+        public async Task<HttpResponseMessage> SaveEvent(List<LogEvent> request)
         {
 
             EventSaveResponse response = null;
-            Task.Factory.StartNew(() =>
-            {
-                var repo = new EventRepository();
-                response = repo.SubmitEventList(request);
-            }).Wait();
+            Task.Run(() =>
+                {
+                    var repo = new EventRepository();
+                    response = repo.SubmitEventList(request);
+                }
+                ).Wait();
             
-            HttpStatusCode  maxStatusCode = (HttpStatusCode) response.Results.Max(r => (int)r.StatusCode);
+
+            HttpStatusCode maxStatusCode = (HttpStatusCode)response.Results.Max(r => (int)r.StatusCode);
             return Request.CreateResponse<EventSaveResponse>(maxStatusCode, response);
         }
     }

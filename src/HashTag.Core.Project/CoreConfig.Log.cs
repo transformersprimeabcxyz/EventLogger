@@ -73,17 +73,17 @@ namespace HashTag
                         _activeConnector = ProviderFactory<ILogConnector>.GetInstance(persisterClassName);
                         if (_activeConnector == null)
                         {
-                            HashTag.Diagnostics.Log.Internal.Write(TraceEventType.Error, CoreResources.MSG_Core_Unable_CreateInstance, persisterClassName, typeof(ILogConnector).FullName);
+                            HashTag.Diagnostics.Logger.Internal.Write(TraceEventType.Error, CoreResources.MSG_Core_Unable_CreateInstance, persisterClassName, typeof(ILogConnector).FullName);
                             throw new DotNetConfig.ConfigurationErrorsException(TextUtils.StringFormat(CoreResources.MSG_Core_Unable_CreateInstance, persisterClassName, typeof(ILogConnector).FullName));
                         }
                         _activeConnector.Initialize();
                     }
                     catch (Exception ex)
                     {
-                        HashTag.Diagnostics.Log.Internal.Write(ex, CoreResources.MSG_Core_Unable_CreateInstance, persisterClassName,typeof(ILogConnector).FullName);
+                        HashTag.Diagnostics.Logger.Internal.Write(ex, CoreResources.MSG_Core_Unable_CreateInstance, persisterClassName,typeof(ILogConnector).FullName);
                         throw new DotNetConfig.ConfigurationErrorsException(TextUtils.StringFormat(CoreResources.MSG_Core_Unable_CreateInstance, persisterClassName, typeof(ILogConnector).FullName), ex);
                     }
-                    HashTag.Diagnostics.Log.Internal.Write(CoreResources.MSG_Diagnostics_Using_LogConnector, persisterClassName);
+                    HashTag.Diagnostics.Logger.Internal.Write(CoreResources.MSG_Diagnostics_Using_LogConnector, persisterClassName);
                     return _activeConnector;
                 }
                 set

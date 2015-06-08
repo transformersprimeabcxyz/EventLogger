@@ -83,8 +83,8 @@ namespace HashTag.Logging.Web.Service
 
             ODataModelBuilder builder = new ODataConventionModelBuilder();
 
-            builder.EntitySet<Event>("4").EntityType.HasKey(p => p.UUID);
-            builder.EntitySet<EventProperty>("Properties").EntityType.HasKey(p => p.UUID);
+            builder.EntitySet<dbEvent>("4").EntityType.HasKey(p => p.UUID);
+            builder.EntitySet<dbEventProperty>("Properties").EntityType.HasKey(p => p.UUID);
             config.MapODataServiceRoute(
                 routeName: "ODataRoute",
                 routePrefix: "events/0/0/O",

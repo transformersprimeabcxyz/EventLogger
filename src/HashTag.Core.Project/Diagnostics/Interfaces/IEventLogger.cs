@@ -11,6 +11,6 @@ namespace HashTag.Diagnostics
         LogEventBuilder Stop { get; }
         LogEventBuilder Verbose { get; }
         LogEventBuilder Warning { get; }
-        Func<LogEvent, Guid> Write { get; set; }
+        Func<LogMessage, Guid> Write { get; set; }
     }
 }

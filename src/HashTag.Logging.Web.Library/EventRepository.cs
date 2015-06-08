@@ -1,6 +1,7 @@
 ﻿using Elmah;
 using HashTag.Collections;
 using HashTag.Diagnostics;
+using HashTag.Diagnostics.Models;
 using HashTag.Logging.Connector.MSSQL;
 using HashTag.Logging.Service.API.Interfaces;
 using HashTag.Logging.Service.API.MEX;
@@ -12,63 +13,42 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using HashTag.Diagnostics.Writers;
 
 namespace HashTag.Logging.Web.Library
 {
     public class EventRepository : IEventRepository
     {
-        private static AsyncBuffer<Event> _buffer = new AsyncBuffer<Event>(saveEventBlock);
+        
+        private static LogEventProcessor _processor = new LogEventProcessor();
 
-        private static void saveEventBlock(List<Event> eventBlock)
-        {
-            try
-            {
-                using (var ctx = new EventContext())
-                {
-
-                    for (int x = 0; x < eventBlock.Count; x++)
-                    {
-                        //TODO: add WriteDate property immediately before saving event
-                        ctx.Events.Add(eventBlock[x]);
-                    }
-                    ctx.SaveChanges();
-                }
-            }
-            catch(Exception ex)
-            {
-                var s = ex.ToString();
-            }        
-        }
-
-        public EventSaveResponse SubmitEventList(List<Event> request)
+        public EventSaveResponse SubmitEventList(List<LogEvent> request)
         {
             var response = new EventSaveResponse();
-            bool errorLevelSubmitted = false;
+            var validatedEvents = new List<LogEvent>();
             for (int x = 0; x < request.Count; x++)
             {
-                var @event = request[x];
-
-                EventSaveItem validationResponse = validateEvent(@event);
-                
+                var logEvent = request[x];
+                EventSaveItem validationResponse = validateEvent(logEvent);
                 validationResponse.Index = x;
                 response.Results.Add(validationResponse);
-                
                 if (validationResponse.StatusCode == HttpStatusCode.Accepted)
                 {
-                    _buffer.Submit(@event);  
-                    if (@event.EventType.HasValue && @event.EventType.Value <= TraceEventType.Warning)
-                    {
-                        _buffer.Flush();
-                    }
+                    validatedEvents.Add(logEvent);
                 }
             }
-            
+
+            if (validatedEvents.Count > 0)
+            {
+                _processor.Submit(validatedEvents);
+            }
+
             response.SubmittedEventCount = response.Results.Count(r => r.StatusCode == HttpStatusCode.Accepted);
             response.IsOk = response.SubmittedEventCount == response.Results.Count;
             return response;
         }
 
-        private EventSaveItem validateEvent(Event evt)
+        private EventSaveItem validateEvent(LogEvent evt)
         {
             var retVal = new EventSaveItem();
             retVal.StatusCode = HttpStatusCode.Accepted;
@@ -108,7 +88,7 @@ namespace HashTag.Logging.Web.Library
                 retVal.Message = "Sender should set event date before submitting event to service.  Using event service time instead.";
                 evt.EventDate = DateTime.Now;
             }
-      
+
             if (evt.EventType == null || string.IsNullOrWhiteSpace(evt.EventTypeName))
             {
                 retVal.StatusCode = HttpStatusCode.BadRequest;
@@ -117,7 +97,7 @@ namespace HashTag.Logging.Web.Library
             }
             if (evt.Properties != null)
             {
-                for(int x =0;x<evt.Properties.Count;x++)
+                for (int x = 0; x < evt.Properties.Count; x++)
                 {
                     var property = evt.Properties[x];
                     if (property.UUID == Guid.Empty)
@@ -128,25 +108,25 @@ namespace HashTag.Logging.Web.Library
 
                     if (string.IsNullOrWhiteSpace(property.Name))
                     {
-                        retVal.Message = string.Format("Property[{0}].Name must not be empty.  Event not submitted for storage",x);
+                        retVal.Message = string.Format("Property[{0}].Name must not be empty.  Event not submitted for storage", x);
                         retVal.StatusCode = HttpStatusCode.BadRequest;
                         return retVal;
                     }
-                    if (property.Name != null && property.Name.Length>=30)
+                    if (property.Name != null && property.Name.Length >= 30)
                     {
-                        retVal.Message = string.Format("Property[{0}].Name must not be longer than 30 characters.  Event not submitted for storage",x);
+                        retVal.Message = string.Format("Property[{0}].Name must not be longer than 30 characters.  Event not submitted for storage", x);
                         retVal.StatusCode = HttpStatusCode.BadRequest;
                         return retVal;
                     }
-                    if (property.Value != null && property.Value.Length>=8000)
+                    if (property.Value != null && property.Value.Length >= 8000)
                     {
-                        retVal.Message = string.Format("Property[{0}].Value must not be longer than 8000 characters.  Event not submitted for storage",x);
+                        retVal.Message = string.Format("Property[{0}].Value must not be longer than 8000 characters.  Event not submitted for storage", x);
                         retVal.StatusCode = HttpStatusCode.BadRequest;
                         return retVal;
                     }
-                    if (property.Group!= null && property.Group.Length>=20)
+                    if (property.Group != null && property.Group.Length >= 20)
                     {
-                        retVal.Message = string.Format("Property[{0}].Group must not be longer than 20 characters.  Event not submitted for storage",x);
+                        retVal.Message = string.Format("Property[{0}].Group must not be longer than 20 characters.  Event not submitted for storage", x);
                         retVal.StatusCode = HttpStatusCode.BadRequest;
                         return retVal;
                     }

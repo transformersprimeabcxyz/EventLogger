@@ -319,13 +319,13 @@ namespace HashTag.Configuration
                 }
                 if (outputResolvedValues.Value)
                 {
-                    Log.Internal.Write(EffectiveConnectionStrings());
-                    Log.Internal.Write(EffectiveAppSettings());
+                    Logger.Internal.Write(EffectiveConnectionStrings());
+                    Logger.Internal.Write(EffectiveAppSettings());
                 }
             }
             catch(Exception ex)
             {
-                Log.Internal.Write(ex);
+                Logger.Internal.Write(ex);
                 return false; //ignore any output errors
             }
             return true;

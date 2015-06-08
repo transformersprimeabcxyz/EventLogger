@@ -20,10 +20,10 @@ namespace HashTag.Diagnostics
     /// </summary>
     public class LogEventBuilder
     {
-        Func<LogEvent,Guid> _writeAction;
-        LogEvent _message;
+        Func<LogMessage,Guid> _writeAction;
+        LogMessage _message;
 
-        internal LogEventBuilder(LogEvent messageToBuild, Func<LogEvent,Guid> writeAction)
+        internal LogEventBuilder(LogMessage messageToBuild, Func<LogMessage,Guid> writeAction)
         {
             _writeAction = writeAction;
             _message = messageToBuild;
@@ -34,7 +34,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="message">Message text of log message.  May include any standard string.format paramters</param>
         /// <param name="args">Any argument to supply to <paramref name="message"/></param>
-        public LogEvent Write(string message, params object[] args)
+        public LogMessage Write(string message, params object[] args)
         {
             _message.MessageText = TextUtils.StringFormat(message, args);
             if (_writeAction != null)
@@ -49,7 +49,7 @@ namespace HashTag.Diagnostics
         /// Persist an object to log.  Uses <paramref name="messageData"/>.ToString() to serialize the message.   This MUST be called for peristance to take place and MUST be last method in fluent chain
         /// </summary>
         /// <param name="messageData">Data to be persisted to log.</param>
-        public LogEvent Write(object messageData = null)
+        public LogMessage Write(object messageData = null)
         {
             
             if (messageData != null)
@@ -71,7 +71,7 @@ namespace HashTag.Diagnostics
             return _message;
         }
 
-        public LogEvent Write(Exception ex, string message=null, params object[] args)
+        public LogMessage Write(Exception ex, string message=null, params object[] args)
         {
             Catch(ex);
             if (string.IsNullOrWhiteSpace(message))
@@ -89,7 +89,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="message">Message text of log message.  May include any standard string.format paramters</param>
         /// <param name="args">Any argument to supply to <paramref name="message"/></param>
-        public LogEvent  Message(string message, params object[] args)
+        public LogMessage  Message(string message, params object[] args)
         {
             _message.MessageText = TextUtils.StringFormat(message, args);
             
@@ -100,7 +100,7 @@ namespace HashTag.Diagnostics
         /// Returns a reference to message being constructed by builder.  Conceptually similar to StringBuilder.ToString() except exposes actual object instead of a copy
         /// </summary>
         /// <param name="messageData">Data to be persisted to log.</param>
-        public LogEvent Message(object messageData = null)
+        public LogMessage Message(object messageData = null)
         {
             if (messageData != null)
             {

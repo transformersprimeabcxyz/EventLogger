@@ -184,7 +184,7 @@ Log Event Supplemental - Machine Context
   */
     public class LogDemo
     {
-        IEventLogger _log = LogEventLoggerFactory.NewLogger<LogDemo>();
+        IEventLogger _log = LoggerFactory.NewLogger<LogDemo>();
 
         public void DoSomething()
         {

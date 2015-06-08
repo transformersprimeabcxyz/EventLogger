@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HashTag.Diagnostics
 {
-    public partial class Log
+    public partial class Logger
     {
         private static InternalLogWriter _internal;
         public static InternalLogWriter Internal

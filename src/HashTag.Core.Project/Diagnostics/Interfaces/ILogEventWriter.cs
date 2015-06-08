@@ -1,4 +1,5 @@
 ﻿using HashTag.Collections;
+using HashTag.Diagnostics.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

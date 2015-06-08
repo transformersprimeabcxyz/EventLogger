@@ -48,15 +48,15 @@ namespace HashTag.Diagnostics
             switch (eventType)
             {
                 case TraceEventType.Critical: return SourceLevels.Critical; 
-                case TraceEventType.Error: return SourceLevels.Error; break;
-                case TraceEventType.Information: return SourceLevels.Information; break;
+                case TraceEventType.Error: return SourceLevels.Error; 
+                case TraceEventType.Information: return SourceLevels.Information; 
                 case TraceEventType.Start:
                 case TraceEventType.Stop:
                 case TraceEventType.Suspend:
                 case TraceEventType.Transfer:
-                case TraceEventType.Resume: return SourceLevels.ActivityTracing; break;
-                case TraceEventType.Verbose: return SourceLevels.Verbose; break;
-                case TraceEventType.Warning: return SourceLevels.Warning; break;
+                case TraceEventType.Resume: return SourceLevels.ActivityTracing; 
+                case TraceEventType.Verbose: return SourceLevels.Verbose; 
+                case TraceEventType.Warning: return SourceLevels.Warning; 
             }
             return SourceLevels.Off;
         }

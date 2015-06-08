@@ -190,7 +190,7 @@
     <Compile Include="Diagnostics\Configuration\LogBufferConfiguration.cs" />
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
     <Compile Include="Diagnostics\Filters\SourceLevelFilter.cs" />
-    <Compile Include="Diagnostics\Log.Internal.cs" />
+    <Compile Include="Diagnostics\Logger.Internal.cs" />
     <Compile Include="Diagnostics\MEX\EventGetRequest.cs" />
     <Compile Include="Diagnostics\Interfaces\IEventLogger.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogEventFactory.cs" />
@@ -199,8 +199,8 @@
     <Compile Include="Diagnostics\Interfaces\ILogEventWriter.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogWorker.cs" />
     <Compile Include="Diagnostics\LogEventProcessor.cs" />
-    <Compile Include="Diagnostics\LogEventLoggerFactory.cs" />
-    <Compile Include="Diagnostics\Models\Event.cs" />
+    <Compile Include="Diagnostics\LoggerFactory.cs" />
+    <Compile Include="Diagnostics\Models\LogEvent.cs" />
     <Compile Include="Diagnostics\Models\LogHttpContext.cs" />
     <Compile Include="Diagnostics\Models\LogRuntimeContext.cs" />
     <Compile Include="Diagnostics\MEX\LogSaveResponse.cs" />
@@ -212,9 +212,9 @@
     <Compile Include="Diagnostics\TraceSource\HashTagSource.cs" />
     <Compile Include="Diagnostics\Models\HttpCaptureFlags.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogConnector.cs" />
-    <Compile Include="Diagnostics\Log.cs" />
-    <Compile Include="Diagnostics\Log.New.cs" />
-    <Compile Include="Diagnostics\Models\LogEvent.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Diagnostics\Logger.New.cs" />
+    <Compile Include="Diagnostics\Models\LogMessage.cs" />
     <Compile Include="Diagnostics\Models\LogException.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\MemoryCache.cs" />

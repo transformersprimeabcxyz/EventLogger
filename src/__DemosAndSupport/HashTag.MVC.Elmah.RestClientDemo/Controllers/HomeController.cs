@@ -16,7 +16,7 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 {
     public class HomeController : Controller
     {
-        IEventLogger _log = LogEventLoggerFactory.NewLogger<HomeController>();
+        IEventLogger _log = LoggerFactory.NewLogger<HomeController>();
 
         public ActionResult Index()
         {
@@ -31,7 +31,7 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
                 }
 
             }
-            catch(Exception ex)
+            catch(Exception)
             {           
                 throw;
             }
@@ -56,7 +56,7 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
     public class TestFilter :ILogEventFilter
     {
 
-        public bool Matches(LogEvent logEvent)
+        public bool Matches(LogMessage logEvent)
         {
             return true;
         }

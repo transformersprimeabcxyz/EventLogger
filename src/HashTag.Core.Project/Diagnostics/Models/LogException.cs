@@ -147,7 +147,7 @@ namespace HashTag.Diagnostics
 
         public object Clone()
         {
-            return (object)JsonConvert.DeserializeObject<LogEvent>(JsonConvert.SerializeObject(this));     
+            return (object)JsonConvert.DeserializeObject<LogMessage>(JsonConvert.SerializeObject(this));     
         }
 
         public override string ToString()

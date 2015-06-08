@@ -20,7 +20,7 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.OData._4
 
         [ODataRoute("4")]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.All, PageSize = 100)]
-        public async Task<IQueryable<Event>> Get()
+        public async Task<IQueryable<dbEvent>> Get()
         {
             return _ctx.Events;
         }

@@ -61,7 +61,7 @@ namespace HashTag.Diagnostics.Filters
 
         public SourceLevels SourceLevels { get; set; }
 
-        public bool Matches(LogEvent le)
+        public bool Matches(LogMessage le)
         {
             return SourceLevels.IsEnabledFor(le.Severity);            
         }

@@ -33,7 +33,7 @@ namespace HashTag.Diagnostics
     /// <summary>
     /// 
     /// </summary>
-    public partial class Log
+    public partial class Logger
     {
 
         
@@ -58,13 +58,13 @@ namespace HashTag.Diagnostics
         /// Default constructor
         /// </summary>
         /// <param name="logName"></param>
-        internal Log(string logName):this()
+        internal Logger(string logName):this()
         {
             _logName = logName;
         }
 
         
-        internal Log()
+        internal Logger()
         {
             if (!_isInitialized)
             {
@@ -75,7 +75,7 @@ namespace HashTag.Diagnostics
             _logLevels = CoreConfig.Log.ApplicationLogLevels;
         }
 
-        internal Log(string sourceName, SourceLevels levels)
+        internal Logger(string sourceName, SourceLevels levels)
             : this()
         {
             LogName = sourceName;

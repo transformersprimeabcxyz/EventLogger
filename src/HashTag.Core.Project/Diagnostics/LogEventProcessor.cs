@@ -1,4 +1,5 @@
 ﻿using HashTag.Collections;
+using HashTag.Diagnostics.Models;
 using HashTag.Diagnostics.Writers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace HashTag.Diagnostics
 {
-    public class LogEventProcessor : ILogEventProcessor,IDisposable
+    public class LogEventProcessor : ILogEventProcessor, IDisposable
     {
         private AsyncBuffer<LogEvent> _buffer;
-        
+
         public LogEventProcessor()
         {
             _buffer = new AsyncBuffer<LogEvent>(writeEvents)
@@ -26,7 +27,7 @@ namespace HashTag.Diagnostics
             _buffer.Start();
 
         }
-       
+
         /// <summary>
         /// 
         /// </summary>
@@ -34,13 +35,13 @@ namespace HashTag.Diagnostics
         /// <remarks>This is called on a separate thread from _buffer so no need to spin up another thread for persistance.  Each call to this method may be on a different thread</remarks>
         private void writeEvents(List<LogEvent> eventBlock)
         {
-            TraceSourceWriter tw = new TraceSourceWriter();
+            var tw = new TraceSourceWriter();
             tw.WriteEvents(eventBlock);
         }
 
         private bool shouldFlushBuffer(LogEvent le)
         {
-            return le.Severity <= TraceEventType.Warning; //flush on warning or more severe messages
+            return le.EventType <= TraceEventType.Warning; //flush on warning or more severe messages
         }
 
         public Guid Submit(LogEvent evt)
@@ -57,6 +58,21 @@ namespace HashTag.Diagnostics
             return evt.UUID;
         }
 
+        public void Submit(List<LogEvent> events)
+        {
+            events.ForEach(e => _buffer.Submit(e));
+
+            var maxLevel = (TraceEventType)events.Min(e => e.EventType);
+
+            if (maxLevel <= TraceEventType.Warning)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    Flush();
+                }
+                );
+            }
+        }
         public void Flush()
         {
             _buffer.Flush();
@@ -70,11 +86,6 @@ namespace HashTag.Diagnostics
         public void Start()
         {
             _buffer.Start();
-        }
-
-        public void Initialize(IDictionary<string, string> config)
-        {
-
         }
 
         public void Dispose(bool isDisposing)
@@ -91,6 +102,11 @@ namespace HashTag.Diagnostics
         ~LogEventProcessor()
         {
             Dispose(false);
+        }
+
+        public void Initialize(IDictionary<string, string> config)
+        {
+
         }
     }
 }

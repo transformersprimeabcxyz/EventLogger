@@ -51,7 +51,7 @@ namespace HashTag.Configuration
                     case "connectionStrings": applySettingAsConnectionString(setting, mergeOptions);
                         break;
                     default:
-                        Log.Internal.Write(CoreResources.MSG_CoreConfig_UnexpectedGroupName, setting.SettingGroup);
+                        Logger.Internal.Write(CoreResources.MSG_CoreConfig_UnexpectedGroupName, setting.SettingGroup);
                         throw ExceptionFactory.New<ConfigurationErrorsException>(CoreResources.MSG_CoreConfig_UnexpectedGroupName, setting.SettingGroup);
                 }
             }
@@ -86,7 +86,7 @@ namespace HashTag.Configuration
             var cnStringSettings = CoreConfig.Configuration.RemoteConfigurationProvider; //NOTE: might need to change this to handle cases where remote configuration is not configured
             if (cnStringSettings == null) return null;
 
-            Log.Internal.Write(CoreResources.MSG_CoreConfig_UsingRemoteSetting, cnStringSettings.Name, cnStringSettings.ConnectionString, cnStringSettings.ProviderName);
+            Logger.Internal.Write(CoreResources.MSG_CoreConfig_UsingRemoteSetting, cnStringSettings.Name, cnStringSettings.ConnectionString, cnStringSettings.ProviderName);
 
             try
             {
@@ -95,7 +95,7 @@ namespace HashTag.Configuration
             }
             catch(Exception ex)
             {
-                Log.Internal.Write(ex);
+                Logger.Internal.Write(ex);
                 return null;
             }
         }

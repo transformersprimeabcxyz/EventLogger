@@ -16,8 +16,8 @@ namespace HashTag.Logging.Connector.MSSQL
 
         }
 
-        public virtual DbSet<Event> Events { get; set; }
-        public virtual DbSet<EventProperty> Properties { get; set; }
+        public virtual DbSet<dbEvent> Events { get; set; }
+        public virtual DbSet<dbEventProperty> Properties { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

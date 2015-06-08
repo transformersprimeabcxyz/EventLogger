@@ -12,9 +12,9 @@ namespace HashTag.Logging.Connector.MSSQL
 {
     [Table("dbEventProperty")]
     
-    public class EventProperty
+    public class dbEventProperty
     {
-        public EventProperty()
+        public dbEventProperty()
         {
             UUID = Guid.NewGuid();
         }
@@ -42,16 +42,16 @@ namespace HashTag.Logging.Connector.MSSQL
 
         [ForeignKey("EventUUID")]
         [JsonIgnore] 
-        public virtual Event Event { get; set; }
+        public virtual dbEvent Event { get; set; }
     }
 
     [Table("dbEvent")]
-    public class Event
+    public class dbEvent
     {
-        public Event()
+        public dbEvent()
         {
             UUID = Guid.NewGuid();
-            Properties = new List<EventProperty>();
+            Properties = new List<dbEventProperty>();
         }
 
         [Key, Required, Column(Order = 150), Display(Name = "Unique identifier of this instance of an event in the event store")]
@@ -104,7 +104,7 @@ namespace HashTag.Logging.Connector.MSSQL
         [MaxLength(100), Column(TypeName = "varchar", Order = 80)]
         public string EventSource { get; set; }
 
-        public virtual List<EventProperty> Properties { get; set; }
+        public virtual List<dbEventProperty> Properties { get; set; }
 
     }
 }

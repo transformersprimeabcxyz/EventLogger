@@ -63,7 +63,7 @@ namespace HashTag.Diagnostics
                 }
                 catch (Exception ex)
                 {
-                    Log.Internal.Write(ex);
+                    Logger.Internal.Write(ex);
                 }
             }
         }

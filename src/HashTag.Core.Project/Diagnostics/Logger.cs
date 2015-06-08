@@ -17,7 +17,7 @@ namespace HashTag.Diagnostics
     /// <summary>
     /// Base class for writing messages to persistant store.
     /// </summary>
-    public sealed partial class Log : IEventLogger
+    public sealed partial class Logger : IEventLogger
     {
 
         private string _logName;
@@ -113,7 +113,7 @@ namespace HashTag.Diagnostics
 
         private LogEventBuilder newLogMessageBuilder(TraceEventType eventType)
         {
-            var msg = new LogEvent();
+            var msg = new LogMessage();
 
             if (string.IsNullOrEmpty(_logName) == false)
             {
@@ -138,7 +138,7 @@ namespace HashTag.Diagnostics
             return new LogEventBuilder(msg, Write);
         }
 
-        public Func<LogEvent, Guid> Write { get; set; }
+        public Func<LogMessage, Guid> Write { get; set; }
 
         private bool _isDisposed = false;
         /// <summary>
@@ -165,7 +165,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Destructor
         /// </summary>
-        ~Log()
+        ~Logger()
         {
 
             Dispose(false);

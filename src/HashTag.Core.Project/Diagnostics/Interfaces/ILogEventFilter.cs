@@ -7,6 +7,6 @@ namespace HashTag.Diagnostics
 {
     public interface ILogEventFilter:ILogWorker
     {
-        bool Matches(LogEvent logEvent);
+        bool Matches(LogMessage logEvent);
     }
 }
