@@ -84,7 +84,7 @@ namespace HashTag.Diagnostics
 
         internal static Guid OnWrite(LogMessage evt)
         {
-            var convertedEvent = convertToEvent(evt);
+            var convertedEvent = ConvertToEvent(evt);
             _eventProcessor.Submit(convertedEvent);
             return evt.UUID;
         }
@@ -95,7 +95,7 @@ namespace HashTag.Diagnostics
         }
 
 
-        private static LogEvent convertToEvent(LogMessage le)
+        public static LogEvent ConvertToEvent(LogMessage le)
         {
             var retVal = new LogEvent();
             retVal.Application = le.ApplicationKey;

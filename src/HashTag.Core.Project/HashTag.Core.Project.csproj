@@ -181,20 +181,15 @@
     <Compile Include="Configuration\RemoteConfigSetting.cs" />
     <Compile Include="Configuration\IConfigProvider.cs" />
     <Compile Include="CoreConfig.Log.cs" />
-    <Compile Include="Diagnostics\Configuration\LogProcessorConfiguration.cs" />
-    <Compile Include="Diagnostics\Configuration\ConfigProvider.cs" />
-    <Compile Include="Diagnostics\Configuration\ConfigValueConverter.cs" />
-    <Compile Include="Diagnostics\Configuration\ConfigValue.cs" />
-    <Compile Include="Diagnostics\Configuration\FilterConverter.cs" />
-    <Compile Include="Diagnostics\Configuration\ConfigProviderConverter.cs" />
-    <Compile Include="Diagnostics\Configuration\LogBufferConfiguration.cs" />
     <Compile Include="Diagnostics\DiagnosticExtensions.cs" />
     <Compile Include="Diagnostics\Filters\SourceLevelFilter.cs" />
+    <Compile Include="Diagnostics\Interfaces\ILogEventFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Diagnostics\Logger.Internal.cs" />
     <Compile Include="Diagnostics\MEX\EventGetRequest.cs" />
     <Compile Include="Diagnostics\Interfaces\IEventLogger.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogEventFactory.cs" />
-    <Compile Include="Diagnostics\Interfaces\ILogEventFilter.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogEventProcessor.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogEventWriter.cs" />
     <Compile Include="Diagnostics\Interfaces\ILogWorker.cs" />
@@ -205,9 +200,12 @@
     <Compile Include="Diagnostics\Models\LogRuntimeContext.cs" />
     <Compile Include="Diagnostics\MEX\LogSaveResponse.cs" />
     <Compile Include="Diagnostics\Models\LogUserContext.cs" />
+    <Compile Include="Diagnostics\TraceListeners\EventFailOverListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\EventServiceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />
-    <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs" />
+    <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Diagnostics\TraceListeners\LocalFileTraceListener.cs" />
     <Compile Include="Diagnostics\TraceSource\HashTagSource.cs" />
     <Compile Include="Diagnostics\Models\HttpCaptureFlags.cs" />

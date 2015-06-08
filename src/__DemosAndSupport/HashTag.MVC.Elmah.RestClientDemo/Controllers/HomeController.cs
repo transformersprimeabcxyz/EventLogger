@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using HashTag.Diagnostics.Models;
 using HashTag.Web.Http;
 
 namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
@@ -53,22 +54,5 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             return View();
         }
     }
-    public class TestFilter :ILogEventFilter
-    {
-
-        public bool Matches(LogMessage logEvent)
-        {
-            return true;
-        }
-
-        public void Initialize(object config)
-        {
-            
-        }
-
-        public void Initialize(IDictionary<string, string> config)
-        {
-            throw new NotImplementedException();
-        }
-    }
+   
 }

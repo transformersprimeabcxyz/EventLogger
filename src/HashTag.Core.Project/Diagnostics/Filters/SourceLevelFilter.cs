@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HashTag.Diagnostics.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -61,9 +62,9 @@ namespace HashTag.Diagnostics.Filters
 
         public SourceLevels SourceLevels { get; set; }
 
-        public bool Matches(LogMessage le)
+        public bool Matches(LogEvent le)
         {
-            return SourceLevels.IsEnabledFor(le.Severity);            
+            return SourceLevels.IsEnabledFor(le.EventType);            
         }
 
        

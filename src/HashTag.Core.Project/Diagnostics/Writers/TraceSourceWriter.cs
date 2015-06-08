@@ -9,6 +9,7 @@ namespace HashTag.Diagnostics.Writers
 {
     public class TraceSourceWriter : ILogEventWriter
     {
+        private IEventLogger _logger = LoggerFactory.NewLogger<TraceSourceWriter>();
         public class Consts
         {
             /// <summary>
@@ -50,6 +51,10 @@ namespace HashTag.Diagnostics.Writers
             }
             catch (Exception ex)
             {
+                var msg = _logger.Error.Catch(ex).Message();
+                msg.Fix();
+                var evt = LoggerFactory.ConvertToEvent(msg);
+                eventBlock.Add(evt);
                 var failOverName = string.Format("{0}.{1}", _traceSourceName, "FailOver");
                 writeToSource(failOverName, eventBlock);
                 return false;
