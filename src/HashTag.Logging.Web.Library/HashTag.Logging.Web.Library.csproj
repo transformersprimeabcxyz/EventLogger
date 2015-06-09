@@ -72,10 +72,6 @@
       <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
       <Name>HashTag.Core.Project</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HashTag.Logging.Connector.MSSQL\HashTag.Logging.Connector.MSSQL.csproj">
-      <Project>{1837960f-bb20-44a1-af38-e96a55c9eebe}</Project>
-      <Name>HashTag.Logging.Connector.MSSQL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HashTag.Logging.Service.API\HashTag.Logging.Service.API.csproj">
       <Project>{0b8b9317-6889-4d8a-9a73-ef0ab17bd552}</Project>
       <Name>HashTag.Logging.Service.API</Name>

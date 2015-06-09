@@ -11,6 +11,7 @@ using System.Web.OData.Query;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using HashTag.Logging.Web.Library;
+using HashTag.Logging.MSSQL;
 
 namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.OData._4
 {

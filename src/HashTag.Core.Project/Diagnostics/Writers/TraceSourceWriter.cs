@@ -80,8 +80,6 @@ namespace HashTag.Diagnostics.Writers
 
             var maxSeverity = (TraceEventType)eventsToWrite.Min(x => (int)x.EventType);
 
-            if (eventsToWrite.Count == 0) return;
-
             ts.Switch.Level = maxSeverity.ToSourceLevels();
             ts.TraceData(maxSeverity, default(int), eventsToWrite);
 

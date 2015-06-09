@@ -1,5 +1,5 @@
 ﻿using HashTag.Diagnostics;
-using HashTag.Logging.Connector.MSSQL;
+using HashTag.Logging.MSSQL;
 using HashTag.Logging.Web.Library;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;

@@ -51,16 +51,16 @@ namespace HashTag.Diagnostics.TraceListeners
                 }
             }
 
-            if (!(data is List<LogMessage>))
+            if (!(data is List<LogEvent>))
             {
                 throw new ArgumentException("'data' parameter is expected to be List<LogEvent>.  Received " + data.GetType().FullName);
             }
 
-            sendDataToEventService(data as List<LogMessage>).Wait();
+            sendDataToEventService(data as List<LogEvent>).Wait();
 
         }
 
-        private async Task sendDataToEventService(List<LogMessage> eventList)
+        private async Task sendDataToEventService(List<LogEvent> eventList)
         {
 
             using (var client = new HttpClient())

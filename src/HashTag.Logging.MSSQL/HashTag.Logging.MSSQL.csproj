@@ -7,8 +7,8 @@
     <ProjectGuid>{1837960F-BB20-44A1-AF38-E96A55C9EEBE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HashTag.Logging.Connector.MSSQL</RootNamespace>
-    <AssemblyName>HashTag.Logging.Connector.MSSQL</AssemblyName>
+    <RootNamespace>HashTag.Logging.MSSQL</RootNamespace>
+    <AssemblyName>HashTag.Logging.MSSQL</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -55,6 +55,7 @@
     <Compile Include="DbDescriptorUpdater.cs" />
     <Compile Include="dbEvent.cs" />
     <Compile Include="dbEventContext.cs" />
+    <Compile Include="dbListener.cs" />
     <Compile Include="Migrations\201505300252319_initial.cs" />
     <Compile Include="Migrations\201505300252319_initial.Designer.cs">
       <DependentUpon>201505300252319_initial.cs</DependentUpon>

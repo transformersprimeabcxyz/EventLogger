@@ -2,7 +2,6 @@
 using HashTag.Collections;
 using HashTag.Diagnostics;
 using HashTag.Diagnostics.Models;
-using HashTag.Logging.Connector.MSSQL;
 using HashTag.Logging.Service.API.Interfaces;
 using HashTag.Logging.Service.API.MEX;
 using Newtonsoft.Json;

@@ -8,10 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HashTag.Logging.Connector.MSSQL
+namespace HashTag.Logging.MSSQL
 {
     [Table("dbEventProperty")]
-    
     public class dbEventProperty
     {
         public dbEventProperty()

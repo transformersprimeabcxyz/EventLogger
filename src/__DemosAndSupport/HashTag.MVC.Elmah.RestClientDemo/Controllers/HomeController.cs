@@ -21,25 +21,18 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 
         public ActionResult Index()
         {
-            
-            try
+
+            var x = 1000;
+            while (--x > -1)
             {
-
-                var x = 1000;
-                while (--x > -1)
-                {
-                    var y = x / x;
-                }
-
+                var y = x / x;
             }
-            catch(Exception)
-            {           
-                throw;
-            }
-            
+
+
+
             return View();
         }
-        
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -54,5 +47,5 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
             return View();
         }
     }
-   
+
 }

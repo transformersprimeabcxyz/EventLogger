@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HashTag.Diagnostics.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -20,12 +22,17 @@ namespace HashTag.Diagnostics.TraceListeners
             {
                 lock (_lockObject)
                 {
-                    string fileName = string.Format("{0}.{1}.Log", DateTime.Now.ToString("yyyy-MM-dd-hh-mm-"), Guid.NewGuid().ToString());
+                    string fileName = string.Format("{0}.{1}.Log", DateTime.Now.ToString("yyyy-MM-dd-hh"), Guid.NewGuid().ToString());
                     string fullFileName = Path.Combine(LogfilePath, fileName);
                     if (File.Exists(fullFileName) == false)
                     {
-                        File.WriteAllText(fullFileName, "[]");
+                        File.WriteAllText(fullFileName,"");
+                        
                     }
+                    var evtList = (List<LogEvent>)data;
+                    
+                    var jsonList = JsonConvert.SerializeObject(evtList, Formatting.Indented);
+                    File.AppendAllText(fullFileName, jsonList + Environment.NewLine);
                 }
             }
             catch (Exception)
@@ -64,10 +71,11 @@ namespace HashTag.Diagnostics.TraceListeners
                 {
                     base.Attributes["logFolder"],
                     HttpContext.Current != null ? HttpContext.Current.Server.MapPath("~/App_Data") : (string) null,
+                    HostingEnvironment.ApplicationPhysicalPath,
                     Path.GetDirectoryName((new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase)).PathAndQuery),
                     Path.GetTempPath(), 
                    
-                    HostingEnvironment.ApplicationPhysicalPath,
+                    
                     AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
                     Path.GetDirectoryName(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile),
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),                    

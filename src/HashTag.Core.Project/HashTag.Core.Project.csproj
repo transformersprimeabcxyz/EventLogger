@@ -200,7 +200,7 @@
     <Compile Include="Diagnostics\Models\LogRuntimeContext.cs" />
     <Compile Include="Diagnostics\MEX\LogSaveResponse.cs" />
     <Compile Include="Diagnostics\Models\LogUserContext.cs" />
-    <Compile Include="Diagnostics\TraceListeners\EventFailOverListener.cs" />
+    <Compile Include="Diagnostics\TraceListeners\EventBlockFileListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\EventServiceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\InternalTraceListener.cs" />
     <Compile Include="Diagnostics\TraceListeners\JsonFileTraceListener.cs">

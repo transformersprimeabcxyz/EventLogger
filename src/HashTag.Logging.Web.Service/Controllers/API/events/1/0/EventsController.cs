@@ -1,6 +1,5 @@
 ﻿using HashTag.Collections;
 using HashTag.Diagnostics;
-using HashTag.Logging.Connector.MSSQL;
 using HashTag.Logging.Web.Library;
 using HashTag.Web.Api;
 using Newtonsoft.Json;
@@ -23,6 +22,7 @@ using System.Web.OData.Query;
 using System.Web.OData.Extensions;
 using HashTag.Diagnostics.Models;
 using HashTag.Logging.Service.API.MEX;
+using HashTag.Logging.MSSQL;
 
 namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0
 {
@@ -36,6 +36,7 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0
         public async Task<HttpResponseMessage> SaveEvent(List<LogEvent> request)
         {
 
+            
             EventSaveResponse response = null;
             Task.Run(() =>
                 {

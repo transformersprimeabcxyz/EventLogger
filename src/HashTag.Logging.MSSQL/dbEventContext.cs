@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HashTag.Logging.Connector.MSSQL
+namespace HashTag.Logging.MSSQL
 {
     public class EventContext : DbContext
     {
@@ -16,6 +16,11 @@ namespace HashTag.Logging.Connector.MSSQL
 
         }
 
+        public EventContext(string connectionStringName)
+            : base(connectionStringName)
+        {
+
+        }
         public virtual DbSet<dbEvent> Events { get; set; }
         public virtual DbSet<dbEventProperty> Properties { get; set; }
 
