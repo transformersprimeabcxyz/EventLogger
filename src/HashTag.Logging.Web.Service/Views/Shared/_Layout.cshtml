@@ -8,27 +8,11 @@
     @Scripts.Render("~/bundles/LogServerScripts")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
-    <div class="container row col-lg-12 body-content">
-        <div class="row panel">
-            <h1>Header</h1>
+<body class="container container-fluid">
+    <div>
+        
+        @RenderBody()
         </div>
-        <div class="row panel col-lg-12">
-            <div class="col-lg-3">
-                side
-            </div>
-            <div class="col-lg-6">
-                body
-                @RenderBody()
-            </div>
-        </div>
-        <div class="row col-lg-12">
-          <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - HashTag.Net</p>
-            </footer>
-        </div>
-    </div>
     
     @RenderSection("scripts", required: false)
 </body>
