@@ -89,8 +89,9 @@ namespace HashTag.Elmah.RestProxy
         public override string Log(e.Error error)
         {
             IEventLogger log = LoggerFactory.NewLogger<RestErrorLog>();
+            
             var lm = log.Error.Write(error.Exception);
-
+            
             return lm.UUID.ToString();
         }
 

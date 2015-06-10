@@ -26,7 +26,7 @@ namespace HashTag.Logging.Web.Service.Controllers.API.events._1._0.OData._4
             return _ctx.Events;
         }
         [ODataRoute("4({key})")]
-        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        [EnableQuery(PageSize = 1000, AllowedQueryOptions = AllowedQueryOptions.All)]
         public async Task<IHttpActionResult> Get([FromODataUri] Guid key)
         {            
             return Ok(_ctx.Events.Include("Properties").Where(e => e.UUID == key));

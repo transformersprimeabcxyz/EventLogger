@@ -42,7 +42,6 @@ detailsVm = function (divNameToApplyBindingsTo, eventId) {
         x.eventMessage = response.Message;
         x.detailsLink = "/Event/" + response.UUID;
         self.header(x);
-
         response.Properties.sort(self.compare);
         for (propertyIndex = 0; propertyIndex < response.Properties.length; propertyIndex++) {
             var dbProperty = response.Properties[propertyIndex];

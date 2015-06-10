@@ -21,7 +21,8 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 
         public ActionResult Index()
         {
-
+            var ctx = HttpContext;
+            var ctxCurrent = HttpContext.Request;
             var x = 1000;
             while (--x > -1)
             {

@@ -11,7 +11,10 @@ namespace HashTag.Diagnostics
     {
         public LogUserContext()
         {
-            if (HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null)
+            if (HttpContext.Current != null 
+                && HttpContext.Current.User != null 
+                && HttpContext.Current.User.Identity != null 
+                && !string.IsNullOrEmpty(HttpContext.Current.User.Identity.Name))
             {
                 HttpUser = HttpContext.Current.User.Identity.Name;
             }
