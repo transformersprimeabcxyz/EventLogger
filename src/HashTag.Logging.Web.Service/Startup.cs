@@ -33,6 +33,7 @@ namespace HashTag.Logging.Web.Service
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/DataTables/css/jquery.dataTables.css",
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/LogServerScripts").Include(
@@ -41,10 +42,12 @@ namespace HashTag.Logging.Web.Service
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/respond.js",
                         "~/Scripts/moment.js",
+                        "~/Scripts/DataTables/jquery.dataTables.js",
                         "~/Scripts/app/eventVm.js",
                         "~/Scripts/app/detailsVm.js")
                         );
         }
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());

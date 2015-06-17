@@ -1,7 +1,62 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Index";
 }
+<table id="mytable">
+    
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                Severity
+            </th>
+            <th>
+                Application
+            </th>
+            <th>
+                Host
+            </th>
+            <th>
+                User
+            </th>
+            <th>
+                Source
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                Date
+            </td>
+            <td>
+                Time
+            </td>
+            <td>
+                Severity
+            </td>
+            <td>
+                Application
+            </td>
+            <td>
+                Host
+            </td>
+            <td>
+                User
+            </td>
+            <td>
+                Source
+            </td>
+        </tr>
+    </tbody>
+</table>
 
+@*
 <h2>Event Server Summary</h2>
 <div id="divEventPage">
     <style scoped>
@@ -78,11 +133,12 @@
             </tr>
         </tbody>
     </table>
-</div>
+</div>*@
 <script>
     var pageVm = null;
     $(document).ready(function () {
-        pageVm = new eventVm("divEventPage");
-        pageVm.onReady();
+        $('#mytable').DataTable();
+        //pageVm = new eventVm("divEventPage");
+        //pageVm.onReady();
     })
 </script>
