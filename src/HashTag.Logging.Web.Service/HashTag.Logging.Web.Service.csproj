@@ -176,6 +176,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\API\events\1\0\EventsController.cs" />
     <Compile Include="Controllers\API\events\1\0\OData\4\EventsOdataController.cs" />
+    <Compile Include="Controllers\DocController.cs" />
     <Compile Include="Controllers\EventSummaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -340,6 +341,7 @@
     <Content Include="Scripts\jquery-2.1.4.min.map" />
     <Content Include="Views\EventSummary\Index.cshtml" />
     <Content Include="Views\EventSummary\Details.cshtml" />
+    <Content Include="Views\Doc\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HashTag.Core.Project\HashTag.Core.Project.csproj">
