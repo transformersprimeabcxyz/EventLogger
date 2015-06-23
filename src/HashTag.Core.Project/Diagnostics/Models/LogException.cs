@@ -92,6 +92,9 @@ namespace HashTag.Diagnostics
         [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public string HttpHtmlMessage { get; set; }
 
+        /// <summary>
+        /// All public properties on the exception being examined expect well known ones from Exception
+        /// </summary>
         [DataMember]
         public List<Property> Properties { get; set; }
 
@@ -132,7 +135,7 @@ namespace HashTag.Diagnostics
         /// Get's the innermost exception or a reference to this instance if there are no inner exceptions
         /// </summary>
         /// <returns></returns>
-        public LogException GetBaseException
+        public LogException BaseException
         {
             get
             {

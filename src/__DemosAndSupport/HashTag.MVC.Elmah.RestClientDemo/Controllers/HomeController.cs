@@ -1,4 +1,4 @@
-﻿using HashTag.Diagnostics;
+﻿
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,25 +10,38 @@ using System.Web.Mvc;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using HashTag.Diagnostics.Models;
-using HashTag.Web.Http;
+
+using NLog.HashTag.Extensions;
+using NLog;
 
 namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
 {
     public class HomeController : Controller
     {
-        IEventLogger _log = LoggerFactory.NewLogger<HomeController>();
-
+        //IEventLogger _log = LoggerFactory.NewLogger<HomeController>();
+        ILogger _log = LogManager.GetLogger(typeof(HomeController).FullName);
         public ActionResult Index()
         {
+            //_log.Fatal("this is a string with param: {0}", DateTime.Now);
+            var tgt = new TestDbTarget();
             var ctx = HttpContext;
             var ctxCurrent = HttpContext.Request;
             var x = 1000;
-            while (--x > -1)
+            try
             {
-                var y = x / x;
+                while (--x > -1)
+                {
+                    var y = x / x;
+                }
             }
-
+            catch(Exception ex)
+            {
+                for (x = 0; x < 1000; x++)
+                {
+                    ex.Data["interation"] = x;
+                    _log.Error(ex, ex.Message);
+                }
+            }
 
 
             return View();

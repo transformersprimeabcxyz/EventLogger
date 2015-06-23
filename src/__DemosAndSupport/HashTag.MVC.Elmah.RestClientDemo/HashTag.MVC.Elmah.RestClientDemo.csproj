@@ -58,9 +58,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -174,7 +178,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -217,6 +223,10 @@
     <ProjectReference Include="..\..\HashTag.Logging.Web.Library\HashTag.Logging.Web.Library.csproj">
       <Project>{6881591d-3a09-4a80-85be-564222cd9595}</Project>
       <Name>HashTag.Logging.Web.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NLog.HashTag.Extensions\NLog.HashTag.Extensions.csproj">
+      <Project>{0a9f8ba8-fde7-4af7-85c1-de6a8843d463}</Project>
+      <Name>NLog.HashTag.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

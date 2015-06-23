@@ -93,7 +93,7 @@ namespace HashTag.Diagnostics
                     {
                         if (Exceptions != null && Exceptions.Count > 0)
                         {
-                            msg = Exceptions[0].GetBaseException.Message.Left(60, "...");
+                            msg = Exceptions[0].BaseException.Message.Left(60, "...");
                         }
                     }
                     return msg;
@@ -271,7 +271,7 @@ namespace HashTag.Diagnostics
                 {
                     if (Exceptions != null && Exceptions.Count > 0)
                     {
-                        _messageText = Exceptions[0].GetBaseException.Message;
+                        _messageText = Exceptions[0].BaseException.Message;
                     }
                 }
                 return _messageText;

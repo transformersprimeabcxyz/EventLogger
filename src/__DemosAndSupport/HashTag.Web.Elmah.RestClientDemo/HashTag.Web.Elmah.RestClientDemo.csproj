@@ -58,8 +58,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -231,6 +235,10 @@
     <ProjectReference Include="..\..\HashTag.Elmah.RestProxy\HashTag.Elmah.RestProxy.csproj">
       <Project>{b191913a-1c54-4356-b436-f8cfa2f269f9}</Project>
       <Name>HashTag.Elmah.RestProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NLog.HashTag.Extensions\NLog.HashTag.Extensions.csproj">
+      <Project>{0a9f8ba8-fde7-4af7-85c1-de6a8843d463}</Project>
+      <Name>NLog.HashTag.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
