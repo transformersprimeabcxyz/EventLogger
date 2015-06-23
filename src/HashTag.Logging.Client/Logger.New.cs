@@ -45,6 +45,8 @@ namespace HashTag.Diagnostics
         /// </summary>
         private static void initialize()
         {
+           
+
             _isInitialized = true;
         }
 
@@ -68,6 +70,8 @@ namespace HashTag.Diagnostics
             {
                 initialize();
             }
+
+
             _logLevels = CoreConfig.Log.ApplicationLogLevels;
         }
 

@@ -82,7 +82,12 @@ namespace HashTag.Diagnostics
             }
         }
 
-      
+        internal static Guid OnWrite(LogMessage evt)
+        {
+            var convertedEvent = ConvertToEvent(evt);
+            _eventProcessor.Submit(convertedEvent);
+            return evt.UUID;
+        }
 
         public static IEventLogger NewLogger(object logNameFromObjectsType,SourceLevels allowedSourceLevels=SourceLevels.All)
         {
