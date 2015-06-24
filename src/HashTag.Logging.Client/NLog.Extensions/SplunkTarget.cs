@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace NLog.HashTag.Extensions
 {
-    [Target("TestDb")]
-    public class TestDbTarget:TargetWithLayout
+    [Target("Splunk")]
+    public class SplunkTarget:TargetWithLayout
     {
         public string dropFolder { get; set; }
         protected override void Write(LogEventInfo logEvent)

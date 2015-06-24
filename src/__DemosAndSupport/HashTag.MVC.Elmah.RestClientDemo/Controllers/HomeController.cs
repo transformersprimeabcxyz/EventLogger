@@ -23,7 +23,7 @@ namespace HashTag.MVC.Elmah.RestClientDemo.Controllers
         public ActionResult Index()
         {
             //_log.Fatal("this is a string with param: {0}", DateTime.Now);
-            var tgt = new TestDbTarget();
+            var tgt = new SplunkTarget();
             var ctx = HttpContext;
             var ctxCurrent = HttpContext.Request;
             var x = 1000;

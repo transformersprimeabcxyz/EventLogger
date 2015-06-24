@@ -12,13 +12,15 @@ namespace HashTag.NLog.Demo
 {
     class Program
     {
+        private static ILogger log = LogManager.GetLogger(typeof(Program).FullName);
         static void Main(string[] args)
         {
-            var xedd = new TestDbTarget(); //forces copy of assembly
-            var log = LogManager.GetLogger(typeof(Program).FullName);
+            var xedd = new SplunkTarget(); //forces copy of assembly
+           
             log.Error("something really really bad happened just now!");
             var config = new LoggingConfiguration();
-
+            LogEventInfo inf = new LogEventInfo(LogLevel.Debug,log.Name,"asfassaf");
+            
             string sfas = JsonConvert.SerializeObject(config, Formatting.Indented);
            // var ctx = HttpContext;
            // var ctxCurrent = HttpContext.Request;

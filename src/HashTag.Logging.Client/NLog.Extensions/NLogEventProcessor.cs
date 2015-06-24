@@ -17,7 +17,7 @@ namespace NLog.HashTag.Extensions
         public Guid Submit(LogEvent evt)
         {
             var logger = getLogger(evt);
-            LogLevel nLogLevel = getLogLevel(evt);
+            var nLogLevel = getLogLevel(evt);
 
             if (!logger.IsEnabled(nLogLevel)) return evt.UUID;
 
