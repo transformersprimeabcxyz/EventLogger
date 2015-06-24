@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using HashTag.Logging.Client.Configuration;
 
 namespace HashTag.Diagnostics
 {
@@ -36,7 +37,7 @@ namespace HashTag.Diagnostics
     public partial class Logger
     {
 
-        
+                
         private volatile static bool _isInitialized = false;
         internal SourceLevels _logLevels { get; set; }
 
@@ -48,17 +49,14 @@ namespace HashTag.Diagnostics
             _isInitialized = true;
         }
 
-      
-
-
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="logName"></param>
-        internal Logger(string logName):this()
+        internal Logger(ClientConfig config):this()
         {
-            _logName = logName;
+            _loggerConfig = (ClientConfig)config.Clone();
         }
 
         
@@ -68,7 +66,6 @@ namespace HashTag.Diagnostics
             {
                 initialize();
             }
-            _logLevels = CoreConfig.Log.ApplicationLogLevels;
         }
 
         internal Logger(string sourceName, SourceLevels levels)

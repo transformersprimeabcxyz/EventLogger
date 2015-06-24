@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using HashTag.Diagnostics.Models;
 using Newtonsoft.Json;
+using HashTag.Logging.Client.Configuration;
 
 namespace HashTag.Diagnostics
 {
@@ -14,7 +15,7 @@ namespace HashTag.Diagnostics
         private static ConcurrentDictionary<string, Logger> _registeredLogs = new ConcurrentDictionary<string, Logger>();
         public static string _defaultLogName { get; set; }
 
-        private static ILogEventProcessor _eventProcessor = new LogEventProcessor();
+        public static ClientConfig DefaultConfig { get; set; }
 
 
         /// <summary>
@@ -25,7 +26,7 @@ namespace HashTag.Diagnostics
         {
             if (string.IsNullOrEmpty(_defaultLogName) == true)
             {
-                _defaultLogName = CoreConfig.ApplicationName;
+                _defaultLogName = DefaultConfig.ApplicationName;
             }
 
             return NewLog(_defaultLogName);
@@ -55,7 +56,7 @@ namespace HashTag.Diagnostics
         /// <returns>Created log</returns>
         public static IEventLogger NewLog(string logName)
         {
-            return NewLogger(logName, CoreConfig.Log.ApplicationLogLevels);
+            return NewLogger(logName, DefaultConfig.SourceLevels);
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace HashTag.Diagnostics
             }
             else
             {
-                Logger log = new Logger(logName, allowedSourceLevels)
+                Logger log = new Logger(DefaultConfig)
                 {
                   //  Write = OnWrite
                 };
@@ -83,7 +84,6 @@ namespace HashTag.Diagnostics
         }
 
       
-
         public static IEventLogger NewLogger(object logNameFromObjectsType,SourceLevels allowedSourceLevels=SourceLevels.All)
         {
             return NewLogger(logNameFromObjectsType.GetType(),allowedSourceLevels);
