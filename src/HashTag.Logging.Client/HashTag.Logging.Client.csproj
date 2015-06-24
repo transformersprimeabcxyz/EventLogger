@@ -55,7 +55,6 @@
     <Compile Include="Interfaces\ILogWorker.cs" />
     <Compile Include="LogEventBuilder.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Logger.New.cs" />
     <Compile Include="LoggerFactory.cs" />
     <Compile Include="Models\HttpCaptureFlags.cs" />
     <Compile Include="Models\LogEvent.cs" />

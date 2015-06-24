@@ -10,7 +10,7 @@ namespace HashTag.Diagnostics.Models
         public LogEvent()
         {
             UUID = Guid.NewGuid();
-            EventDate = DateTime.Now;
+            TimeStamp = DateTime.Now;
         }
 
         public Guid UUID { get; set; }
@@ -19,7 +19,7 @@ namespace HashTag.Diagnostics.Models
         public string Message { get; set; }
 
         [JsonProperty(PropertyName = "eventDate", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime EventDate { get; set; }
+        public DateTime TimeStamp { get; set; }
 
         [JsonProperty(PropertyName = "application", NullValueHandling = NullValueHandling.Ignore)]
         public string Application { get; set; }

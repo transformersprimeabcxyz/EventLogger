@@ -16,10 +16,9 @@ namespace HashTag.Diagnostics
         public static string _defaultLogName { get; set; }
 
         public static ClientConfig DefaultConfig { get; set; }
-
-
+        
         /// <summary>
-        /// Create a new log instance with application name.  (Default log level is set in .config HashTag.Diagnostics.LogLevel, Default:Vital)
+        /// Create a new log instance with application name. 
         /// </summary>
         /// <returns></returns>
         public static IEventLogger NewLogger(SourceLevels allowedLogLevels =  SourceLevels.All)
@@ -74,10 +73,7 @@ namespace HashTag.Diagnostics
             }
             else
             {
-                Logger log = new Logger(DefaultConfig)
-                {
-                  //  Write = OnWrite
-                };
+                Logger log = new Logger(logName, DefaultConfig);                
                 _registeredLogs[logName] = log;
                 return log;
             }
@@ -88,8 +84,6 @@ namespace HashTag.Diagnostics
         {
             return NewLogger(logNameFromObjectsType.GetType(),allowedSourceLevels);
         }
-
-
     }
 
   

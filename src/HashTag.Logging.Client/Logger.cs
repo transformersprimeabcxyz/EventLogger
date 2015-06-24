@@ -23,6 +23,30 @@ namespace HashTag.Diagnostics
         private string _logName;
 
         private ClientConfig _loggerConfig;
+
+        private volatile static bool _isInitialized = false;
+        internal SourceLevels _logLevels { get; set; }
+
+        /// <summary>
+        /// Initialize global (i.e. static) fields for logging subsystem
+        /// </summary>
+        private static void initialize()
+        {
+            _isInitialized = true;
+        }
+
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="logName"></param>
+        internal Logger(string logName, ClientConfig config)
+        {
+            _logName = _logName;
+            _loggerConfig = (ClientConfig)config.Clone();
+        }
+
+
         /// <summary>
         /// Name of this particular log.
         /// </summary>
@@ -39,7 +63,7 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                return newLogMessageBuilder(TraceEventType.Critical).CaptureHttp().CaptureIdentity().CaptureMachineContext();
+                return newLogMessageBuilder(TraceEventType.Critical).CaptureHttp(_loggerConfig.OnErrorHttpCaptureFlags).CaptureIdentity().CaptureMachineContext();
             }
         }
 
@@ -50,7 +74,7 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                return newLogMessageBuilder(TraceEventType.Error).CaptureHttp().CaptureIdentity().CaptureMachineContext();
+                return newLogMessageBuilder(TraceEventType.Error).CaptureHttp(_loggerConfig.OnErrorHttpCaptureFlags).CaptureIdentity().CaptureMachineContext();
             }
         }
 
@@ -61,7 +85,7 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                return newLogMessageBuilder(TraceEventType.Warning).CaptureHttp().CaptureIdentity().CaptureMachineContext();
+                return newLogMessageBuilder(TraceEventType.Warning).CaptureHttp(_loggerConfig.OnErrorHttpCaptureFlags).CaptureIdentity().CaptureMachineContext();
             }
         }
 

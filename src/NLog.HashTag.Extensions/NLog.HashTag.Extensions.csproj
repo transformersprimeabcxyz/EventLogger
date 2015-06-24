@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NLogErrorLog.cs" />
+    <Compile Include="NLogEventProcessor.cs" />
     <Compile Include="TestTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,9 +66,9 @@
     <Content Include="App_Readme\Elmah.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HashTag.Core.Project\HashTag.Core.Project.csproj">
-      <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
-      <Name>HashTag.Core.Project</Name>
+    <ProjectReference Include="..\HashTag.Logging.Client\HashTag.Logging.Client.csproj">
+      <Project>{c2bd921b-cd0d-48c5-a084-d79dca488d38}</Project>
+      <Name>HashTag.Logging.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

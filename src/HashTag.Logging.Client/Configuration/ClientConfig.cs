@@ -10,6 +10,7 @@ namespace HashTag.Logging.Client.Configuration
         public ClientConfig()
         {
             HostName = _hostName;
+            OnErrorHttpCaptureFlags = HttpCaptureFlags.All;
         }
         public const bool IGNORECASE_FLAG = false;
 
@@ -22,6 +23,8 @@ namespace HashTag.Logging.Client.Configuration
         public ILogEventProcessor Processor { get; set; }
 
         public SourceLevels SourceLevels { get; set; }
+
+        public HttpCaptureFlags OnErrorHttpCaptureFlags { get; set; }
 
         public object Clone()
         {

@@ -285,7 +285,7 @@ namespace HashTag.Diagnostics
         {
             var retVal = new LogEvent();
             retVal.Application = evtBuilder.ApplicationKey;
-            retVal.EventDate = evtBuilder.TimeStamp;
+            retVal.TimeStamp = evtBuilder.TimeStamp;
             retVal.EventSource = evtBuilder.LoggerName;
             retVal.EventType = evtBuilder.Severity;
             retVal.EventTypeName = evtBuilder.Severity.ToString();

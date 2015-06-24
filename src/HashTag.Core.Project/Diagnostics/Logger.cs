@@ -24,6 +24,8 @@ namespace HashTag.Diagnostics
         private static string _envName = CoreConfig.ActiveEnvironment;
         private static string _appName = CoreConfig.ApplicationName;
         private static string _machineName = Environment.MachineName;
+
+
         /// <summary>
         /// Name of this particular log.
         /// </summary>
