@@ -15,7 +15,7 @@ namespace HashTag.NLog.Demo
         private static ILogger log = LogManager.GetLogger(typeof(Program).FullName);
         static void Main(string[] args)
         {
-            var xedd = new SplunkTarget(); //forces copy of assembly
+            var xedd = new NLogSplunkTarget(); //forces copy of assembly
            
             log.Error("something really really bad happened just now!");
             var config = new LoggingConfiguration();

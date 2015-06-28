@@ -236,10 +236,6 @@
       <Project>{b191913a-1c54-4356-b436-f8cfa2f269f9}</Project>
       <Name>HashTag.Elmah.RestProxy</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\NLog.HashTag.Extensions\NLog.HashTag.Extensions.csproj">
-      <Project>{0a9f8ba8-fde7-4af7-85c1-de6a8843d463}</Project>
-      <Name>NLog.HashTag.Extensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

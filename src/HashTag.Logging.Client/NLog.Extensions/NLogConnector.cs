@@ -10,10 +10,11 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 namespace NLog.HashTag.Extensions
 {
-    public class NLogEventProcessor:ILogEventProcessor
+    public class NLogEventProcessor : ILogStoreConnector
     {
         private static ConcurrentDictionary<string, ILoggerBase> _nlogInstances = new ConcurrentDictionary<string, ILoggerBase>();
         private object listLock = new object();
+
         public Guid Submit(LogEvent evt)
         {
             var logger = getLogger(evt);

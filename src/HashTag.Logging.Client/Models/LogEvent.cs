@@ -13,6 +13,7 @@ namespace HashTag.Diagnostics.Models
             TimeStamp = DateTime.Now;
         }
 
+        [JsonProperty(PropertyName = "id")]
         public Guid UUID { get; set; }
 
         [JsonProperty(PropertyName = "message", NullValueHandling = NullValueHandling.Ignore)]
@@ -26,9 +27,11 @@ namespace HashTag.Diagnostics.Models
 
         [JsonProperty(PropertyName = "host", NullValueHandling = NullValueHandling.Ignore)]
         public string Host { get; set; }
-        
+
+        [JsonIgnore]
         public TraceEventType EventType { get; set; }
 
+        [JsonProperty(PropertyName = "eventType")]
         public string EventTypeName
         {
             get
@@ -55,11 +58,10 @@ namespace HashTag.Diagnostics.Models
         [JsonProperty(PropertyName = "eventCode", NullValueHandling = NullValueHandling.Ignore)]
         public string EventCode { get; set; }
 
+        [JsonProperty(PropertyName = "eventId", NullValueHandling = NullValueHandling.Ignore)]
         public int EventId { get; set; }
 
         [JsonProperty(PropertyName = "properties", NullValueHandling = NullValueHandling.Ignore)]
         public virtual List<LogEventProperty> Properties { get; set; }
-
-
     }
 }

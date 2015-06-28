@@ -10,6 +10,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using HashTag.Logging.Client.Configuration;
+using HashTag.Logging.Client.Interfaces;
 
 
 namespace HashTag.Diagnostics
@@ -22,7 +23,7 @@ namespace HashTag.Diagnostics
 
         private string _logName;
 
-        private ClientConfig _loggerConfig;
+        private LoggingOptions _loggerConfig;
 
         private volatile static bool _isInitialized = false;
         internal SourceLevels _logLevels { get; set; }
@@ -40,10 +41,10 @@ namespace HashTag.Diagnostics
         /// Default constructor
         /// </summary>
         /// <param name="logName"></param>
-        internal Logger(string logName, ClientConfig config)
+        internal Logger(string logName, LoggingOptions config)
         {
             _logName = _logName;
-            _loggerConfig = (ClientConfig)config.Clone();
+            _loggerConfig = (LoggingOptions)config.Clone();
         }
 
 
@@ -59,7 +60,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Critical' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public LogEventBuilder Critical
+        public ILogEventBuilder Critical
         {
             get
             {
@@ -70,7 +71,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Error' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public LogEventBuilder Error
+        public ILogEventBuilder Error
         {
             get
             {
@@ -81,7 +82,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Warning' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public LogEventBuilder Warning
+        public ILogEventBuilder Warning
         {
             get
             {
@@ -92,7 +93,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Information' level message.
         /// </summary>
-        public LogEventBuilder Info
+        public ILogEventBuilder Info
         {
             get
             {
@@ -103,7 +104,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Verbose' level message.
         /// </summary>
-        public LogEventBuilder Verbose
+        public ILogEventBuilder Verbose
         {
             get
             {
@@ -114,7 +115,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Operation starting' message.
         /// </summary>
-        public LogEventBuilder Start
+        public ILogEventBuilder Start
         {
             get
             {
@@ -126,7 +127,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Operation stopping' message.
         /// </summary>
-        public LogEventBuilder Stop
+        public ILogEventBuilder Stop
         {
             get
             {
@@ -134,7 +135,7 @@ namespace HashTag.Diagnostics
             }
         }
 
-        private LogEventBuilder newLogMessageBuilder(TraceEventType eventType)
+        private ILogEventBuilder newLogMessageBuilder(TraceEventType eventType)
         {
             var evtBuilder = new LogEventBuilder(_loggerConfig)
             {

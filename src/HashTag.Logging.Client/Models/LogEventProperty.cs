@@ -11,8 +11,10 @@ namespace HashTag.Diagnostics.Models
             UUID = Guid.NewGuid();
         }
 
+        [JsonProperty(PropertyName = "id")]
         public Guid UUID { get; set; }
 
+        [JsonProperty(PropertyName = "eventId")]
         public Guid EventUUID { get; set; }
 
         [JsonProperty(PropertyName = "group", NullValueHandling = NullValueHandling.Ignore)]
@@ -22,7 +24,6 @@ namespace HashTag.Diagnostics.Models
         public string Name { get; set; }
         
         [JsonProperty(PropertyName = "value", NullValueHandling = NullValueHandling.Ignore)]
-
         public string Value { get; set; }
     }
 

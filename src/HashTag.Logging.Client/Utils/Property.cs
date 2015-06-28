@@ -121,7 +121,7 @@ namespace HashTag.Collections
             {
                 return false;
             }
-            return (string.Compare(source.Key, this.Key, ClientConfig.IGNORECASE_FLAG) == 0 && string.Compare(source.Value, this.Value, ClientConfig.IGNORECASE_FLAG) == 0);
+            return (string.Compare(source.Key, this.Key, LoggingOptions.IGNORECASE_FLAG) == 0 && string.Compare(source.Value, this.Value, LoggingOptions.IGNORECASE_FLAG) == 0);
         }
         public override int GetHashCode()
         {
@@ -141,9 +141,9 @@ namespace HashTag.Collections
             if (left == null && right == null) return 0;
             if (left == null && right != null) return -1;
 
-            int result = string.Compare(left.Key, right.Key, ClientConfig.IGNORECASE_FLAG);
+            int result = string.Compare(left.Key, right.Key, LoggingOptions.IGNORECASE_FLAG);
             if (result != 0) return result;
-            return string.Compare(left.Value, right.Value, ClientConfig.IGNORECASE_FLAG);
+            return string.Compare(left.Value, right.Value, LoggingOptions.IGNORECASE_FLAG);
         }
 
         public int CompareTo(Property other)

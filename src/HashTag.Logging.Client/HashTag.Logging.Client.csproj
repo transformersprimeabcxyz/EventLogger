@@ -43,6 +43,7 @@
       <HintPath>..\..\lib\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -52,12 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\Property.cs" />
-    <Compile Include="Collections\PropertyBag.cs" />
-    <Compile Include="Configuration\ClientConfig.cs" />
+    <Compile Include="Interfaces\ILogEventBuilder.cs" />
+    <Compile Include="TraceSource.Extensions\TraceSourceConnector.cs" />
+    <Compile Include="Utils\Property.cs" />
+    <Compile Include="Utils\PropertyBag.cs" />
+    <Compile Include="Configuration\LoggingOptions.cs" />
     <Compile Include="DiagnosticExtensions.cs" />
     <Compile Include="Interfaces\IEventLogger.cs" />
-    <Compile Include="Interfaces\ILogEventProcessor.cs" />
+    <Compile Include="Interfaces\ILogStoreConnector.cs" />
     <Compile Include="Interfaces\ILogWorker.cs" />
     <Compile Include="LogEventBuilder.cs" />
     <Compile Include="Logger.cs" />
@@ -72,13 +75,14 @@
     <Compile Include="Models\LogRuntimeContext.cs" />
     <Compile Include="Models\LogUserContext.cs" />
     <Compile Include="NLog.Extensions\NLogErrorLog.cs" />
-    <Compile Include="NLog.Extensions\NLogEventProcessor.cs" />
-    <Compile Include="NLog.Extensions\SplunkTarget.cs" />
+    <Compile Include="NLog.Extensions\NLogConnector.cs" />
+    <Compile Include="NLog.Extensions\NLogSplunkTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection\Reflector.cs" />
-    <Compile Include="Transform\Transform.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="Utils.Win32.cs" />
+    <Compile Include="Utils\ProviderFactory.cs" />
+    <Compile Include="Utils\Reflector.cs" />
+    <Compile Include="Utils\Transform.cs" />
+    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Utils\Utils.Win32.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

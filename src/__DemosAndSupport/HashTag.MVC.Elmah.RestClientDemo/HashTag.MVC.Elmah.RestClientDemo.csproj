@@ -220,13 +220,13 @@
       <Project>{c92dc151-a0ba-4a5e-a20e-620ec9c06aff}</Project>
       <Name>HashTag.Elmah</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\HashTag.Logging.Client\HashTag.Logging.Client.csproj">
+      <Project>{c2bd921b-cd0d-48c5-a084-d79dca488d38}</Project>
+      <Name>HashTag.Logging.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\HashTag.Logging.Web.Library\HashTag.Logging.Web.Library.csproj">
       <Project>{6881591d-3a09-4a80-85be-564222cd9595}</Project>
       <Name>HashTag.Logging.Web.Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\NLog.HashTag.Extensions\NLog.HashTag.Extensions.csproj">
-      <Project>{0a9f8ba8-fde7-4af7-85c1-de6a8843d463}</Project>
-      <Name>NLog.HashTag.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

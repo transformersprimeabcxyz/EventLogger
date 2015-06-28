@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace NLog.HashTag.Extensions
 {
     [Target("Splunk")]
-    public class SplunkTarget:TargetWithLayout
+    public class NLogSplunkTarget:TargetWithLayout
     {
         public string dropFolder { get; set; }
         protected override void Write(LogEventInfo logEvent)
