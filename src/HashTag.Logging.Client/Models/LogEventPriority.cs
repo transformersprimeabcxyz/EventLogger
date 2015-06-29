@@ -11,6 +11,10 @@
     /// </remarks>
     public enum LogEventPriority
     {
+        /// <summary>
+        /// Default value
+        /// </summary>
+        None = 0,
         
         /// <summary>
         ///  Lowest message priority. (80000)

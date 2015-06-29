@@ -25,6 +25,9 @@ namespace HashTag.Diagnostics.Models
         [JsonProperty(PropertyName = "application", NullValueHandling = NullValueHandling.Ignore)]
         public string Application { get; set; }
 
+        [JsonProperty(PropertyName = "environment", NullValueHandling = NullValueHandling.Ignore)]
+        public string Environment { get; set; }
+        
         [JsonProperty(PropertyName = "host", NullValueHandling = NullValueHandling.Ignore)]
         public string Host { get; set; }
 
@@ -49,6 +52,13 @@ namespace HashTag.Diagnostics.Models
             }
         }
 
+        [JsonProperty(PropertyName = "eventTypeId")]
+        public int EventTypeId
+        {
+            get { return (int)EventType; }
+            set { EventType = (TraceEventType)value; }
+        }
+
         [JsonProperty(PropertyName = "user", NullValueHandling = NullValueHandling.Ignore)]
         public string User { get; set; }
 
@@ -60,6 +70,34 @@ namespace HashTag.Diagnostics.Models
 
         [JsonProperty(PropertyName = "eventId", NullValueHandling = NullValueHandling.Ignore)]
         public int EventId { get; set; }
+
+        [JsonIgnore]
+        public LogEventPriority Priority { get; set; }
+
+        [JsonProperty(PropertyName = "priority")]
+        public string PriorityName
+        {
+            get
+            {
+                return Priority.ToString();
+            }
+            set
+            {
+                if (value == null)
+                {
+                    Priority = default(LogEventPriority);
+                    return;
+                }
+                Priority = (LogEventPriority)Enum.Parse(typeof(LogEventPriority), value);
+            }
+        }
+
+        [JsonProperty(PropertyName = "priorityId")]
+        public int PriorityId
+        {
+            get { return (int) Priority; }
+            set { Priority = (LogEventPriority) value; }
+        }
 
         [JsonProperty(PropertyName = "properties", NullValueHandling = NullValueHandling.Ignore)]
         public virtual List<LogEventProperty> Properties { get; set; }

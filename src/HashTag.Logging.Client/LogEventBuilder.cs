@@ -19,33 +19,32 @@ namespace HashTag.Diagnostics
     {
         public LogEventBuilder()
         {
+            UUID = Guid.NewGuid();
+            timeStamp = DateTime.Now;
+        }
 
+        internal LogEventBuilder(LoggingOptions options)
+            : this()
+        {
+            Config = (LoggingOptions)options.Clone();
         }
 
         public LoggingOptions Config { get; set; }
-                
-        private string Message { get; set; }
-        private string Host { get; set; }
-        private string EventTypeName { get; set; }
-        private string ApplicationKey { get; set; }
-        private string LoggerName { get; set; }
-        private  Guid ActivityId { get; set; }
-        private string ApplicationSubKey { get; set; }
-        private List<LogException> Exceptions { get; set; }
-        private Guid UUID { get; set; }
-        private LogMachineContext MachineContext { get; set; }
-        private LogEventPriority Priority { get; set; }
-        private PropertyBag Properties { get; set; }
-        private LogHttpContext _httpContext { get; set; }
-        private DateTime TimeStamp { get; set; }
-        private LogUserContext UserContext { get; set; }
-        private TraceEventType Severity { get; set; }
-        private string UserIdentity { get; set; }
 
-        internal LogEventBuilder(LoggingOptions config)
-        {
-            Config = (LoggingOptions)config.Clone();
-        }
+        private string applicationKey { get; set; }
+        private string loggerName { get; set; }
+        private Guid activityId { get; set; }
+        private string applicationSubKey { get; set; }
+        private Guid UUID { get; set; }
+        private LogMachineContext machineContext { get; set; }
+        private LogEventPriority priority { get; set; }
+        private PropertyBag properties { get; set; }
+        private LogHttpContext httpContext { get; set; }
+        private DateTime timeStamp { get; set; }
+        private LogUserContext userContext { get; set; }
+        private TraceEventType severity { get; set; }
+        private string userIdentity { get; set; }
+
 
         private string _messageText;
         /// <summary>
@@ -70,26 +69,26 @@ namespace HashTag.Diagnostics
         /// <param name="messageData">Data to be persisted to log.</param>
         public LogEvent Write(object messageData = null)
         {
-            var evt = ConvertToEvent(this);            
+
             if (messageData != null)
             {
                 if (messageData is Exception)
                 {
-                    return Catch(messageData as Exception).Write();
+                    Catch((Exception)messageData);
                 }
-                Write(messageData.ToString());
+                _messageText = messageData.ToString();
             }
-            else
+
+            var evt = ConvertToEvent(this);
+            if (Config.LogConnector != null)
             {
-                if (Config.LogConnector != null)
-                {
-                    Config.LogConnector.Submit(evt);
-                }
+                Config.LogConnector.Submit(evt);
             }
+
             return evt;
         }
 
-        public LogEvent Write(Exception ex, string message=null, params object[] args)
+        public LogEvent Write(Exception ex, string message = null, params object[] args)
         {
             Catch(ex);
             if (string.IsNullOrWhiteSpace(message))
@@ -126,6 +125,17 @@ namespace HashTag.Diagnostics
         public ILogEventBuilder WithCode(string code, params object[] args)
         {
             _eventCode = string.Format(code, args);
+            return this;
+        }
+
+        /// <summary>
+        /// Sets how urgent the caller considers this message.  System will determine default priority based on EventType (e.g. Error-High)
+        /// </summary>
+        /// <param name="priority"></param>
+        /// <returns></returns>
+        public ILogEventBuilder WithPriority(LogEventPriority priority)
+        {
+            this.priority = priority;
             return this;
         }
 
@@ -175,12 +185,12 @@ namespace HashTag.Diagnostics
                 _exceptions = new List<LogException>();
             }
             _exceptions.Add(new LogException(ex));
-           
+
             return this;
         }
 
 
-       
+
         /// <summary>
         /// Extract specific HTTP information and store it in message's HttpContext collection.
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
@@ -189,7 +199,7 @@ namespace HashTag.Diagnostics
         /// <returns></returns>
         public ILogEventBuilder CaptureHttp(HttpCaptureFlags flags)
         {
-            _httpContext = new LogHttpContext(HttpContext.Current, flags);
+            httpContext = new LogHttpContext(HttpContext.Current, flags);
             return this;
         }
 
@@ -285,56 +295,65 @@ namespace HashTag.Diagnostics
         public static LogEvent ConvertToEvent(LogEventBuilder evtBuilder)
         {
             var retVal = new LogEvent();
-            retVal.Application = evtBuilder.ApplicationKey;
-            retVal.TimeStamp = evtBuilder.TimeStamp;
-            retVal.EventSource = evtBuilder.LoggerName;
-            retVal.EventType = evtBuilder.Severity;
-            retVal.EventTypeName = evtBuilder.Severity.ToString();
+            retVal.Application = evtBuilder.applicationKey;
+            retVal.TimeStamp = evtBuilder.timeStamp;
+            retVal.EventSource = evtBuilder.loggerName;
+            retVal.EventType = evtBuilder.severity;
             retVal.Host = evtBuilder.Config.HostName;
-            retVal.Message = evtBuilder.Message;
-            retVal.User = evtBuilder.UserIdentity;
-            if (evtBuilder.UserContext != null)
+            retVal.Message = evtBuilder._messageText;
+            retVal.User = evtBuilder.userIdentity;
+            retVal.Environment = evtBuilder.Config.ActiveEnvironment;
+            if (evtBuilder.priority == default(LogEventPriority))
             {
-                retVal.User = evtBuilder.UserContext.DefaultUser;
+                retVal.Priority = retVal.EventType.ToPriority();
+            }
+            retVal.Priority = evtBuilder.priority;
+
+            if (evtBuilder._eventId == 0)
+            {
+                retVal.EventId = (int)retVal.Priority + (int)retVal.EventType;
+            }
+
+            if (evtBuilder.userContext != null)
+            {
+                retVal.User = evtBuilder.userContext.DefaultUser;
             }
             retVal.UUID = evtBuilder.UUID;
 
-            if (evtBuilder.Exceptions != null && evtBuilder.Exceptions.Count > 0)
+            if (evtBuilder._exceptions != null && evtBuilder._exceptions.Count > 0)
             {
-                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Exceptions", Value = JsonConvert.SerializeObject(evtBuilder.Exceptions, Formatting.Indented) });
+                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Exceptions", Value = JsonConvert.SerializeObject(evtBuilder._exceptions, Formatting.Indented) });
             }
-            retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Environment", Value = evtBuilder.Config.ActiveEnvironment });
-            if (!string.IsNullOrWhiteSpace(evtBuilder.ApplicationSubKey))
+            if (!string.IsNullOrWhiteSpace(evtBuilder.applicationSubKey))
             {
-                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "SubKey", Value = evtBuilder.ApplicationSubKey });
+                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "SubKey", Value = evtBuilder.applicationSubKey });
             }
-            retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Priority", Value = ((int)evtBuilder.Priority).ToString() });
-            retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "PriorityName", Value = evtBuilder.Priority.ToString() });
-            retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "ActivityId", Value = evtBuilder.ActivityId.ToString() });
+
+            retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "ActivityId", Value = evtBuilder.activityId.ToString() });
             if (evtBuilder._reference != null)
             {
                 retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Reference", Value = JsonConvert.SerializeObject(evtBuilder._reference, Formatting.Indented) });
             }
-        
-            if (evtBuilder.Properties != null && evtBuilder.Properties.Count > 0)
+
+            if (evtBuilder.properties != null && evtBuilder.properties.Count > 0)
             {
-                foreach (var prop in evtBuilder.Properties)
+                foreach (var prop in evtBuilder.properties)
                 {
                     retVal.Properties.Add(new LogEventProperty() { Group = "Properties", Name = prop.Key, Value = prop.Value });
                 }
             }
 
-            if (evtBuilder._httpContext != null)
+            if (evtBuilder.httpContext != null)
             {
-                convertToEvent(retVal.Properties, evtBuilder._httpContext);
+                convertToEvent(retVal.Properties, evtBuilder.httpContext);
             }
-            if (evtBuilder.MachineContext != null)
+            if (evtBuilder.machineContext != null)
             {
-                convertToEvent(retVal.Properties, evtBuilder.MachineContext);
+                convertToEvent(retVal.Properties, evtBuilder.machineContext);
             }
-            if (evtBuilder.UserContext != null)
+            if (evtBuilder.userContext != null)
             {
-                convertToEvent(retVal.Properties, evtBuilder.UserContext);
+                convertToEvent(retVal.Properties, evtBuilder.userContext);
             }
 
             retVal.Properties.ForEach(p =>
