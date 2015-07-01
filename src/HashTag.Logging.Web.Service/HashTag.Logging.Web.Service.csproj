@@ -344,22 +344,6 @@
     <Content Include="Views\Doc\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HashTag.Core.Project\HashTag.Core.Project.csproj">
-      <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
-      <Name>HashTag.Core.Project</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HashTag.Logging.MSSQL\HashTag.Logging.MSSQL.csproj">
-      <Project>{1837960f-bb20-44a1-af38-e96a55c9eebe}</Project>
-      <Name>HashTag.Logging.MSSQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HashTag.Logging.Service.API\HashTag.Logging.Service.API.csproj">
-      <Project>{0b8b9317-6889-4d8a-9a73-ef0ab17bd552}</Project>
-      <Name>HashTag.Logging.Service.API</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HashTag.Logging.Web.Library\HashTag.Logging.Web.Library.csproj">
-      <Project>{6881591d-3a09-4a80-85be-564222cd9595}</Project>
-      <Name>HashTag.Logging.Web.Library</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HashTag.Web.Api\HashTag.Web.Api.csproj">
       <Project>{1e50e3c1-3d9d-491e-bd8a-c3c9fde48722}</Project>
       <Name>HashTag.Web.Api</Name>

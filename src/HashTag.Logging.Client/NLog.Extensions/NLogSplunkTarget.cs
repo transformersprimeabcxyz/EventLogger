@@ -1,5 +1,6 @@
 ﻿using HashTag.Diagnostics;
 using Newtonsoft.Json;
+using NLog;
 using NLog.Targets;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLog.HashTag.Extensions
+namespace HashTag.Logging.Client.NLog.Extensions
 {
     [Target("Splunk")]
     public class NLogSplunkTarget:TargetWithLayout
@@ -17,6 +18,7 @@ namespace NLog.HashTag.Extensions
         public string dropFolder { get; set; }
         protected override void Write(LogEventInfo logEvent)
         {
+
             var msg = new Dictionary<object, object>();
             msg["timeStamp"] = logEvent.TimeStamp;
             msg["level"] = logEvent.Level;

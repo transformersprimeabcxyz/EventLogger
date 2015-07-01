@@ -13,6 +13,7 @@ namespace HashTag.Diagnostics
     /// </summary>
     
     [Serializable]
+    [JsonObject]
     public class LogException : ICloneable
     {
         static string[] _filterList = Reflector.GetPublicPropertyNames(typeof(Exception));
@@ -87,35 +88,44 @@ namespace HashTag.Diagnostics
 
         public List<Property> Properties { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public LogException InnerException { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Source { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string StackTrace { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string HelpLink { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string TargetSite { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<Property> Data { get; set; }
 
         /// <summary>
         ///  A coded value that is assigned to a specific exception. Often the HRESULT from the attached exception 
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string ErrorCode { get; set; }
 
         /// <summary>
         /// .Net data type of exception
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string ExceptionType { get; set; }
 
         /// <summary>
         /// Get's the innermost exception or a reference to this instance if there are no inner exceptions
         /// </summary>
         /// <returns></returns>
-        public LogException GetBaseException
+        public LogException BaseException
         {
             get
             {
@@ -135,7 +145,10 @@ namespace HashTag.Diagnostics
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
         
 

@@ -58,12 +58,6 @@
     </Content>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\HashTag.Core.Project\HashTag.Core.Project.csproj">
-      <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
-      <Name>HashTag.Core.Project</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

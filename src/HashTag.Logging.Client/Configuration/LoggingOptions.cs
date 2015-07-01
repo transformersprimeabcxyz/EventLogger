@@ -18,6 +18,7 @@ namespace HashTag.Logging.Client.Configuration
             OnErrorHttpCaptureFlags = HttpCaptureFlags.All;
             SourceLevels = SourceLevels.All;
             ConfigKeys = new Keys();
+            ConnectorType = "HashTag.Logging.Client.NLog.Extensions.NLogEventConnector, HashTag.Logging.Client";
         }
         public LoggingOptions(Keys applicationKeys)
             : this()

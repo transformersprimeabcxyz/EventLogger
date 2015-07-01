@@ -23,17 +23,33 @@ namespace HashTag.Diagnostics
             timeStamp = DateTime.Now;
         }
 
-        internal LogEventBuilder(LoggingOptions options)
+        internal LogEventBuilder(LoggingOptions options, string loggerName)
             : this()
         {
             Config = (LoggingOptions)options.Clone();
+            this.loggerName = loggerName;
         }
 
         public LoggingOptions Config { get; set; }
 
         private string applicationKey { get; set; }
+
         private string loggerName { get; set; }
-        private Guid activityId { get; set; }
+        private Guid activityId
+        {
+            get
+            {
+                var cm = Trace.CorrelationManager;
+
+                var actId = cm.ActivityId;
+                if (actId == Guid.Empty)
+                {
+                    actId = Guid.NewGuid();
+                    cm.ActivityId = actId;
+                }
+                return actId;
+            }
+        }
         private string applicationSubKey { get; set; }
         private Guid UUID { get; set; }
         private LogMachineContext machineContext { get; set; }
@@ -41,9 +57,9 @@ namespace HashTag.Diagnostics
         private PropertyBag properties { get; set; }
         private LogHttpContext httpContext { get; set; }
         private DateTime timeStamp { get; set; }
-        private LogUserContext userContext { get; set; }
+        
         private TraceEventType severity { get; set; }
-        private string userIdentity { get; set; }
+        
 
 
         private string _messageText;
@@ -55,12 +71,7 @@ namespace HashTag.Diagnostics
         public LogEvent Write(string message, params object[] args)
         {
             _messageText = string.Format(message, args);
-            var evt = ConvertToEvent(this);
-            if (Config.LogConnector != null)
-            {
-                Config.LogConnector.Submit(evt);
-            }
-            return evt;
+            return writeToLogStore();
         }
 
         /// <summary>
@@ -76,16 +87,12 @@ namespace HashTag.Diagnostics
                 {
                     Catch((Exception)messageData);
                 }
-                _messageText = messageData.ToString();
+                else
+                {
+                    _messageText = messageData.ToString();
+                }
             }
-
-            var evt = ConvertToEvent(this);
-            if (Config.LogConnector != null)
-            {
-                Config.LogConnector.Submit(evt);
-            }
-
-            return evt;
+            return writeToLogStore();            
         }
 
         public LogEvent Write(Exception ex, string message = null, params object[] args)
@@ -93,7 +100,7 @@ namespace HashTag.Diagnostics
             Catch(ex);
             if (string.IsNullOrWhiteSpace(message))
             {
-                return Write((object)null);
+                return writeToLogStore();
             }
             else
             {
@@ -101,6 +108,15 @@ namespace HashTag.Diagnostics
             }
         }
 
+        private LogEvent writeToLogStore()
+        {
+            var evt = ConvertToEvent();
+            if (Config.LogConnector != null)
+            {
+                Config.LogConnector.Submit(evt);
+            }
+            return evt;
+        }
 
         private int _eventId;
         /// <summary>
@@ -136,6 +152,17 @@ namespace HashTag.Diagnostics
         public ILogEventBuilder WithPriority(LogEventPriority priority)
         {
             this.priority = priority;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the level of this message.  Automatically set with LogEventBuilder but caller may override default if necessary
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <returns></returns>
+        public ILogEventBuilder AsEventType(TraceEventType eventType)
+        {
+            this.severity = eventType;
             return this;
         }
 
@@ -236,8 +263,7 @@ namespace HashTag.Diagnostics
             return CaptureHttp(HttpCaptureFlags.All);
         }
 
-        private LogMachineContext _machineContext;
-
+        
         /// <summary>
         /// Retrieve operating system and network settings (e.g. thread id, host name, IP addresses, process identifiers)
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
@@ -245,7 +271,7 @@ namespace HashTag.Diagnostics
         /// <returns></returns>
         public ILogEventBuilder CaptureMachineContext()
         {
-            _machineContext = new LogMachineContext();
+            machineContext = new LogMachineContext();
             return this;
         }
 
@@ -292,68 +318,78 @@ namespace HashTag.Diagnostics
             return base.GetHashCode();
         }
 
-        public static LogEvent ConvertToEvent(LogEventBuilder evtBuilder)
+        public LogEvent ConvertToEvent()
         {
             var retVal = new LogEvent();
-            retVal.Application = evtBuilder.applicationKey;
-            retVal.TimeStamp = evtBuilder.timeStamp;
-            retVal.EventSource = evtBuilder.loggerName;
-            retVal.EventType = evtBuilder.severity;
-            retVal.Host = evtBuilder.Config.HostName;
-            retVal.Message = evtBuilder._messageText;
-            retVal.User = evtBuilder.userIdentity;
-            retVal.Environment = evtBuilder.Config.ActiveEnvironment;
-            if (evtBuilder.priority == default(LogEventPriority))
+            retVal.Application = this.applicationKey ?? Config.ApplicationName;
+            retVal.TimeStamp = this.timeStamp;
+            retVal.EventSource = this.loggerName;
+            retVal.EventType = this.severity;
+            retVal.Host = this.Config.HostName;
+            if (!string.IsNullOrWhiteSpace(_messageText))
+            {
+                retVal.Message = _messageText;
+            }
+            else
+            {
+                if (_exceptions != null && _exceptions.Count > 0 && _exceptions[0] != null)
+                {
+                    retVal.Message = _exceptions[0].BaseException.Message;
+                }
+            };
+
+            retVal.User = (_userContext != null) ? _userContext.DefaultUser : "(undetermined)";
+            retVal.Environment = this.Config.ActiveEnvironment;
+            if (this.priority == default(LogEventPriority))
             {
                 retVal.Priority = retVal.EventType.ToPriority();
             }
-            retVal.Priority = evtBuilder.priority;
+           
 
-            if (evtBuilder._eventId == 0)
+            if (this._eventId == 0)
             {
                 retVal.EventId = (int)retVal.Priority + (int)retVal.EventType;
             }
 
-            if (evtBuilder.userContext != null)
-            {
-                retVal.User = evtBuilder.userContext.DefaultUser;
-            }
-            retVal.UUID = evtBuilder.UUID;
+           
+            retVal.UUID = this.UUID;
 
-            if (evtBuilder._exceptions != null && evtBuilder._exceptions.Count > 0)
+            if (this._exceptions != null && this._exceptions.Count > 0)
             {
-                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Exceptions", Value = JsonConvert.SerializeObject(evtBuilder._exceptions, Formatting.Indented) });
-            }
-            if (!string.IsNullOrWhiteSpace(evtBuilder.applicationSubKey))
-            {
-                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "SubKey", Value = evtBuilder.applicationSubKey });
+                retVal.Exceptions = new List<LogException>();
+                retVal.Exceptions.AddRange(this._exceptions);
             }
 
-            retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "ActivityId", Value = evtBuilder.activityId.ToString() });
-            if (evtBuilder._reference != null)
+            if (!string.IsNullOrWhiteSpace(this.applicationSubKey))
             {
-                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Reference", Value = JsonConvert.SerializeObject(evtBuilder._reference, Formatting.Indented) });
+                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "SubKey", Value = this.applicationSubKey });
             }
 
-            if (evtBuilder.properties != null && evtBuilder.properties.Count > 0)
+            retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "ActivityId", Value = this.activityId.ToString() });
+            if (this._reference != null)
             {
-                foreach (var prop in evtBuilder.properties)
+                retVal.Properties.Add(new LogEventProperty() { Group = "General", Name = "Reference", Value = JsonConvert.SerializeObject(this._reference, Formatting.Indented) });
+            }
+
+            if (this.properties != null && this.properties.Count > 0)
+            {
+                foreach (var prop in this.properties)
                 {
                     retVal.Properties.Add(new LogEventProperty() { Group = "Properties", Name = prop.Key, Value = prop.Value });
                 }
             }
 
-            if (evtBuilder.httpContext != null)
+            if (this.httpContext != null)
             {
-                convertToEvent(retVal.Properties, evtBuilder.httpContext);
+                convertToEvent(retVal.Properties, this.httpContext);
             }
-            if (evtBuilder.machineContext != null)
+            if (this.machineContext != null)
             {
-                convertToEvent(retVal.Properties, evtBuilder.machineContext);
+                convertToEvent(retVal.Properties, this.machineContext);
             }
-            if (evtBuilder.userContext != null)
+            if (_userContext != null)
             {
-                convertToEvent(retVal.Properties, evtBuilder.userContext);
+                convertToEvent(retVal.Properties, _userContext);
             }
 
             retVal.Properties.ForEach(p =>
@@ -363,7 +399,7 @@ namespace HashTag.Diagnostics
             return retVal;
         }
 
-        private static void convertToEvent(List<LogEventProperty> list, LogUserContext logUserContext)
+        private void convertToEvent(List<LogEventProperty> list, LogUserContext logUserContext)
         {
             if (!string.IsNullOrWhiteSpace(logUserContext.AppDomainIdentity))
             {
@@ -396,55 +432,71 @@ namespace HashTag.Diagnostics
             }
         }
         private const int BytesInMB = (1024 * 1024 * 1024);
-        private static void convertToEvent(List<LogEventProperty> list, LogMachineContext logMachineContext)
+        private void convertToEvent(List<LogEventProperty> list, LogMachineContext logMachineContext)
         {
             if (!string.IsNullOrWhiteSpace(logMachineContext.AppDomainName))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "AppDomainName", Value = logMachineContext.AppDomainName });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "AppDomainName", Value = logMachineContext.AppDomainName });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.AppFolder))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "AppFolder", Value = logMachineContext.AppFolder });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "AppFolder", Value = logMachineContext.AppFolder });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.ClassName))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "ClassName", Value = logMachineContext.ClassName });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "ClassName", Value = logMachineContext.ClassName });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.CommandLine))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "CommandLine", Value = logMachineContext.CommandLine });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "CommandLine", Value = logMachineContext.CommandLine });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.DomainAppIdentity))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "DomainAppIdentity", Value = logMachineContext.DomainAppIdentity });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "DomainAppIdentity", Value = logMachineContext.DomainAppIdentity });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.DomainAppName))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "DomainAppName", Value = logMachineContext.DomainAppName });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "DomainAppName", Value = logMachineContext.DomainAppName });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.DomainAssmName))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "DomainAssmName", Value = logMachineContext.DomainAssmName });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "DomainAssmName", Value = logMachineContext.DomainAssmName });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.DomainAssmVersion))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "DomainAssmVersion", Value = logMachineContext.DomainAssmVersion });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "DomainAssmVersion", Value = logMachineContext.DomainAssmVersion });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.DomainConfigFile))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "DomainConfigFile", Value = logMachineContext.DomainConfigFile });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "DomainConfigFile", Value = logMachineContext.DomainConfigFile });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.DomainCtxIdentity))
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "DomainCtxIdentity", Value = logMachineContext.DomainCtxIdentity });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "DomainCtxIdentity", Value = logMachineContext.DomainCtxIdentity });
             }
             if (logMachineContext.DomainId.HasValue)
             {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "DomainId", Value = logMachineContext.DomainId.Value.ToString() });
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "DomainId", Value = logMachineContext.DomainId.Value.ToString() });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.HostName))
             {
                 list.Add(new LogEventProperty() { Group = "MachineContext", Name = "HostName", Value = logMachineContext.HostName });
+            }
+            if (!string.IsNullOrWhiteSpace(logMachineContext.ProcessId))
+            {
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "ProcessId", Value = logMachineContext.ProcessId });
+            }
+            if (!string.IsNullOrWhiteSpace(logMachineContext.ProcessName))
+            {
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "ProcessName", Value = logMachineContext.ProcessName });
+            }
+            if ((_exceptions == null || _exceptions.Count == 0 || _exceptions[0] == null) && !string.IsNullOrWhiteSpace(logMachineContext.StackTrace))
+            {
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "StackTrace", Value = logMachineContext.StackTrace });
+            }
+            if (!string.IsNullOrWhiteSpace(logMachineContext.Win32ThreadId))
+            {
+                list.Add(new LogEventProperty() { Group = "ProcessContext", Name = "Win32ThreadId", Value = logMachineContext.Win32ThreadId });
             }
             if (!string.IsNullOrWhiteSpace(logMachineContext.IPAddressList))
             {
@@ -472,27 +524,9 @@ namespace HashTag.Diagnostics
             {
                 list.Add(new LogEventProperty() { Group = "MachineContext", Name = "OsVersion", Value = logMachineContext.OsVersion });
             }
-            if (!string.IsNullOrWhiteSpace(logMachineContext.ProcessId))
-            {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "ProcessId", Value = logMachineContext.ProcessId });
-            }
-            if (!string.IsNullOrWhiteSpace(logMachineContext.ProcessName))
-            {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "ProcessName", Value = logMachineContext.ProcessName });
-            }
-
             if (logMachineContext.ProcessorCount.HasValue)
             {
                 list.Add(new LogEventProperty() { Group = "MachineContext", Name = "ProcessorCount", Value = logMachineContext.ProcessorCount.Value.ToString() });
-            }
-
-            if (!string.IsNullOrWhiteSpace(logMachineContext.StackTrace))
-            {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "StackTrace", Value = logMachineContext.StackTrace });
-            }
-            if (!string.IsNullOrWhiteSpace(logMachineContext.Win32ThreadId))
-            {
-                list.Add(new LogEventProperty() { Group = "MachineContext", Name = "Win32ThreadId", Value = logMachineContext.Win32ThreadId });
             }
             if (logMachineContext.WorkingMemoryBytes.HasValue)
             {

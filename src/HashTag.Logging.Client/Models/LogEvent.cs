@@ -11,6 +11,7 @@ namespace HashTag.Diagnostics.Models
         {
             UUID = Guid.NewGuid();
             TimeStamp = DateTime.Now;
+            Properties = new List<LogEventProperty>();
         }
 
         [JsonProperty(PropertyName = "id")]
@@ -98,6 +99,9 @@ namespace HashTag.Diagnostics.Models
             get { return (int) Priority; }
             set { Priority = (LogEventPriority) value; }
         }
+
+        [JsonProperty(PropertyName = "exceptions", NullValueHandling = NullValueHandling.Ignore)]
+        public List<LogException> Exceptions { get; set; }
 
         [JsonProperty(PropertyName = "properties", NullValueHandling = NullValueHandling.Ignore)]
         public virtual List<LogEventProperty> Properties { get; set; }

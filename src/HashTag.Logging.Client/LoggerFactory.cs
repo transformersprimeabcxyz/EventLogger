@@ -23,15 +23,26 @@ namespace HashTag.Diagnostics
         }
         public static void Initialize(LoggingOptions config)
         {
-            DefaultConfig = config;
+            if (config != null)
+            {
+                DefaultConfig = (LoggingOptions)config.Clone();
+            }
+            else
+            {
+                DefaultConfig = new LoggingOptions();
+            }
             isInitialized = true;
         }
-        public static void EnsureInitialized(LoggingOptions config=null)
+
+
+        public static void EnsureInitialized()
         {
-
+            if (isInitialized == false)
+            {
+                Initialize(DefaultConfig);
+                isInitialized = true;                
+            }
         }
-
-        
 
         /// <summary>
         /// Create a new log instance with application name. 

@@ -8,7 +8,7 @@ using NLog;
 using Newtonsoft.Json;
 using System.Collections;
 using HashTag.Diagnostics;
-namespace NLog.HashTag.Extensions
+namespace HashTag.Logging.Client.NLog.Extensions
 {
     public class NLogConnectorForElmah:ErrorLog
     {

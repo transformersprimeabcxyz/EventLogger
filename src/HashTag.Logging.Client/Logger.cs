@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using HashTag.Logging.Client.Configuration;
 using HashTag.Logging.Client.Interfaces;
+using HashTag.Diagnostics.Models;
 
 
 namespace HashTag.Diagnostics
@@ -43,7 +44,7 @@ namespace HashTag.Diagnostics
         /// <param name="logName"></param>
         internal Logger(string logName, LoggingOptions config)
         {
-            _logName = _logName;
+            _logName = logName;
             _loggerConfig = (LoggingOptions)config.Clone();
         }
 
@@ -137,14 +138,22 @@ namespace HashTag.Diagnostics
 
         private ILogEventBuilder newLogMessageBuilder(TraceEventType eventType)
         {
-            var evtBuilder = new LogEventBuilder(_loggerConfig)
+            var evtBuilder = new LogEventBuilder(_loggerConfig, _logName)
             {
-
+               
             };
             
-            return null;
+            return evtBuilder.AsEventType(eventType);
         }
 
+        /// <summary>
+        /// Writes a hydrated event to configured event store
+        /// </summary>
+        /// <param name="evt">Event to persist to logger's event store</param>
+        public void Write(LogEvent evt)
+        {
+            _loggerConfig.LogConnector.Submit(evt);
+        }
 
         private bool _isDisposed = false;
         /// <summary>

@@ -85,6 +85,7 @@
     <Compile Include="Utils\Utils.Win32.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Readme\Sample.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

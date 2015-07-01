@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using HashTag.Diagnostics;
+using HashTag.Logging.Client.NLog.Extensions;
+using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
-using NLog.HashTag.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +13,25 @@ namespace HashTag.NLog.Demo
 {
     class Program
     {
-        private static ILogger log = LogManager.GetLogger(typeof(Program).FullName);
+       
         static void Main(string[] args)
         {
+            //private static ILogger log = LogManager.GetLogger(typeof(Program).FullName);
+            var log = LoggerFactory.NewLogger<Program>();
+
+            log.Error.Write("something really really bad happened just now!");
+
             var xedd = new NLogSplunkTarget(); //forces copy of assembly
-           
-            log.Error("something really really bad happened just now!");
-            var config = new LoggingConfiguration();
-            LogEventInfo inf = new LogEventInfo(LogLevel.Debug,log.Name,"asfassaf");
+
+            var cn = new NLogEventConnector();
+            cn.Initialize(null);
+           // log.Error("something really really bad happened just now!");
+           // var config = new LoggingConfiguration();
+           // LogEventInfo inf = new LogEventInfo(LogLevel.Debug,log.Name,"asfassaf");
             
-            string sfas = JsonConvert.SerializeObject(config, Formatting.Indented);
-           // var ctx = HttpContext;
-           // var ctxCurrent = HttpContext.Request;
+           // string sfas = JsonConvert.SerializeObject(config, Formatting.Indented);
+           //// var ctx = HttpContext;
+           //// var ctxCurrent = HttpContext.Request;
             try
             {
                 var x = 1000;
@@ -32,22 +40,10 @@ namespace HashTag.NLog.Demo
                     var y = x / x;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-             //   var inf = new LogEventInfo(LogLevel.Fatal, log.Name, null);
-             //   inf.Exception = ex;
-             //   inf.Level = LogLevel.Fatal;
-             //   inf.Properties.Add("prop1", "val1");
-             ////   inf.LoggerShortName = log.Name;
-             //   inf.LoggerName = log.Name;
-             //  // inf.Context.Add("other stuff","aval");
-             //   var g = ex.TargetSite.Name;
-                ex.Data.Add("my key", "my value");
-                //var s = JsonConvert.SerializeObject(inf, Formatting.Indented);
-                //log.Log(inf);
-                log.Fatal(ex,"some message");
+                log.Error.Write(ex);
             }
-
 
             Console.WriteLine("press Any key");
             Console.ReadKey();

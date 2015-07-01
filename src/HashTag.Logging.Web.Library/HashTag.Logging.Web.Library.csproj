@@ -67,16 +67,6 @@
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HashTag.Core.Project\HashTag.Core.Project.csproj">
-      <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
-      <Name>HashTag.Core.Project</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HashTag.Logging.Service.API\HashTag.Logging.Service.API.csproj">
-      <Project>{0b8b9317-6889-4d8a-9a73-ef0ab17bd552}</Project>
-      <Name>HashTag.Logging.Service.API</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

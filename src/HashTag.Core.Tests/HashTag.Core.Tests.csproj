@@ -57,12 +57,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HashTag.Core.Project\HashTag.Core.Project.csproj">
-      <Project>{4ccd8fcc-8bfd-4787-8d0f-67994cb1d83d}</Project>
-      <Name>HashTag.Core.Project</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <Choose>

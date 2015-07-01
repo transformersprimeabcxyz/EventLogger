@@ -25,6 +25,11 @@ namespace HashTag.Diagnostics.Models
         
         [JsonProperty(PropertyName = "value", NullValueHandling = NullValueHandling.Ignore)]
         public string Value { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("[{0}::{1}] = {2}", Group, Name, Value);
+        }
     }
 
    
