@@ -6,32 +6,37 @@ using NLog.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Ninject;
+using Ninject.Modules;
+using Ninject.Activation;
+using Logger = NLog.Logger;
+
 
 namespace HashTag.NLog.Demo
 {
     class Program
     {
-       
+
         static void Main(string[] args)
         {
-            //private static ILogger log = LogManager.GetLogger(typeof(Program).FullName);
-            var log = LoggerFactory.NewLogger<Program>();
+            IKernel kernel = new StandardKernel();
+            kernel.Load(Assembly.GetExecutingAssembly());
+            var errorThrower = kernel.Get<IErrorThrower>();
+            errorThrower.ThrowException();
 
-            log.Error.Write("something really really bad happened just now!");
+            var errorThrower2 = kernel.Get<IErrorThrower2>();
+            errorThrower2.ThrowException();
 
-            var xedd = new NLogSplunkTarget(); //forces copy of assembly
+            Console.WriteLine("press Any key");
+            Console.ReadKey();
+        }
 
-            var cn = new NLogEventConnector();
-            cn.Initialize(null);
-           // log.Error("something really really bad happened just now!");
-           // var config = new LoggingConfiguration();
-           // LogEventInfo inf = new LogEventInfo(LogLevel.Debug,log.Name,"asfassaf");
-            
-           // string sfas = JsonConvert.SerializeObject(config, Formatting.Indented);
-           //// var ctx = HttpContext;
-           //// var ctxCurrent = HttpContext.Request;
+
+        private static void throwNewException(IEventLogger logger)
+        {
             try
             {
                 var x = 1000;
@@ -42,11 +47,57 @@ namespace HashTag.NLog.Demo
             }
             catch (Exception ex)
             {
-                log.Error.Write(ex);
+                logger.Error.Write(ex);
             }
-
-            Console.WriteLine("press Any key");
-            Console.ReadKey();
         }
     }
+
+    public interface IErrorThrower
+    {
+        void ThrowException();
+    }
+    public interface IErrorThrower2
+    {
+        void ThrowException();
+    }
+    public class ErrorThrower : IErrorThrower
+    {
+        private IEventLogger _logger;
+        public ErrorThrower(IEventLogger logger)
+        {
+            _logger = logger;
+        }
+
+        public void ThrowException()
+        {
+            _logger.Error.Write("something really really bad happened just now! by {0}", _logger.LogName);
+        }
+    }
+
+    public class ErrorThrower2 : IErrorThrower2
+    {
+        private IEventLogger _logger;
+        public ErrorThrower2(IEventLogger logger)
+        {
+            _logger = logger;
+        }
+
+        public void ThrowException()
+        {
+            
+            _logger.Error.Write("22something really really bad happened just now! by {0}",_logger.LogName);
+        }
+    }
+
+    public class Bindings : NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<IErrorThrower>().To<ErrorThrower>();
+            Bind<IErrorThrower2>().To<ErrorThrower2>();  
+
+            Bind<IEventLogger>().ToMethod(g => LoggerFactory.NewLogger(g.Request.Target.Member.DeclaringType.FullName)).InTransientScope();
+        }
+    }
+
 }

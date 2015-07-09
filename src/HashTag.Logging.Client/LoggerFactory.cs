@@ -16,12 +16,20 @@ namespace HashTag.Diagnostics
         private static volatile bool isInitialized=false;
         public static string _defaultLogName { get; set; }
 
-        public static LoggingOptions DefaultConfig { get; set; }
-        public static void Initialize()
-        {
-
+        private static LoggingOptions _options;
+        public static LoggingOptions DefaultConfig {
+            get
+            {
+                if (_options == null)
+                {
+                    _options = new LoggingOptions();
+                }
+                return _options;
+            }
+            set { _options = value; }
         }
-        public static void Initialize(LoggingOptions config)
+        
+        public static void Initialize(LoggingOptions config=null)
         {
             if (config != null)
             {
@@ -50,6 +58,7 @@ namespace HashTag.Diagnostics
         /// <returns></returns>
         public static IEventLogger NewLogger(SourceLevels allowedLogLevels = SourceLevels.All)
         {
+            EnsureInitialized();    
             if (string.IsNullOrEmpty(_defaultLogName) == true)
             {
                 _defaultLogName = DefaultConfig.ApplicationName;
@@ -60,6 +69,7 @@ namespace HashTag.Diagnostics
 
         public static IEventLogger NewLogger<T>(SourceLevels allowedLevels = SourceLevels.All)
         {
+            EnsureInitialized();    
             return NewLogger(typeof(T), allowedLevels);
         }
 
@@ -71,6 +81,7 @@ namespace HashTag.Diagnostics
         /// <returns>Instance of logger</returns>
         public static IEventLogger NewLogger(Type type, SourceLevels logLevels = SourceLevels.All)
         {
+            EnsureInitialized();    
             return NewLogger(type.FullName, logLevels);
 
         }
@@ -82,6 +93,7 @@ namespace HashTag.Diagnostics
         /// <returns>Created log</returns>
         public static IEventLogger NewLogger(string logName)
         {
+            EnsureInitialized();    
             return NewLogger(logName, DefaultConfig.SourceLevels);
         }
 
@@ -109,6 +121,7 @@ namespace HashTag.Diagnostics
 
         public static IEventLogger NewLogger(object logNameFromObjectsType, SourceLevels allowedSourceLevels = SourceLevels.All)
         {
+
             return NewLogger(logNameFromObjectsType.GetType(), allowedSourceLevels);
         }
     }
