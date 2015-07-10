@@ -10,9 +10,9 @@ using HashTag.Logging.Client.Configuration;
 
 namespace HashTag.Diagnostics
 {
-    public class LoggerFactory
+    public partial class EventLogger
     {
-        private static ConcurrentDictionary<string, Logger> _registeredLogs = new ConcurrentDictionary<string, Logger>();
+        private static ConcurrentDictionary<string, EventLogger> _registeredLogs = new ConcurrentDictionary<string, EventLogger>();
         private static volatile bool isInitialized=false;
         public static string _defaultLogName { get; set; }
 
@@ -53,10 +53,10 @@ namespace HashTag.Diagnostics
         }
 
         /// <summary>
-        /// Create a new log instance with application name. 
+        /// GetLogger a new log instance with application name. 
         /// </summary>
         /// <returns></returns>
-        public static IEventLogger NewLogger(SourceLevels allowedLogLevels = SourceLevels.All)
+        public static IEventLogger GetLogger(SourceLevels allowedLogLevels = SourceLevels.All)
         {
             EnsureInitialized();    
             if (string.IsNullOrEmpty(_defaultLogName) == true)
@@ -64,46 +64,46 @@ namespace HashTag.Diagnostics
                 _defaultLogName = DefaultConfig.ApplicationName;
             }
 
-            return NewLogger(_defaultLogName);
+            return GetLogger(_defaultLogName);
         }
 
-        public static IEventLogger NewLogger<T>(SourceLevels allowedLevels = SourceLevels.All)
+        public static IEventLogger GetLogger<T>(SourceLevels allowedLevels = SourceLevels.All)
         {
             EnsureInitialized();    
-            return NewLogger(typeof(T), allowedLevels);
+            return GetLogger(typeof(T), allowedLevels);
         }
 
         /// <summary>
-        /// Create a default logger using full name of type (pattern from log4Net)
+        /// GetLogger a default logger using full name of type (pattern from log4Net)
         /// </summary>
         /// <param name="logLevels">List of levels (flags) of message severity to log</param>
         /// <param name="type">Type that will be using this logger</param>
         /// <returns>Instance of logger</returns>
-        public static IEventLogger NewLogger(Type type, SourceLevels logLevels = SourceLevels.All)
+        public static IEventLogger GetLogger(Type type, SourceLevels logLevels = SourceLevels.All)
         {
             EnsureInitialized();    
-            return NewLogger(type.FullName, logLevels);
+            return GetLogger(type.FullName, logLevels);
 
         }
 
 
         /// <summary>
-        /// Create a new log with a specific name.  LoggerLevel is set to 'Vital' (Information, Warning, Error, Critical)  (Default log level is set in .config HashTag.Diagnostics.LogLevel, Default:All)
+        /// GetLogger a new log with a specific name.  LoggerLevel is set to 'Vital' (Information, Warning, Error, Critical)  (Default log level is set in .config HashTag.Diagnostics.LogLevel, Default:All)
         /// </summary>/// <param name="logName">Name of log (in logging system).  May not map to actual operating system file name</param>
-        /// <returns>Created log</returns>
-        public static IEventLogger NewLogger(string logName)
+        /// <returns>GetLoggerd log</returns>
+        public static IEventLogger GetLogger(string logName)
         {
             EnsureInitialized();    
-            return NewLogger(logName, DefaultConfig.SourceLevels);
+            return GetLogger(logName, DefaultConfig.SourceLevels);
         }
 
         /// <summary>
-        /// Create a new log with a specific name and specific logging level.
+        /// GetLogger a new log with a specific name and specific logging level.
         /// </summary>
         /// <param name="logName">Name of log (in logging system).  May not map to actual operating system file name</param>
         /// <param name="allowedSourceLevels">Amount of logging this log will do</param>
-        /// <returns>Created log or cached instance if already created one in application domain</returns>
-        public static IEventLogger NewLogger(string logName, SourceLevels allowedSourceLevels = SourceLevels.All)
+        /// <returns>GetLoggerd log or cached instance if already GetLoggerd one in application domain</returns>
+        public static IEventLogger GetLogger(string logName, SourceLevels allowedSourceLevels = SourceLevels.All)
         {
             EnsureInitialized();    
             if (_registeredLogs.ContainsKey(logName) == true)
@@ -113,16 +113,16 @@ namespace HashTag.Diagnostics
             }
             else
             {
-                Logger log = new Logger(logName, DefaultConfig);
+                EventLogger log = new EventLogger(logName, DefaultConfig);
                 _registeredLogs[logName] = log;
                 return log;
             }
         }
 
-        public static IEventLogger NewLogger(object logNameFromObjectsType, SourceLevels allowedSourceLevels = SourceLevels.All)
+        public static IEventLogger GetLogger(object logNameFromObjectsType, SourceLevels allowedSourceLevels = SourceLevels.All)
         {
 
-            return NewLogger(logNameFromObjectsType.GetType(), allowedSourceLevels);
+            return GetLogger(logNameFromObjectsType.GetType(), allowedSourceLevels);
         }
     }
 

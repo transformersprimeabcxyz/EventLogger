@@ -70,8 +70,8 @@
     <Compile Include="Interfaces\ILogStoreConnector.cs" />
     <Compile Include="Interfaces\ILogWorker.cs" />
     <Compile Include="LogEventBuilder.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="LoggerFactory.cs" />
+    <Compile Include="EventLogger.cs" />
+    <Compile Include="EnventLogger.Factory.cs" />
     <Compile Include="Models\HttpCaptureFlags.cs" />
     <Compile Include="Models\LogEvent.cs" />
     <Compile Include="Models\LogEventPriority.cs" />
@@ -81,7 +81,7 @@
     <Compile Include="Models\LogMachineContext.cs" />
     <Compile Include="Models\LogRuntimeContext.cs" />
     <Compile Include="Models\LogUserContext.cs" />
-    <Compile Include="NLog.Extensions\NLogErrorLog.cs" />
+    <Compile Include="Elmah\ElmahErrorLog.cs" />
     <Compile Include="NLog.Extensions\NLogConnector.cs" />
     <Compile Include="NLog.Extensions\NLogSplunkTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

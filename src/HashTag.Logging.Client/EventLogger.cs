@@ -19,7 +19,7 @@ namespace HashTag.Diagnostics
     /// <summary>
     /// Base class for writing messages to persistant store.
     /// </summary>
-    public sealed partial class Logger : IEventLogger
+    public sealed partial class EventLogger : IEventLogger
     {
 
         private string _logName;
@@ -42,7 +42,7 @@ namespace HashTag.Diagnostics
         /// Default constructor
         /// </summary>
         /// <param name="logName"></param>
-        internal Logger(string logName, LoggingOptions config)
+        internal EventLogger(string logName, LoggingOptions config)
         {
             _logName = logName;
             _loggerConfig = (LoggingOptions)config.Clone();
@@ -98,7 +98,7 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                return newLogMessageBuilder(TraceEventType.Information);
+                return newLogMessageBuilder(TraceEventType.Information).CaptureIdentity();
             }
         }
 
@@ -109,7 +109,7 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                return newLogMessageBuilder(TraceEventType.Verbose);
+                return newLogMessageBuilder(TraceEventType.Verbose).CaptureIdentity();
             }
         }
 
@@ -120,7 +120,7 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                return newLogMessageBuilder(TraceEventType.Start);
+                return newLogMessageBuilder(TraceEventType.Start).CaptureIdentity();
             }
         }
 
@@ -132,7 +132,7 @@ namespace HashTag.Diagnostics
         {
             get
             {
-                return newLogMessageBuilder(TraceEventType.Stop);
+                return newLogMessageBuilder(TraceEventType.Stop).CaptureIdentity();
             }
         }
 
@@ -180,7 +180,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Destructor
         /// </summary>
-        ~Logger()
+        ~EventLogger()
         {
 
             Dispose(false);

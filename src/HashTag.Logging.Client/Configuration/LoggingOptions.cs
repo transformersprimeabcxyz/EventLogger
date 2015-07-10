@@ -8,10 +8,16 @@ using HashTag.Logging.Client.TraceSource.Extensions;
 using System.Collections.Generic;
 namespace HashTag.Logging.Client.Configuration
 {
+    /// <summary>
+    /// Shapes the default behavior of the logging client
+    /// </summary>
     public class LoggingOptions : ICloneable
     {
         private static string _hostName = Environment.MachineName;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public LoggingOptions()
         {
             HostName = _hostName;
@@ -20,16 +26,29 @@ namespace HashTag.Logging.Client.Configuration
             ConfigKeys = new Keys();
             ConnectorType = "HashTag.Logging.Client.NLog.Extensions.NLogEventConnector, HashTag.Logging.Client";
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="applicationKeys">Customized .config keys to use when loading configuration settings.  Often used in branding scenarios</param>
         public LoggingOptions(Keys applicationKeys)
             : this()
         {
             ConfigKeys = applicationKeys;
         }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="branding">Company prefix to use on keys.  Often used in branding scenarios</param>
         public LoggingOptions(string branding):this()
         {
             ConfigKeys = new Keys(branding);
         }
 
+        /// <summary>
+        /// Configuration keys to retrieve logging client values from
+        /// </summary>
         public class Keys
         {
             public Keys(string branding)
@@ -71,16 +90,29 @@ namespace HashTag.Logging.Client.Configuration
 
         }
 
+        /// <summary>
+        /// Current .config keys to use when retrieving settings from .config file.  Referenced when a 
+        /// new EventLogger is instantiated
+        /// </summary>
         public Keys ConfigKeys { get; set; }
 
         public const bool IGNORECASE_FLAG = false;
 
+
+        /// <summary>
+        /// BIOS name of computer generating this event
+        /// </summary>
         [JsonIgnore]
         public string HostName { get; set; }
 
         private ILogStoreConnector _connector = null;
         private object connectorLock = new object();
 
+        /// <summary>
+        /// Returns the connector that takes a log event and persists it to disk.  This
+        /// property is what allows logging client to support a different number of
+        /// 3rd party log persisters (e.g. log4net, nlog, .Net TraceSource)
+        /// </summary>
         [JsonIgnore]
         public ILogStoreConnector LogConnector
         {
@@ -137,8 +169,11 @@ namespace HashTag.Logging.Client.Configuration
             return defaultName;
         }
 
-
+        
         private string _connectorType;
+        /// <summary>
+        /// Fully qualified type, assembly of connect EventBuilder will write event to
+        /// </summary>
         public string ConnectorType
         {
             get
@@ -153,9 +188,14 @@ namespace HashTag.Logging.Client.Configuration
             }
         }
 
-
+        /// <summary>
+        /// Lowest level of messages EventLogger will write to logging store
+        /// </summary>
         public SourceLevels SourceLevels { get; set; }
 
+        /// <summary>
+        /// HTTP values to auto-capture on Exception and more severe events
+        /// </summary>
         public HttpCaptureFlags OnErrorHttpCaptureFlags { get; set; }
 
         public object Clone()
@@ -165,7 +205,7 @@ namespace HashTag.Logging.Client.Configuration
                 ActiveEnvironment = this.ActiveEnvironment,
                 ApplicationName = this.ApplicationName,
                 SourceLevels = this.SourceLevels,
-                HostName = HostName,
+                HostName = this.HostName,
                 ConnectorType = this.ConnectorType
             };
         }

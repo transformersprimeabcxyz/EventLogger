@@ -96,7 +96,7 @@ namespace HashTag.NLog.Demo
             Bind<IErrorThrower>().To<ErrorThrower>();
             Bind<IErrorThrower2>().To<ErrorThrower2>();  
 
-            Bind<IEventLogger>().ToMethod(g => LoggerFactory.NewLogger(g.Request.Target.Member.DeclaringType.FullName)).InTransientScope();
+            Bind<IEventLogger>().ToMethod(g => EventLogger.GetLogger(g.Request.Target.Member.DeclaringType.FullName)).InTransientScope();
         }
     }
 

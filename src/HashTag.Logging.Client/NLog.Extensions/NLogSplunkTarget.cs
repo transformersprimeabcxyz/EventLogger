@@ -20,11 +20,11 @@ namespace HashTag.Logging.Client.NLog.Extensions
         {
 
             var msg = new Dictionary<object, object>();
-            msg["timeStamp"] = logEvent.TimeStamp;
-            msg["level"] = logEvent.Level;
-            msg["logger"] = logEvent.LoggerName;
-            msg["message"] = logEvent.FormattedMessage;
-            msg["host"] = Environment.MachineName;
+            //msg["timeStamp"] = logEvent.TimeStamp;
+            //msg["level"] = logEvent.Level;
+            //msg["logger"] = logEvent.LoggerName;
+            //msg["message"] = logEvent.FormattedMessage;
+            //msg["host"] = Environment.MachineName;
             if (logEvent.Exception != null)
             {
                 msg["exception"] = logEvent.Exception;
@@ -41,23 +41,15 @@ namespace HashTag.Logging.Client.NLog.Extensions
                 msg["userStackFrameIndex"] = logEvent.UserStackFrameNumber;
             }
 
-            if (!logEvent.Properties.ContainsKey((object)"Id")) 
-            {
-                msg["id"] = Guid.NewGuid();
-            }
-            else
-            {
-                msg["id"] = logEvent.Properties["Id"];
-                logEvent.Properties.Remove("Id");
-            }
+            
 
             foreach(var prop in logEvent.Properties)
             {
                 msg[prop.Key] = prop.Value;
             }
 
-            var id = msg["id"].ToString();
-            var s = JsonConvert.SerializeObject(msg,Formatting.None);
+            var id = msg["UUID"].ToString();
+            var s = JsonConvert.SerializeObject(msg,Formatting.Indented);
 
             string fileName = Path.Combine(dropFolder, id.ToString()) + ".log";
             File.WriteAllText(fileName, s);
