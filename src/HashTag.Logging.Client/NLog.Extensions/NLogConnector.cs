@@ -52,34 +52,75 @@ namespace HashTag.Logging.Client.NLog.Extensions
             retVal.Properties.Add("EventId", evt.EventId);
             if (evt.Exceptions != null && evt.Exceptions.Count > 0)
             {
-                for (int x = 0; x < evt.Exceptions.Count; x++)
+                for (int exceptionIndex = 0; exceptionIndex < evt.Exceptions.Count; exceptionIndex++)
                 {
-                    var ex = evt.Exceptions[0];
-                    var baseEx = ex.BaseException;
-                    if (string.Compare(ex.Message, baseEx.Message) == 0)
-                    {
-                        retVal.Properties.Add(string.Format("Exception[{0}].Message", x), ex.Message);
-                        retVal.Properties.Add(string.Format("Exception[{0}].Source", x), ex.Source);
-                        retVal.Properties.Add(string.Format("Exception[{0}].Type", x), ex.ExceptionType);
-                        retVal.Properties.Add(string.Format("Exception[{0}].Site", x), ex.TargetSite);
-                    }
-                    else
-                    {
-                        retVal.Properties.Add(string.Format("Exception[{0}].Base.Message", x), baseEx.Message);
-                        retVal.Properties.Add(string.Format("Exception[{0}].Base.Source", x), baseEx.Source);
-                        retVal.Properties.Add(string.Format("Exception[{0}].Base.Type", x), baseEx.ExceptionType);
-                        retVal.Properties.Add(string.Format("Exception[{0}].Base.Site", x), baseEx.TargetSite);
-                    }
-                }
-                retVal.Properties.Add("Exceptions", JsonConvert.SerializeObject(evt.Exceptions, Formatting.None, new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                }));
+                    expandException(evt.Exceptions[exceptionIndex], exceptionIndex, retVal.Properties);
+                }               
             }
+         
             evt.Properties.ForEach(e => retVal.Properties.Add(string.Format("{0}.{1}", e.Group, e.Name), e.Value));
             return retVal;
         }
 
+        private void expandException(LogException logException, int exceptionIndex, IDictionary<object, object> nlogProperties)
+        {
+            var baseEx = logException.BaseException;
+            if (logException.InnerException != null || logException.BaseException.ExceptionId != logException.ExceptionId)
+            {
+                nlogProperties.Add(string.Format("Exception[{0}].Base.Message", exceptionIndex), baseEx.Message);                
+            }
+            expandException(logException, nlogProperties, "", exceptionIndex);
+            
+            nlogProperties.Add(string.Format("Exception[{0}].JSON", exceptionIndex), JsonConvert.SerializeObject(logException, Formatting.None, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
+        }
+
+        private void expandException(LogException ex, IDictionary<object,object> nlogProperties,string qualifier,int exceptionIndex)
+        {
+            if (ex.InnerException != null)
+            {
+                expandException(ex.InnerException, nlogProperties, qualifier + ".", exceptionIndex);
+            }
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Message", exceptionIndex,qualifier), ex.Message);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}StackTrace", exceptionIndex,qualifier), ex.StackTrace);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Source", exceptionIndex,qualifier), ex.Source);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Type", exceptionIndex,qualifier), ex.ExceptionType);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Site", exceptionIndex,qualifier), ex.Method);            
+            nlogProperties.Add(string.Format("Exception[{0}].{1}ErrorCode", exceptionIndex,qualifier), ex.ErrorCode);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}HelpLink", exceptionIndex,qualifier), ex.HelpLink);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Module", exceptionIndex, qualifier), ex.Module);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Class", exceptionIndex, qualifier), ex.Class);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Method", exceptionIndex, qualifier), ex.Method);
+            if (ex.Properties.Count > 0)
+            {
+                foreach (var exProp in ex.Properties)
+                {
+                    try
+                    {
+                        nlogProperties.Add(string.Format("Exception[{0}].{2}{1}", exceptionIndex, exProp.Key, qualifier), exProp.Value);
+                    }
+                    catch(ArgumentException)
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            if (ex.Data.Count > 0)
+            {
+                foreach (var exData in ex.Data)
+                {
+                    nlogProperties.Add(string.Format("Exception[{0}].{2}Data.{1}", exceptionIndex,exData.Key,qualifier), exData.Value);
+                }
+            }
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Html.EventCode", exceptionIndex,qualifier), ex.HttpWebEventCode);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Html.StatusValue", exceptionIndex,qualifier), ex.HttpStatusValue);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Html.StatusCode", exceptionIndex,qualifier), ex.HttpStatusCode);
+            nlogProperties.Add(string.Format("Exception[{0}].{1}Html.Message", exceptionIndex,qualifier), ex.HttpHtmlMessage);
+
+        }
         private LogLevel getLogLevel(LogEvent evt)
         {
             switch (evt.EventType)

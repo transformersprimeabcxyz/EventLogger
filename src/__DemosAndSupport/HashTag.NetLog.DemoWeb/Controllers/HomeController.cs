@@ -26,7 +26,7 @@ namespace HashTag.NetLog.DemoWeb.Controllers
         {
             _log.Info.Write("Starting controller action");
             _log.Info.Reference(14).Write("starting processing record");
-         //   throw new NotImplementedException("you don't need no stink'n phone number");
+            throw new NotImplementedException("error to elmah");
             ViewBag.Message = "Your contact page.";
 
             return View();

@@ -51,7 +51,12 @@ namespace HashTag.Diagnostics
             //-------------------------------------------------------			
             this.Properties = Reflector.GetPublicProperties(ex, _filterList);
 
-            TargetSite = (ex.TargetSite == null) ? "(null)" : ex.TargetSite.ToString();
+            if (ex.TargetSite != null)
+            {
+                Method = ex.TargetSite.ToString();
+                Module = ex.TargetSite.DeclaringType.Module.Name;
+                Class = ex.TargetSite.DeclaringType.FullName;
+            }
 
             if (ex is HttpException)
             {
@@ -72,6 +77,15 @@ namespace HashTag.Diagnostics
 
 
         public Guid ExceptionId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Module { get; set; }
+
+        
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Class { get; set; }
+
 
         // https://msdn.microsoft.com/en-us/library/system.web.management.webeventcodes%28v=vs.110%29.aspx
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -104,7 +118,7 @@ namespace HashTag.Diagnostics
         public string HelpLink { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string TargetSite { get; set; }
+        public string Method { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<Property> Data { get; set; }

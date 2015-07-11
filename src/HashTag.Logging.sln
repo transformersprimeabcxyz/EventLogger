@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.Logging.Client", "H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.NetLog.DemoWeb", "__DemosAndSupport\HashTag.NetLog.DemoWeb\HashTag.NetLog.DemoWeb.csproj", "{42C0C164-0B70-4137-BDDF-6D63E3694FB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTag.NetLog.DemoWeb.Services", "__DemosAndSupport\HashTag.NetLog.DemoWeb.Services\HashTag.NetLog.DemoWeb.Services.csproj", "{4843BD97-E2FF-4AE7-8B33-104581D99701}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,15 @@ Global
 		{42C0C164-0B70-4137-BDDF-6D63E3694FB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42C0C164-0B70-4137-BDDF-6D63E3694FB8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42C0C164-0B70-4137-BDDF-6D63E3694FB8}.Release|x86.ActiveCfg = Release|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Net40|Any CPU.ActiveCfg = Release|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Net40|Any CPU.Build.0 = Release|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Net40|x86.ActiveCfg = Release|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4843BD97-E2FF-4AE7-8B33-104581D99701}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,5 +87,6 @@ Global
 		{C92DC151-A0BA-4A5E-A20E-620EC9C06AFF} = {F1B15DD9-8870-430E-89C5-DF5F1E469907}
 		{232493A7-2E7D-4BA9-B2B9-1E7AE76B3AD3} = {E3CF7125-5D53-4D44-B808-021488E0FAF3}
 		{42C0C164-0B70-4137-BDDF-6D63E3694FB8} = {E3CF7125-5D53-4D44-B808-021488E0FAF3}
+		{4843BD97-E2FF-4AE7-8B33-104581D99701} = {E3CF7125-5D53-4D44-B808-021488E0FAF3}
 	EndGlobalSection
 EndGlobal
