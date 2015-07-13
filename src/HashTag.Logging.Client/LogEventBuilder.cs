@@ -15,7 +15,7 @@ namespace HashTag.Diagnostics
     /// <summary>
     /// Facade to set values on the underlying message to be persisted to log
     /// </summary>
-    public class LogEventBuilder : ILogEventBuilder
+    public class LogEventBuilder : IEventBuilder
     {
         internal LogEventBuilder()
         {
@@ -128,7 +128,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="eventId">User defined numerical id of message</param>
         /// <returns></returns>
-        public ILogEventBuilder WithId(int eventId)
+        public IEventBuilder WithId(int eventId)
         {
             _eventId = eventId;
             return this;
@@ -141,7 +141,7 @@ namespace HashTag.Diagnostics
         /// <param name="code"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public ILogEventBuilder WithCode(string code, params object[] args)
+        public IEventBuilder WithCode(string code, params object[] args)
         {
             _eventCode = string.Format(code, args);
             return this;
@@ -152,7 +152,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="priority"></param>
         /// <returns></returns>
-        public ILogEventBuilder WithPriority(LogEventPriority priority)
+        public IEventBuilder WithPriority(LogEventPriority priority)
         {
             this.priority = priority;
             return this;
@@ -163,7 +163,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="eventType"></param>
         /// <returns></returns>
-        public ILogEventBuilder AsEventType(TraceEventType eventType)
+        public IEventBuilder AsEventType(TraceEventType eventType)
         {
             this.severity = eventType;
             return this;
@@ -175,7 +175,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="moduleName">Name of sub-part of application</param>
         /// <returns></returns>
-        public ILogEventBuilder ForModule(string moduleName)
+        public IEventBuilder ForModule(string moduleName)
         {
             _appSubKey = moduleName;
             return this;
@@ -189,7 +189,7 @@ namespace HashTag.Diagnostics
         /// <param name="key">Name for item.</param>
         /// <param name="value">Value to add.  Uses <paramref name="value"/>.ToString() to store value</param>
         /// <returns></returns>
-        public ILogEventBuilder Collect(string key, object value) // extended properties
+        public IEventBuilder Collect(string key, object value) // extended properties
         {
             if (_properties == null)
             {
@@ -208,7 +208,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="ex">Hydrated exception to store</param>
         /// <returns></returns>
-        public ILogEventBuilder Catch(Exception ex)
+        public IEventBuilder Catch(Exception ex)
         {
             if (_exceptions == null)
             {
@@ -245,7 +245,7 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="flags">Determines which information to collect from context</param>
         /// <returns></returns>
-        public ILogEventBuilder CaptureHttp(HttpCaptureFlags flags)
+        public IEventBuilder CaptureHttp(HttpCaptureFlags flags)
         {
             httpContext = new LogHttpContext(HttpContext.Current, flags);
             return this;
@@ -257,7 +257,7 @@ namespace HashTag.Diagnostics
         /// <param name="reference"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public ILogEventBuilder Reference(string reference, params object[] args)
+        public IEventBuilder Reference(string reference, params object[] args)
         {
             _reference = (object)string.Format(reference, args);
             return this;
@@ -268,7 +268,7 @@ namespace HashTag.Diagnostics
         /// Convenience.  Set the Title of message to <paramref name="reference"/>.  Value is <paramref name="reference"/>.ToString()
         /// </summary>
         /// <returns></returns>
-        public ILogEventBuilder Reference(object reference)
+        public IEventBuilder Reference(object reference)
         {
             _reference = (object)reference.ToString();
             return this;
@@ -279,7 +279,7 @@ namespace HashTag.Diagnostics
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
         /// </summary>
         /// <returns></returns>
-        public ILogEventBuilder CaptureHttp()
+        public IEventBuilder CaptureHttp()
         {
             return CaptureHttp(HttpCaptureFlags.All);
         }
@@ -290,7 +290,7 @@ namespace HashTag.Diagnostics
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
         /// </summary>
         /// <returns></returns>
-        public ILogEventBuilder CaptureMachineContext()
+        public IEventBuilder CaptureMachineContext()
         {
             machineContext = new LogMachineContext();
             return this;
@@ -302,7 +302,7 @@ namespace HashTag.Diagnostics
         /// WARNING: This is an extemely heavy operation and should only be done in extreme cases (e.g. logging exceptions)
         /// </summary>
         /// <returns></returns>
-        public ILogEventBuilder CaptureIdentity()
+        public IEventBuilder CaptureIdentity()
         {
             _userContext = new LogUserContext();
             return this;

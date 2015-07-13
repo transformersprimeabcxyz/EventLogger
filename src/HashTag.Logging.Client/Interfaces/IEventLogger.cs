@@ -9,12 +9,12 @@ namespace HashTag.Diagnostics
     {
         string LogName { get; set; }
 
-        ILogEventBuilder Critical { get; }
-        ILogEventBuilder Error { get; }
-        ILogEventBuilder Info { get; }
-        ILogEventBuilder Start { get; }
-        ILogEventBuilder Stop { get; }
-        ILogEventBuilder Verbose { get; }
-        ILogEventBuilder Warning { get; }
+        IEventBuilder Critical { get; }
+        IEventBuilder Error { get; }
+        IEventBuilder Info { get; }
+        IEventBuilder Start { get; }
+        IEventBuilder Stop { get; }
+        IEventBuilder Verbose { get; }
+        IEventBuilder Warning { get; }
     }
 }

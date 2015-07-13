@@ -2,7 +2,7 @@
 
 namespace HashTag.Diagnostics
 {
-    public interface ILogWorker
+    public interface IEventConnectorBase
     {
         void Initialize(IDictionary<string,string> config);
     }

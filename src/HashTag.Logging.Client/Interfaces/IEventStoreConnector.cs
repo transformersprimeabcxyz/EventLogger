@@ -4,7 +4,7 @@ using HashTag.Diagnostics.Models;
 
 namespace HashTag.Diagnostics
 {
-    public interface ILogStoreConnector:ILogWorker
+    public interface IEventStoreConnector:IEventConnectorBase
     {
         Guid Submit(LogEvent evt);
         void Submit(List<LogEvent> events);
