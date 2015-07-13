@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HashTag.Logging.Client.TraceSource.Extensions
 {
-    public class TraceSourceConnector:ILogStoreConnector
+    public class TraceSourceConnector:IEventStoreConnector
     {
 
         public Guid Submit(LogEvent evt)

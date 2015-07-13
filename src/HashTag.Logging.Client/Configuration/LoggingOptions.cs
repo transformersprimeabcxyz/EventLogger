@@ -105,7 +105,7 @@ namespace HashTag.Logging.Client.Configuration
         [JsonIgnore]
         public string HostName { get; set; }
 
-        private ILogStoreConnector _connector = null;
+        private IEventStoreConnector _connector = null;
         private object connectorLock = new object();
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace HashTag.Logging.Client.Configuration
         /// 3rd party log persisters (e.g. log4net, nlog, .Net TraceSource)
         /// </summary>
         [JsonIgnore]
-        public ILogStoreConnector LogConnector
+        public IEventStoreConnector LogConnector
         {
             get
             {
@@ -131,7 +131,7 @@ namespace HashTag.Logging.Client.Configuration
 
                     var connectorType = findConnectorType();
 
-                    _connector = HashTag.Reflection.ProviderFactory<ILogStoreConnector>.GetInstance(connectorType);
+                    _connector = HashTag.Reflection.ProviderFactory<IEventStoreConnector>.GetInstance(connectorType);
                 }
                 return _connector;
             }

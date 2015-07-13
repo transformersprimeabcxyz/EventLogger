@@ -12,7 +12,7 @@ using NLog.Config;
 using Newtonsoft.Json;
 namespace HashTag.Logging.Client.NLog.Extensions
 {
-    public class NLogEventConnector : ILogStoreConnector
+    public class NLogEventConnector : IEventStoreConnector
     {
         private static ConcurrentDictionary<string, ILoggerBase> _nlogInstances = new ConcurrentDictionary<string, ILoggerBase>();
         private object listLock = new object();
@@ -128,12 +128,12 @@ namespace HashTag.Logging.Client.NLog.Extensions
                 case TraceEventType.Error: return LogLevel.Error;
                 case TraceEventType.Warning: return LogLevel.Warn;
                 case TraceEventType.Information: return LogLevel.Info;
-                case TraceEventType.Verbose: return LogLevel.Debug;
-                case TraceEventType.Start: return LogLevel.Trace;
-                case TraceEventType.Stop: return LogLevel.Trace;
-                case TraceEventType.Resume: return LogLevel.Trace;
-                case TraceEventType.Suspend: return LogLevel.Trace;
-                case TraceEventType.Transfer: return LogLevel.Trace;
+                case TraceEventType.Verbose: return LogLevel.Trace;
+                case TraceEventType.Start: return LogLevel.Debug;
+                case TraceEventType.Stop: return LogLevel.Debug;
+                case TraceEventType.Resume: return LogLevel.Debug;
+                case TraceEventType.Suspend: return LogLevel.Debug;
+                case TraceEventType.Transfer: return LogLevel.Debug;
             }
             return LogLevel.Off;
         }

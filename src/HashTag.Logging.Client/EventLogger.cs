@@ -61,7 +61,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Critical' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public ILogEventBuilder Critical
+        public IEventBuilder Critical
         {
             get
             {
@@ -72,7 +72,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Error' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public ILogEventBuilder Error
+        public IEventBuilder Error
         {
             get
             {
@@ -83,7 +83,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Warning' level message.  Also captures some key HttpContext, Identity, and Machine parameters.
         /// </summary>
-        public ILogEventBuilder Warning
+        public IEventBuilder Warning
         {
             get
             {
@@ -94,7 +94,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Information' level message.
         /// </summary>
-        public ILogEventBuilder Info
+        public IEventBuilder Info
         {
             get
             {
@@ -105,7 +105,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Verbose' level message.
         /// </summary>
-        public ILogEventBuilder Verbose
+        public IEventBuilder Verbose
         {
             get
             {
@@ -116,7 +116,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Operation starting' message.
         /// </summary>
-        public ILogEventBuilder Start
+        public IEventBuilder Start
         {
             get
             {
@@ -128,7 +128,7 @@ namespace HashTag.Diagnostics
         /// <summary>
         /// Build a 'Operation stopping' message.
         /// </summary>
-        public ILogEventBuilder Stop
+        public IEventBuilder Stop
         {
             get
             {
@@ -136,7 +136,7 @@ namespace HashTag.Diagnostics
             }
         }
 
-        private ILogEventBuilder newLogMessageBuilder(TraceEventType eventType)
+        private IEventBuilder newLogMessageBuilder(TraceEventType eventType)
         {
             var evtBuilder = new LogEventBuilder(_loggerConfig, _logName)
             {
