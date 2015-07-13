@@ -87,7 +87,6 @@ namespace HashTag.Logging.Client.NLog.Extensions
             nlogProperties.Add(string.Format("Exception[{0}].{1}StackTrace", exceptionIndex,qualifier), ex.StackTrace);
             nlogProperties.Add(string.Format("Exception[{0}].{1}Source", exceptionIndex,qualifier), ex.Source);
             nlogProperties.Add(string.Format("Exception[{0}].{1}Type", exceptionIndex,qualifier), ex.ExceptionType);
-            nlogProperties.Add(string.Format("Exception[{0}].{1}Site", exceptionIndex,qualifier), ex.Method);            
             nlogProperties.Add(string.Format("Exception[{0}].{1}ErrorCode", exceptionIndex,qualifier), ex.ErrorCode);
             nlogProperties.Add(string.Format("Exception[{0}].{1}HelpLink", exceptionIndex,qualifier), ex.HelpLink);
             nlogProperties.Add(string.Format("Exception[{0}].{1}Module", exceptionIndex, qualifier), ex.Module);
