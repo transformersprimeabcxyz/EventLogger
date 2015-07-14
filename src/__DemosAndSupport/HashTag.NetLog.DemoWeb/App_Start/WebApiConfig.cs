@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
-
 namespace HashTag.NetLog.DemoWeb
 {
     public static class WebApiConfig
