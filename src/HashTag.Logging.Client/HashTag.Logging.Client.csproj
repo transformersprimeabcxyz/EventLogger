@@ -92,10 +92,11 @@
     <Compile Include="Utils\Utils.Win32.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Readme\Sample.app.config" />
-    <None Include="App_Readme\Sample.web.config">
+    <None Include="App_Readme\Sample.annotated.app.config" />
+    <None Include="App_Readme\Sample.annotated.web.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App_Readme\Sample.Minimal.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

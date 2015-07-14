@@ -60,6 +60,7 @@ namespace HashTag.Logging.Client.Configuration
                 ConnectorType = string.Format("{0}.Logging.ConnectorType", branding);
                 SourceLevels = string.Format("{0}.Logging.DefaultSourceLevels", branding);
                 HttpCaptureFlags = string.Format("{0}.Logging.HttpCaptureFlags", branding);
+                ApplicationModule = string.Format("{0}.Application.Module", branding);
             }
             public Keys()
                 : this("HashTag")
@@ -72,6 +73,7 @@ namespace HashTag.Logging.Client.Configuration
             public string SourceLevels { get; set; }
             public string HttpCaptureFlags { get; set; }
             public string BrandingPrefix { get; set; }
+            public string ApplicationModule { get; set; }
 
             public List<string> SupportedKeys
             {
@@ -83,11 +85,11 @@ namespace HashTag.Logging.Client.Configuration
                         ActiveEnvironment,
                         ConnectorType,
                         SourceLevels,
-                        HttpCaptureFlags
+                        HttpCaptureFlags,
+                        ApplicationModule,
                     };
                 }
             }
-
         }
 
         /// <summary>
@@ -227,7 +229,7 @@ namespace HashTag.Logging.Client.Configuration
                 {
                     return _activeEnvironment;
                 }
-                _activeEnvironment = ConfigurationManager.AppSettings[ConfigKeys.ActiveEnvironment];
+                _activeEnvironment = resolveKey(ConfigKeys.ActiveEnvironment);
 
                 if (string.IsNullOrEmpty(_activeEnvironment) == true)
                 {
@@ -256,7 +258,7 @@ namespace HashTag.Logging.Client.Configuration
                     return _applicationKey;
                 }
 
-                _applicationKey = ConfigurationManager.AppSettings[ConfigKeys.ApplicationName];
+                _applicationKey = resolveKey(ConfigKeys.ApplicationName);
                 if (string.IsNullOrEmpty(_applicationKey) == true)
                 {
                     Assembly asm = Assembly.GetEntryAssembly();
@@ -276,6 +278,45 @@ namespace HashTag.Logging.Client.Configuration
             {
                 _applicationKey = value;
             }
+        }
+
+        private string _applicationModule;
+        /// <summary>
+        /// Subsystem within an applications (MyAccountApp::AccountsPayable)
+        /// </summary>
+        [JsonIgnore]
+        public string ApplicationModule
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_applicationModule) == false)
+                {
+                    return _applicationModule;
+                }
+
+                _applicationModule = resolveKey(ConfigKeys.ApplicationModule);
+
+                return _applicationModule;
+            }
+            set
+            {
+                _applicationModule = value;
+            }
+        }
+
+        private string resolveKey(string key)
+        {
+            return resolveKey(ConfigurationManager.AppSettings[key], ConfigurationManager.AppSettings[key]);
+            
+        }
+        private string resolveKey(string nextKey, string currentValue)
+        {
+            while(!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[nextKey]))
+            {
+                currentValue = ConfigurationManager.AppSettings[nextKey];
+                nextKey = currentValue;
+            }
+            return currentValue;
         }
     }
 }

@@ -340,6 +340,7 @@ namespace HashTag.Diagnostics
         {
             var retVal = new LogEvent();
             retVal.Application = this.applicationKey ?? Config.ApplicationName;
+            retVal.Module = this._appSubKey ?? Config.ApplicationModule;
             retVal.TimeStamp = this.timeStamp;
             retVal.EventSource = this.loggerName;
             retVal.EventType = this.severity;

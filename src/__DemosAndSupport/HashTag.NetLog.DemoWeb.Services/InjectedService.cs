@@ -42,7 +42,7 @@ namespace HashTag.NetLog.DemoWeb.Services
                     //simulate an error
                     if (x ==errorIndex)
                     {
-                        throw new InvalidOperationException("Something really really bad happened! Running away to circus");
+                        throw new InvalidOperationException("SaveRecordsWithRandomError::Something really really bad happened! Running away to become animated cartoon");
                     }
                 }
             }

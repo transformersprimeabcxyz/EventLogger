@@ -1,6 +1,8 @@
 ﻿using HashTag.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,9 +19,29 @@ namespace HashTag.NetLog.DemoWeb.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            try
+            {
+                ViewBag.Message = "Your application description page.";
 
-            return View();
+                using(var cn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                {
+                    cn.Open();
+                    cn.Close();
+                }
+                return View();
+            }
+            //catch(SqlException sqlEx)
+            //{
+            //    _log.Error.Write(sqlEx);
+            //    throw;
+            //}
+            catch(Exception ex)
+            {
+                var s = ex.ToString();
+                _log.Error.Write(ex);
+                throw;
+            }
+            
         }
 
         public ActionResult Contact()

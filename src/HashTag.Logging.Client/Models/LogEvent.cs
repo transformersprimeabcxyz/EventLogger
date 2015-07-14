@@ -26,6 +26,9 @@ namespace HashTag.Diagnostics.Models
         [JsonProperty(PropertyName = "application", NullValueHandling = NullValueHandling.Ignore)]
         public string Application { get; set; }
 
+        [JsonProperty(PropertyName = "module", NullValueHandling = NullValueHandling.Ignore)]
+        public string Module { get; set; }
+
         [JsonProperty(PropertyName = "environment", NullValueHandling = NullValueHandling.Ignore)]
         public string Environment { get; set; }
         

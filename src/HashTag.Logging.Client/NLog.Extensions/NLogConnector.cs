@@ -37,6 +37,8 @@ namespace HashTag.Logging.Client.NLog.Extensions
             retVal.Properties.Add("Message", evt.Message);
             retVal.Properties.Add("UUID", evt.UUID);
             retVal.Properties.Add("Application", evt.Application);
+            retVal.Properties.Add("Module", evt.Module);
+
             retVal.Properties.Add("Environment", evt.Environment);
             retVal.Properties.Add("Host", evt.Host);
             retVal.Properties.Add("EventSource", evt.EventSource);
