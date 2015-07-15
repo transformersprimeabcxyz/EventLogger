@@ -6,8 +6,8 @@
     /// </summary>
     /// <remarks>
     /// Most urgent priority is lowest value to match TraceEventType ordering.  High enumeration values
-    /// are used so MessagePriority and TraceEventTypes can be combined to
-    /// create a default EventId in LogMessage
+    /// are used so Priority and TraceEventTypes can be combined to
+    /// create a default EventId in LogEvent
     /// </remarks>
     public enum LogEventPriority
     {

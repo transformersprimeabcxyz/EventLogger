@@ -9,15 +9,18 @@ using Newtonsoft.Json;
 namespace HashTag.Diagnostics
 {
     /// <summary>
-    /// Serializable version of a .Net exception including all inner exceptions and public properties
-    /// </summary>
-    
+    /// Serializable version of a .Net exception including all inner exceptions and public properties.
+    /// Uses reflection to pull out exception specific properties
+    /// </summary>    
     [Serializable]
     [JsonObject]
     public class LogException : ICloneable
     {
         static string[] _filterList = Reflector.GetPublicPropertyNames(typeof(Exception));
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public LogException()
         {
             Properties = new List<Property>();
@@ -25,6 +28,10 @@ namespace HashTag.Diagnostics
             ExceptionId = Guid.NewGuid();
         }
 
+        /// <summary>
+        /// Create object based on .Net exception
+        /// </summary>
+        /// <param name="ex">Hydrated .Net exception</param>
         public LogException(Exception ex)
             : this()
         {
@@ -78,48 +85,89 @@ namespace HashTag.Diagnostics
 
         public Guid ExceptionId { get; set; }
 
+        /// <summary>
+        /// Name of module (often .dll)
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Module { get; set; }
 
-        
-
+        /// <summary>
+        /// Class where exception occured
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Class { get; set; }
 
-
-        // https://msdn.microsoft.com/en-us/library/system.web.management.webeventcodes%28v=vs.110%29.aspx
+        
+        
+        /// <summary>
+        /// Http Specific.  https://msdn.microsoft.com/en-us/library/system.web.management.webeventcodes%28v=vs.110%29.aspx
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? HttpWebEventCode { get; set; }
 
+        /// <summary>
+        /// Http Specific. 404, 200, 310, etc.
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int?  HttpStatusValue { get; set; }
 
+        /// <summary>
+        /// Http Specific. Textual represenation of status (Ok, BadMessage, Accepted)
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string HttpStatusCode { get; set; }
         
+        /// <summary>
+        /// Http Specific.  Any html message returned from server
+        /// </summary>
         [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public string HttpHtmlMessage { get; set; }
 
+        /// <summary>
+        /// Properties of .Net exception extracted using reflection
+        /// </summary>
         public List<Property> Properties { get; set; }
 
+        /// <summary>
+        /// Inner exception (if any)
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public LogException InnerException { get; set; }
 
+
+        /// <summary>
+        /// Exception.Message
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
 
+        /// <summary>
+        /// Exception.Source
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Source { get; set; }
 
+        /// <summary>
+        /// Exception.StackTract
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string StackTrace { get; set; }
 
+        /// <summary>
+        /// HelpLink
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string HelpLink { get; set; }
 
+        /// <summary>
+        /// Method that was executing when error occured
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Method { get; set; }
 
+        /// <summary>
+        /// Data representation of Exception.Data property.  using Data[x].ToString() on Data values
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<Property> Data { get; set; }
 
@@ -152,11 +200,19 @@ namespace HashTag.Diagnostics
             }
         }
 
+        /// <summary>
+        /// Creates a copy of this message
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return (object)JsonConvert.DeserializeObject<LogException>(JsonConvert.SerializeObject(this));     
         }
 
+        /// <summary>
+        /// Returns a human readable version of this exception
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings

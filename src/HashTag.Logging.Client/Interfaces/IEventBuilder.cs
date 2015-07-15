@@ -1,4 +1,5 @@
-﻿using HashTag.Diagnostics.Models;
+﻿using HashTag.Diagnostics;
+using HashTag.Diagnostics.Models;
 using HashTag.Logging.Client.Configuration;
 using System;
 namespace HashTag.Logging.Client.Interfaces
@@ -11,7 +12,7 @@ namespace HashTag.Logging.Client.Interfaces
 
        LoggingOptions Config { get; set; }
        IEventBuilder CaptureHttp();
-       IEventBuilder CaptureHttp(HashTag.Diagnostics.HttpCaptureFlags flags);
+       IEventBuilder CaptureHttp(HttpCaptureFlags flags);
        IEventBuilder CaptureIdentity();
        IEventBuilder CaptureMachineContext();
        IEventBuilder Catch(Exception ex);

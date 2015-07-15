@@ -61,14 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IEventBuilder.cs" />
-    <Compile Include="TraceSource.Extensions\TraceSourceConnector.cs" />
     <Compile Include="Utils\Property.cs" />
     <Compile Include="Utils\PropertyBag.cs" />
     <Compile Include="Configuration\LoggingOptions.cs" />
     <Compile Include="DiagnosticExtensions.cs" />
     <Compile Include="Interfaces\IEventLogger.cs" />
     <Compile Include="Interfaces\IEventStoreConnector.cs" />
-    <Compile Include="Interfaces\IEventConnectorBase.cs" />
     <Compile Include="LogEventBuilder.cs" />
     <Compile Include="EventLogger.cs" />
     <Compile Include="EnventLogger.Factory.cs" />
@@ -79,7 +77,6 @@
     <Compile Include="Models\LogException.cs" />
     <Compile Include="Models\LogHttpContext.cs" />
     <Compile Include="Models\LogMachineContext.cs" />
-    <Compile Include="Models\LogRuntimeContext.cs" />
     <Compile Include="Models\LogUserContext.cs" />
     <Compile Include="Elmah\ElmahErrorLog.cs" />
     <Compile Include="NLog.Extensions\NLogConnector.cs" />

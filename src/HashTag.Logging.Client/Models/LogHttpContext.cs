@@ -4,13 +4,24 @@ using Newtonsoft.Json;
 
 namespace HashTag.Diagnostics
 {
+    /// <summary>
+    /// Extract a common set of properties from HttpContext
+    /// </summary>
     public class LogHttpContext
     {
-        public LogHttpContext()
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public LogHttpContext():this(HttpContext.Current, HttpCaptureFlags.All)
         {
 
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="context">Current HttpContext from which to extract properties</param>
+        /// <param name="flags">Determins which class of properties should be extracted</param>
         public LogHttpContext(HttpContext context, HttpCaptureFlags flags)
         {
             if (context == null) return;
@@ -91,6 +102,10 @@ namespace HashTag.Diagnostics
         }
 
         private PropertyBag _headers;
+
+        /// <summary>
+        /// HttpRequest.Headers
+        /// </summary>
         public PropertyBag Headers
         {
             get
@@ -108,6 +123,9 @@ namespace HashTag.Diagnostics
         }
         private PropertyBag _serverVariables;
 
+        /// <summary>
+        /// HttpRequest.ServerVariables
+        /// </summary>
         [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public PropertyBag ServerVariables 
         {
@@ -189,6 +207,17 @@ namespace HashTag.Diagnostics
             {
                 _cookies = value;
             }
+        }
+
+        public bool ShouldSerializeCookies() { return shouldSerialize(_cookies); }
+        public bool ShouldSerializeForm() { return shouldSerialize(_form); }
+        public bool ShouldSerializeQueryString() { return shouldSerialize(_queryString); }
+        public bool ShouldSerializeServerVariables() { return shouldSerialize(_serverVariables); }
+        public bool ShouldSerializeHeaders() { return shouldSerialize(_headers); }
+
+        private bool shouldSerialize(PropertyBag properties)
+        {
+            return properties != null && properties.Count > 0;
         }
     }
 }

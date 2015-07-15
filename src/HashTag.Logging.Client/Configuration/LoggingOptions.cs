@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Configuration;
 using System.Reflection;
 using Newtonsoft.Json;
-using HashTag.Logging.Client.TraceSource.Extensions;
 using System.Collections.Generic;
 namespace HashTag.Logging.Client.Configuration
 {
@@ -167,8 +166,8 @@ namespace HashTag.Logging.Client.Configuration
                 return ConfigurationManager.AppSettings[ConfigKeys.ConnectorType];
             }
 
-            var defaultName = typeof(TraceSourceConnector).AssemblyQualifiedName;
-            return defaultName;
+            //TODO intialize a default connector
+            throw new ConfigurationErrorsException("Unable to determine a LogEventConnector");
         }
 
         
