@@ -12,11 +12,19 @@ using NLog.Config;
 using Newtonsoft.Json;
 namespace HashTag.Logging.Client.NLog.Extensions
 {
+    /// <summary>
+    /// Connects EventBuilder to NLog
+    /// </summary>
     public class NLogEventConnector : IEventStoreConnector
     {
         private static ConcurrentDictionary<string, ILoggerBase> _nlogInstances = new ConcurrentDictionary<string, ILoggerBase>();
         private object listLock = new object();
 
+        /// <summary>
+        /// see IEventStoreConnector for documentation
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
         public Guid Submit(LogEvent evt)
         {
             var logger = getLogger(evt);
@@ -168,6 +176,10 @@ namespace HashTag.Logging.Client.NLog.Extensions
             return "default";
         }
 
+        /// <summary>
+        /// See <see cref="HashTag.Diagnostics.IEventBuilder">IEventBuilder</see> for documentation
+        /// </summary>
+        /// <param name="events"></param>
         public void Submit(List<LogEvent> events)
         {
             events.ForEach(e => Submit(e));
@@ -182,6 +194,9 @@ namespace HashTag.Logging.Client.NLog.Extensions
             });
         }
 
+        /// <summary>
+        /// See <see cref="HashTag.Diagnostics.IEventBuilder">IEventBuilder</see> for documentation
+        /// </summary>
         public void Stop()
         {
             var keys = _nlogInstances.Keys.ToList();
@@ -195,6 +210,9 @@ namespace HashTag.Logging.Client.NLog.Extensions
             });
         }
 
+        /// <summary>
+        /// See <see cref="HashTag.Diagnostics.IEventBuilder">IEventBuilder</see> for documentation
+        /// </summary>
         public void Start()
         {
             var keys = _nlogInstances.Keys.ToList();
@@ -208,9 +226,14 @@ namespace HashTag.Logging.Client.NLog.Extensions
             });
         }
 
+        /// <summary>
+        /// See <see cref="HashTag.Diagnostics.IEventBuilder">IEventBuilder</see> for documentation (no-op)
+        /// </summary>
+        /// <param name="config"></param>
         public void Initialize(IDictionary<string, string> config)
         {
-            var nConfig = new LoggingConfiguration();
+            //var nConfig = new LoggingConfiguration();
+            
         }
     }
 }

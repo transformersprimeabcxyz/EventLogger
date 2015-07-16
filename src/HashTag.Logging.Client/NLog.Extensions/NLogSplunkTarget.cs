@@ -12,19 +12,24 @@ using System.Threading.Tasks;
 
 namespace HashTag.Logging.Client.NLog.Extensions
 {
+    /// <summary>
+    /// NLog target to write Splunk compatible files
+    /// </summary>
     [Target("Splunk")]
     public class NLogSplunkTarget:TargetWithLayout
     {
+        /// <summary>
+        /// dropFolder attribute on target that determines where file(s) should be written to
+        /// </summary>
         public string dropFolder { get; set; }
+
+        /// <summary>
+        /// Format and output logvent
+        /// </summary>
+        /// <param name="logEvent">If caller is NLogConnector, <paramref name="logEvent"/></param>.properties will have a complete set of values of HashTag.Diagnostics.LogEvent
         protected override void Write(LogEventInfo logEvent)
         {
-
             var msg = new Dictionary<object, object>();
-            //msg["timeStamp"] = logEvent.TimeStamp;
-            //msg["level"] = logEvent.Level;
-            //msg["logger"] = logEvent.LoggerName;
-            //msg["message"] = logEvent.FormattedMessage;
-            //msg["host"] = Environment.MachineName;
             if (logEvent.Exception != null)
             {
                 msg["exception"] = logEvent.Exception;
@@ -41,16 +46,14 @@ namespace HashTag.Logging.Client.NLog.Extensions
                 msg["userStackFrameIndex"] = logEvent.UserStackFrameNumber;
             }
 
-            
-
             foreach(var prop in logEvent.Properties)
             {
                 msg[prop.Key] = prop.Value;
             }
 
             var id = msg["UUID"].ToString();
-            var s = JsonConvert.SerializeObject(msg,Formatting.Indented);
 
+            var s = JsonConvert.SerializeObject(msg,Formatting.Indented);
             string fileName = Path.Combine(dropFolder, id.ToString()) + ".log";
             File.WriteAllText(fileName, s);
         }        

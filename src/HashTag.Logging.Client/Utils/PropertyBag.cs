@@ -54,7 +54,7 @@ namespace HashTag.Collections
 
 		public int IndexOf(string key)
 		{
-			return _items.FindIndex(prop => string.Compare(prop.Key, key, LoggingOptions.IGNORECASE_FLAG) == 0);
+			return _items.FindIndex(prop => string.Compare(prop.Key, key, EventOptions.IGNORECASE_FLAG) == 0);
 		}
 		public int IndexOf(Property item)
 		{

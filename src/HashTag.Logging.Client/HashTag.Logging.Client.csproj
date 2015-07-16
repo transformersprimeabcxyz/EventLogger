@@ -63,7 +63,7 @@
     <Compile Include="Interfaces\IEventBuilder.cs" />
     <Compile Include="Utils\Property.cs" />
     <Compile Include="Utils\PropertyBag.cs" />
-    <Compile Include="Configuration\LoggingOptions.cs" />
+    <Compile Include="Configuration\EventOptions.cs" />
     <Compile Include="DiagnosticExtensions.cs" />
     <Compile Include="Interfaces\IEventLogger.cs" />
     <Compile Include="Interfaces\IEventStoreConnector.cs" />

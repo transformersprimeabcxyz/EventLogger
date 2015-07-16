@@ -24,7 +24,7 @@ namespace HashTag.Diagnostics
 
         private string _logName;
 
-        private LoggingOptions _loggerConfig;
+        private EventOptions _loggerConfig;
 
         private volatile static bool _isInitialized = false;
         internal SourceLevels _logLevels { get; set; }
@@ -42,10 +42,10 @@ namespace HashTag.Diagnostics
         /// Default constructor
         /// </summary>
         /// <param name="logName"></param>
-        internal EventLogger(string logName, LoggingOptions config)
+        internal EventLogger(string logName, EventOptions config)
         {
             _logName = logName;
-            _loggerConfig = (LoggingOptions)config.Clone();
+            _loggerConfig = (EventOptions)config.Clone();
         }
 
 
@@ -152,7 +152,7 @@ namespace HashTag.Diagnostics
         /// <param name="evt">Event to persist to logger's event store</param>
         public void Write(LogEvent evt)
         {
-            _loggerConfig.LogConnector.Submit(evt);
+            _loggerConfig.EventStoreConnector.Submit(evt);
         }
 
         private bool _isDisposed = false;

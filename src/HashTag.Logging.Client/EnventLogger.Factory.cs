@@ -16,33 +16,43 @@ namespace HashTag.Diagnostics
         private static volatile bool isInitialized=false;
         public static string _defaultLogName { get; set; }
 
-        private static LoggingOptions _options;
-        public static LoggingOptions DefaultConfig {
+        private static EventOptions _options;
+
+        /// <summary>
+        /// Sets the configuration options that will be passed to each event builder
+        /// </summary>
+        public static EventOptions DefaultConfig {
             get
             {
                 if (_options == null)
                 {
-                    _options = new LoggingOptions();
+                    _options = new EventOptions();
                 }
                 return _options;
             }
             set { _options = value; }
         }
         
-        public static void Initialize(LoggingOptions config=null)
+        /// <summary>
+        /// Set/reset configuration options for subsequent event log creation.  Usually done very early on in application boostrapping
+        /// </summary>
+        /// <param name="config"></param>
+        public static void Initialize(EventOptions config=null)
         {
             if (config != null)
             {
-                DefaultConfig = (LoggingOptions)config.Clone();
+                DefaultConfig = (EventOptions)config.Clone();
             }
             else
             {
-                DefaultConfig = new LoggingOptions();
+                DefaultConfig = new EventOptions();
             }
             isInitialized = true;
         }
 
-
+        /// <summary>
+        /// If configuration is dirty then apply configuration.
+        /// </summary>
         public static void EnsureInitialized()
         {
             if (isInitialized == false)
@@ -67,6 +77,12 @@ namespace HashTag.Diagnostics
             return GetLogger(_defaultLogName);
         }
 
+        /// <summary>
+        /// Returns a logger that is named the fully qualified type name of T
+        /// </summary>
+        /// <typeparam name="T">Type from which to get logger name</typeparam>
+        /// <param name="allowedLevels">Lowest severity created log will emit events to event store</param>
+        /// <returns></returns>
         public static IEventLogger GetLogger<T>(SourceLevels allowedLevels = SourceLevels.All)
         {
             EnsureInitialized();    
@@ -119,9 +135,14 @@ namespace HashTag.Diagnostics
             }
         }
 
+        /// <summary>
+        /// Get a new logger based on the type of <paramref name="logNameFromObjectsType"/>
+        /// </summary>
+        /// <param name="logNameFromObjectsType">Object to get logger name for</param>
+        /// <param name="allowedSourceLevels">Amount of logging this log will do</param>
+        /// <returns></returns>
         public static IEventLogger GetLogger(object logNameFromObjectsType, SourceLevels allowedSourceLevels = SourceLevels.All)
         {
-
             return GetLogger(logNameFromObjectsType.GetType(), allowedSourceLevels);
         }
     }

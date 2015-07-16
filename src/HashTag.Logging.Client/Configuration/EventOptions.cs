@@ -10,14 +10,14 @@ namespace HashTag.Logging.Client.Configuration
     /// <summary>
     /// Shapes the default behavior of the logging client
     /// </summary>
-    public class LoggingOptions : ICloneable
+    public class EventOptions : ICloneable
     {
         private static string _hostName = Environment.MachineName;
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LoggingOptions()
+        public EventOptions()
         {
             HostName = _hostName;
             OnErrorHttpCaptureFlags = HttpCaptureFlags.All;
@@ -30,7 +30,7 @@ namespace HashTag.Logging.Client.Configuration
         /// 
         /// </summary>
         /// <param name="applicationKeys">Customized .config keys to use when loading configuration settings.  Often used in branding scenarios</param>
-        public LoggingOptions(Keys applicationKeys)
+        public EventOptions(Keys applicationKeys)
             : this()
         {
             ConfigKeys = applicationKeys;
@@ -40,7 +40,7 @@ namespace HashTag.Logging.Client.Configuration
         /// Constructor
         /// </summary>
         /// <param name="branding">Company prefix to use on keys.  Often used in branding scenarios</param>
-        public LoggingOptions(string branding):this()
+        public EventOptions(string branding):this()
         {
             ConfigKeys = new Keys(branding);
         }
@@ -56,9 +56,9 @@ namespace HashTag.Logging.Client.Configuration
 
                 ApplicationName = string.Format("{0}.Application.Name", branding);
                 ActiveEnvironment = string.Format("{0}.Application.Environment", branding);
-                ConnectorType = string.Format("{0}.Logging.ConnectorType", branding);
-                SourceLevels = string.Format("{0}.Logging.DefaultSourceLevels", branding);
-                HttpCaptureFlags = string.Format("{0}.Logging.HttpCaptureFlags", branding);
+                ConnectorType = string.Format("{0}.Diagnostics.ConnectorType", branding);
+                SourceLevels = string.Format("{0}.Diagnostics.DefaultSourceLevels", branding);
+                HttpCaptureFlags = string.Format("{0}.Diagnostics.HttpCaptureFlags", branding);
                 ApplicationModule = string.Format("{0}.Application.Module", branding);
             }
             public Keys()
@@ -115,7 +115,7 @@ namespace HashTag.Logging.Client.Configuration
         /// 3rd party log persisters (e.g. log4net, nlog, .Net TraceSource)
         /// </summary>
         [JsonIgnore]
-        public IEventStoreConnector LogConnector
+        public IEventStoreConnector EventStoreConnector
         {
             get
             {
@@ -184,7 +184,7 @@ namespace HashTag.Logging.Client.Configuration
             set
             {
                 if (string.Compare(_connectorType, value, true) == 0) return;
-                LogConnector = null;
+                EventStoreConnector = null;
                 _connectorType = value;
             }
         }
@@ -201,7 +201,7 @@ namespace HashTag.Logging.Client.Configuration
 
         public object Clone()
         {
-            return new LoggingOptions()
+            return new EventOptions()
             {
                 ActiveEnvironment = this.ActiveEnvironment,
                 ApplicationName = this.ApplicationName,
@@ -211,7 +211,7 @@ namespace HashTag.Logging.Client.Configuration
             };
         }
 
-        public static LoggingOptions GetDefaultConfig()
+        public static EventOptions GetDefaultConfig()
         {
             return null;
         }
