@@ -1,11 +1,46 @@
-# EventLogger
-.Net Fluent logging wrapper for both NLog and native .Net TraceSource.  DI compatible with built in integrations for Ninject and Elmah.
+# Event Logger
 
 ## Quick Start
-1. Install Nuget package (or download source and add a reference in your project
+1. Install Nuget package (or download source and add a reference in your project)
 1. In your main application, set desired configuration settings
 1. Begin capturing log events in your application
 
+### Logging in your code
+(1) Create reference to a logger inside each class you want to log from.  There are several ways to do this including dependency injection though private instances is probably one of the most common.
+
+```csharp
+public class HomeController : Controller
+{
+    IEventLogger _log = EventLogger.GetLogger(typeof(HomeController));
+}
+````
+(2) Capture log events
+
+**Reminder:** - always end your `_log` statements with a `.Write()` which sends your event to the logging store (by default NLog)
+
+```csharp
+ public void SaveRecords(List<int> records)
+        {
+            _log.Start.Write("Saving records");
+            var currentRecordId = -1;
+            try
+            {
+                for(var x =0;x<records.Count;x++)
+                {
+                    _log.Info.Write("Processing and saving record: id: {0}, index: {1}", records[x], x);
+                    currentRecordId = records[x];
+                }
+            }
+            catch(Exception ex)
+            {
+                _log.Error.Reference(currentRecordId).Catch(ex).Write();
+                _log.Error.Reference(currentRecordId).Write(ex);
+                _log.Error.Reference(currentRecordId).Write();
+                throw;
+            }
+            _log.Stop.Write("Finished saving records");
+        }
+```
 ## Recommended Configuration
 
 ### AppSettings
@@ -67,4 +102,3 @@ This example is from the demo which uses some nice NLog features:
     </rules>
   </nlog>
 ```
-
