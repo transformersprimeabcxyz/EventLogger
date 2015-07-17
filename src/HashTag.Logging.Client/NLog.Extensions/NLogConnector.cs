@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using NLog;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using NLog.Config;
+using nlc=NLog.Config;
 using Newtonsoft.Json;
 namespace HashTag.Logging.Client.NLog.Extensions
 {

@@ -12,6 +12,7 @@ namespace HashTag.NetLog.DemoWeb.Controllers
     public class HomeController : Controller
     {
         IEventLogger _log = EventLogger.GetLogger(typeof(HomeController));
+
         public ActionResult Index()
         {
             _log.Info.Write("Welcome to IEventLogger Demo!");
