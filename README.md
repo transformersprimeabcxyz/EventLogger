@@ -1,7 +1,7 @@
 # Event Logger
 
 ## Quick Start
-1. Install Nuget package (or download source and add a reference in your project)
+1. Install [Nuget Package](https://www.nuget.org/packages/HashTag.Logging.Client) package (or download source and add a reference in your project)
 1. In your main application, set desired configuration settings
 1. Begin capturing log events in your application
 
