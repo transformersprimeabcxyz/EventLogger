@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HashTag.Diagnostics.Models;
+using HashTag.Logging.Client.Configuration;
 
 namespace HashTag.Diagnostics
 {
@@ -16,13 +17,13 @@ namespace HashTag.Diagnostics
         /// </summary>
         /// <param name="evt">Fully hyrated event to persist</param>
         /// <returns>UUID of submitted event. Might be used in UI scenarios or other tracing</returns>
-        Guid Submit(LogEvent evt);
+        Guid Submit(LogEvent evt, EventOptions options = null);
 
         /// <summary>
         /// Submit a block of <see cref="HashTag.Diagnostics.Models.LogEvent">LogEvents</see> to peristant storage
         /// </summary>
         /// <param name="events"></param>
-        void Submit(List<LogEvent> events);
+        void Submit(List<LogEvent> events, EventOptions options = null);
 
         /// <summary>
         /// Tells underlying provider to force a write-all operation of any pending writes.  Provider should implement as a non-op method

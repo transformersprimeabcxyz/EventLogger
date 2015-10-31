@@ -34,7 +34,7 @@ namespace HashTag.NetLog.DemoWeb.Controllers
             }
             catch (SqlException sqlEx)
             {
-                _log.Error.Write(sqlEx);
+                _log.Error.Write(new ApplicationException("this is a nested exception",sqlEx));
                 throw;
             }
             catch(Exception ex)

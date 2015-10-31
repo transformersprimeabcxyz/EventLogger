@@ -10,12 +10,14 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using nlc=NLog.Config;
 using Newtonsoft.Json;
-namespace HashTag.Logging.Client.NLog.Extensions
+using System.IO;
+using HashTag.Logging.Client.Configuration;
+namespace HashTag.Logging.NLog
 {
     /// <summary>
     /// Connects EventBuilder to NLog
     /// </summary>
-    public class NLogEventConnector : IEventStoreConnector
+    public class Connector : IEventStoreConnector
     {
         private static ConcurrentDictionary<string, ILoggerBase> _nlogInstances = new ConcurrentDictionary<string, ILoggerBase>();
         private object listLock = new object();
@@ -25,18 +27,23 @@ namespace HashTag.Logging.Client.NLog.Extensions
         /// </summary>
         /// <param name="evt"></param>
         /// <returns></returns>
-        public Guid Submit(LogEvent evt)
+        public Guid Submit(LogEvent evt,EventOptions options=null)
         {
+            var s = JsonConvert.SerializeObject(evt, Formatting.Indented, new JsonSerializerSettings()
+            {
+                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+            });
+
             var logger = getLogger(evt);
             var nLogLevel = getLogLevel(evt);
 
             if (!logger.IsEnabled(nLogLevel)) return evt.UUID;
-
+            
             logger.Log((LogEventInfo)mapper(evt, nLogLevel));
 
             return evt.UUID;
         }
-
+       
         private LogEventInfo mapper(LogEvent evt, LogLevel nLogLevel)
         {
             var retVal = new LogEventInfo(nLogLevel, evt.EventSource, evt.Message);
@@ -180,9 +187,9 @@ namespace HashTag.Logging.Client.NLog.Extensions
         /// See <see cref="HashTag.Diagnostics.IEventBuilder">IEventBuilder</see> for documentation
         /// </summary>
         /// <param name="events"></param>
-        public void Submit(List<LogEvent> events)
+        public void Submit(List<LogEvent> events,EventOptions options=null)
         {
-            events.ForEach(e => Submit(e));
+            events.ForEach(e => Submit(e,options));
         }
 
         public void Flush()
@@ -235,5 +242,7 @@ namespace HashTag.Logging.Client.NLog.Extensions
             //var nConfig = new LoggingConfiguration();
             
         }
+
+      
     }
 }

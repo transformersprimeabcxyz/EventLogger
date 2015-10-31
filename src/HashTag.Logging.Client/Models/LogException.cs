@@ -187,6 +187,7 @@ namespace HashTag.Diagnostics
         /// Get's the innermost exception or a reference to this instance if there are no inner exceptions
         /// </summary>
         /// <returns></returns>
+        [JsonIgnore]
         public LogException BaseException
         {
             get

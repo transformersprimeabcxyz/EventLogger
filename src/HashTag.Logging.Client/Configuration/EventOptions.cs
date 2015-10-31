@@ -13,7 +13,7 @@ namespace HashTag.Logging.Client.Configuration
     public class EventOptions : ICloneable
     {
         private static string _hostName = Environment.MachineName;
-
+        private EventQueue _queue;
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -23,7 +23,8 @@ namespace HashTag.Logging.Client.Configuration
             OnErrorHttpCaptureFlags = HttpCaptureFlags.All;
             SourceLevels = SourceLevels.All;
             ConfigKeys = new Keys();
-            ConnectorType = "HashTag.Logging.Client.NLog.Extensions.NLogEventConnector, HashTag.Logging.Client";
+            ConnectorType = "HashTag.Logging.Client.NLog.NLogEventConnector, HashTag.Logging.Client";
+            _queue = new EventQueue(this);
         }
 
         /// <summary>
